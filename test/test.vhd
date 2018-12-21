@@ -33,17 +33,29 @@ entity test is
 	generic(WIDTH: integer := 8);
 	port(
 		switch : in  STD_LOGIC_VECTOR (WIDTH-1 downto 0);
+		joy : in STD_LOGIC_VECTOR(4 downto 0);
 		led : out  STD_LOGIC_VECTOR (WIDTH-1 downto 0)
 	);
 end test;
 
 architecture arch of test is
+	constant JOYS: integer := 5; -- joy btns 
 begin
 
-for_loop:
-for i in 0 to (WIDTH-1) generate
+assert (WIDTH >= JOYS) report "WIDTH too small: minimum " & integer'image(JOYS) severity failure;
+
+for_loop_joy:
+for i in 0 to JOYS-1 generate
+	with switch(i) select
+		led(i) <=
+		switch(i) when '1',
+		not joy(i) when others;
+end generate;
+
+for_loop_switch:
+for i in JOYS to (WIDTH-1) generate
 	led(i) <= switch(i);
 end generate;
 
-end arch;
 
+end arch;
