@@ -65,3 +65,12 @@ xlnx_auto_0_xdb/
 xst/
 _ngo/
 _xmsgs/
+
+# isim related files & folders
+*.log
+*.xmsgs
+*.cmd
+*.exe
+*.wdb
+*.ini
+isim/
