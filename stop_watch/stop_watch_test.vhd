@@ -14,7 +14,7 @@ architecture arch of stop_watch_test is
 	signal dig0, dig1, dig2: STD_LOGIC_VECTOR (3 downto 0);
 begin
 
-	sw: entity work.stop_watch(cascade_arch)
+	sw: entity work.stop_watch(if_arch)
 	port map(
 		clk => clk,
 		go => switch(1),
