@@ -26,7 +26,7 @@ CONFIG PROHIBIT=P144;
 CONFIG PROHIBIT=P69;
 CONFIG PROHIBIT=P60;
 
-#NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;               # CLK
+NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;               # CLK
 #NET RX             LOC="P101" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # RX
 #NET TX             LOC="P105" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST | PULLUP; # TX
 #NET Seg7_AN(3)     LOC="P48"  | IOSTANDARD=LVTTL;                                # A0
@@ -154,3 +154,29 @@ NET JOY(3)       LOC="P57"  | IOSTANDARD=LVTTL;                                #
 NET JOY(2)       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
 NET JOY(1)         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 NET JOY(0)     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
+
+#NET Seg7_AN(3)     LOC="P48"  | IOSTANDARD=LVTTL;                                # A0
+#NET Seg7_AN(2)     LOC="P56"  | IOSTANDARD=LVTTL;                                # A2
+#NET Seg7_AN(1)     LOC="P79"  | IOSTANDARD=LVTTL;                                # A8
+#NET Seg7_AN(0)     LOC="P85"  | IOSTANDARD=LVTTL;                                # A11
+NET AN(3)     LOC="P48"  | IOSTANDARD=LVTTL;                                # A0
+NET AN(2)     LOC="P56"  | IOSTANDARD=LVTTL;                                # A2
+NET AN(1)     LOC="P79"  | IOSTANDARD=LVTTL;                                # A8
+NET AN(0)     LOC="P85"  | IOSTANDARD=LVTTL;                                # A11
+
+#NET Seg7_A         LOC="P75"  | IOSTANDARD=LVTTL;                                # A7
+#NET Seg7_B         LOC="P83"  | IOSTANDARD=LVTTL;                                # A10
+#NET Seg7_C         LOC="P66"  | IOSTANDARD=LVTTL;                                # A5
+#NET Seg7_D         LOC="P67"  | IOSTANDARD=LVTTL;                                # A6
+#NET Seg7_E         LOC="P58"  | IOSTANDARD=LVTTL;                                # A3
+#NET Seg7_F         LOC="P61"  | IOSTANDARD=LVTTL;                                # A4
+#NET Seg7_G         LOC="P81"  | IOSTANDARD=LVTTL;                                # A9
+#NET Seg7_DP        LOC="P51"  | IOSTANDARD=LVTTL;                                # A1
+NET Sseg(0)         LOC="P75"  | IOSTANDARD=LVTTL;                                # A7
+NET Sseg(1)         LOC="P83"  | IOSTANDARD=LVTTL;                                # A10
+NET Sseg(2)         LOC="P66"  | IOSTANDARD=LVTTL;                                # A5
+NET Sseg(3)         LOC="P67"  | IOSTANDARD=LVTTL;                                # A6
+NET Sseg(4)         LOC="P58"  | IOSTANDARD=LVTTL;                                # A3
+NET Sseg(5)         LOC="P61"  | IOSTANDARD=LVTTL;                                # A4
+NET Sseg(6)         LOC="P81"  | IOSTANDARD=LVTTL;                                # A9
+NET Sseg(7)         LOC="P51"  | IOSTANDARD=LVTTL;                                # A1
