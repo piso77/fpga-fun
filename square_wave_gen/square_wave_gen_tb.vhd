@@ -9,7 +9,9 @@ ARCHITECTURE behavior OF square_wave_gen_tb IS
    --Inputs
    signal clk : std_logic := '0';
    signal rst : std_logic := '0';
-
+	signal onp : std_logic_vector(3 downto 0) := "0000";
+	signal offp : std_logic_vector(3 downto 0) := "0000";
+	
  	--Outputs
    signal level : std_logic;
 
@@ -19,9 +21,11 @@ ARCHITECTURE behavior OF square_wave_gen_tb IS
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: entity work.square_wave_gen(arch) PORT MAP (
+   uut: entity work.square_wave_gen(chu) PORT MAP (
           clk => clk,
           rst => rst,
+			 onp => onp,
+			 offp => offp,
           level => level
         );
 
@@ -42,7 +46,8 @@ BEGIN
 		rst <= '1';
       wait for 100 ns;
 		rst <= '0';
-		wait for clk_period/2;
+		onp <= "0010";
+		offp <= "0001";
       
       wait;
    end process;
