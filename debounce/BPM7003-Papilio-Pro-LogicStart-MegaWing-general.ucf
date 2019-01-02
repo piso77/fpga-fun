@@ -54,8 +54,8 @@ NET Sseg(5)         LOC="P61"  | IOSTANDARD=LVTTL;                              
 NET Sseg(6)         LOC="P81"  | IOSTANDARD=LVTTL;                                # A9
 NET Sseg(7)         LOC="P51"  | IOSTANDARD=LVTTL;                                # A1
 
-NET BTN(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
-NET BTN(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # C1
+#NET BTN(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
+#NET BTN(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # C1
 #NET SWITCH(2)      LOC="P116" | IOSTANDARD=LVTTL;                                # C2
 #NET SWITCH(3)      LOC="P117" | IOSTANDARD=LVTTL;                                # C3
 #NET SWITCH(4)      LOC="P118" | IOSTANDARD=LVTTL;                                # C4
@@ -78,7 +78,7 @@ NET BTN(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # 
 #NET JOY_UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 #NET JOY_SELECT     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 
-#NET BTN(0)       LOC="P50"  | IOSTANDARD=LVTTL;                                # B13
-#NET BTN(1)        LOC="P55"  | IOSTANDARD=LVTTL;                                # B14
+NET BTN(0)       LOC="P50"  | IOSTANDARD=LVTTL;                                # B13
+NET BTN(1)        LOC="P47"  | IOSTANDARD=LVTTL;                                # B14
 #NET BTN(2)       LOC="P57"  | IOSTANDARD=LVTTL;                                # B11
 #NET BTN(3)       LOC="P59"  | IOSTANDARD=LVTTL;                                # B12

@@ -12,7 +12,7 @@ entity debounce is
 end debounce;
 
 architecture arch of debounce is
-	constant N: integer := 24; -- 2^N * 10ns = 10ms tick -- 100Mhz clk
+	constant N: integer := 10; -- 2^N * 10ns = 10ms tick -- 100Mhz clk
 	signal cnt_reg, cnt_next: unsigned(N-1 downto 0);
 	signal tick: std_logic;
 	type state_type is (zero, wait1_1, wait1_2, wait1_3, one, wait0_1, wait0_2, wait0_3);
@@ -21,7 +21,7 @@ begin
 
 process(clk, rst)
 begin
-	if rst='0'then
+	if rst='1' then
 		cnt_reg <= (others => '0');
 		state_reg <= zero;
 	elsif rising_edge(clk) then
