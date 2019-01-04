@@ -108,7 +108,7 @@ edge_detector_vanilla: entity work.edge_detector(gate_level)
 	);
 
 -- debounced input
-debouncer: entity work.debounce(arch)
+debouncer: entity work.debounce(upfront)
 	port map(
 		clk => clk,
 		rst => '0',
