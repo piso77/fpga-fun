@@ -14,26 +14,76 @@ entity bcdfibonaccibcd_test is
 	port(
 		clk : in  STD_LOGIC;
 		switch : in  STD_LOGIC_VECTOR (7 downto 0);
-		btn : STD_LOGIC;
-		--led : out  STD_LOGIC_VECTOR (7 downto 0);
+		btn : STD_LOGIC_VECTOR(1 downto 0);
+		led : out  STD_LOGIC_VECTOR (3 downto 0);
 		an : out  STD_LOGIC_VECTOR (3 downto 0);
 		sseg : out  STD_LOGIC_VECTOR (7 downto 0)
 	);
 end bcdfibonaccibcd_test;
 
-architecture arch of bcdfibonaccibcd_test is
-	signal start, donebcd, donefib, donebin : std_logic;
+architecture fsmd of bcdfibonaccibcd_test is
+	type state is (idle, bcdtob, fibona, bintob, waito);
+	signal state_reg, state_next: state;
+	signal start, reset : std_logic;
+	signal startbcd, donebcd : std_logic;
+	signal startfib, donefib : std_logic;
+	signal startbin, donebin : std_logic;
 	signal binary : std_logic_vector(6 downto 0);
 	signal fibo : std_logic_vector(19 downto 0);
 	signal bcds : std_logic_vector(15 downto 0);
 begin
 
-start <= not btn;
+start <= not btn(0);
+reset <= not btn(1);
+
+process(clk, reset)
+begin
+	if (reset='1') then
+		state_reg <= idle;
+	elsif rising_edge(clk) then
+		state_reg <= state_next;
+	end if;
+end process;
+
+process(state_reg, start, donebcd, donefib, donebin)
+begin
+	state_next <= state_reg;
+	startbcd <= '0';
+	startfib <= '0';
+	startbin <= '0';
+	case state_reg is
+		when idle =>
+			if start='1' then
+				startbcd <= '1';
+				state_next <= bcdtob;
+			end if;
+			led <= "0001";
+		when bcdtob =>
+			if donebcd='1' then
+				startfib <= '1';
+				state_next <= fibona;				
+			end if;
+			led <= "0010";
+		when fibona =>
+			if donefib='1' then
+				startbin <= '1';
+				state_next <= bintob;
+			end if;
+			led <= "0100";
+		when bintob =>
+			if donebin='1' then
+				state_next <= waito;
+			end if;
+			led <= "1000";
+		when others =>
+			led <= "1111";
+	end case;
+end process;
 
 bcdtobin: entity work.bcdtobin(arch)
 	port map(
 		clk => clk,
-		start => start,
+		start => startbcd,
 		done => donebcd,
 		bcdl => switch(7 downto 4),
 		bcdh => switch(3 downto 0),
@@ -43,8 +93,8 @@ bcdtobin: entity work.bcdtobin(arch)
 fib: entity work.fibonacci(arch)
 	port map(
 		clk => clk,
-		reset => '0',
-		start => donebcd,
+		reset => reset,
+		start => startfib,
 		i => binary(4 downto 0),
 		ready => open,
 		done_tick => donefib,
@@ -54,8 +104,8 @@ fib: entity work.fibonacci(arch)
 bintobcd: entity work.bin2bcd(arch)
 	port map(
 		clk => clk,
-		reset => '0',
-		start => donefib,
+		reset => reset,
+		start => startbin,
 		bin => fibo(12 downto 0),
 		ready => open,
 		done_tick => donebin,
@@ -68,7 +118,7 @@ bintobcd: entity work.bin2bcd(arch)
 dispmux: entity work.disp_hex_mux(arch)
 	port map(
 		clk => clk,
-		reset => '0',
+		reset => reset,
 		hex3 => bcds(15 downto 12),
 		hex2 => bcds(11 downto 8),
 		hex1 => bcds(7 downto 4),
@@ -78,7 +128,66 @@ dispmux: entity work.disp_hex_mux(arch)
 		sseg => sseg
 	);
 
-end arch;
+end fsmd;
+
+--architecture cascade_signals of bcdfibonaccibcd_test is
+--	signal start, donebcd, donefib, donebin : std_logic;
+--	signal binary : std_logic_vector(6 downto 0);
+--	signal fibo : std_logic_vector(19 downto 0);
+--	signal bcds : std_logic_vector(15 downto 0);
+--begin
+--
+--start <= not btn;
+--
+--bcdtobin: entity work.bcdtobin(arch)
+--	port map(
+--		clk => clk,
+--		start => start,
+--		done => donebcd,
+--		bcdl => switch(7 downto 4),
+--		bcdh => switch(3 downto 0),
+--		bin => binary
+--	);
+--
+--fib: entity work.fibonacci(arch)
+--	port map(
+--		clk => clk,
+--		reset => '0',
+--		start => donebcd,
+--		i => binary(4 downto 0),
+--		ready => open,
+--		done_tick => donefib,
+--		f => fibo
+--	);
+--
+--bintobcd: entity work.bin2bcd(arch)
+--	port map(
+--		clk => clk,
+--		reset => '0',
+--		start => donefib,
+--		bin => fibo(12 downto 0),
+--		ready => open,
+--		done_tick => donebin,
+--		bcd0 => bcds(15 downto 12),
+--		bcd1 => bcds(11 downto 8),
+--		bcd2 => bcds(7 downto 4),
+--		bcd3 => bcds(3 downto 0)
+--	);
+--
+--dispmux: entity work.disp_hex_mux(arch)
+--	port map(
+--		clk => clk,
+--		reset => '0',
+--		hex3 => bcds(15 downto 12),
+--		hex2 => bcds(11 downto 8),
+--		hex1 => bcds(7 downto 4),
+--		hex0 => bcds(3 downto 0),
+--		dp_in => "1111",
+--		an => an,
+--		sseg => sseg
+--	);
+--
+--end cascade_signals;
 
 
 
