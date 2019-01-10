@@ -35,7 +35,8 @@ bcdtobin: entity work.bcdtobin(arch)
 		clk => clk,
 		start => start,
 		done => donebcd,
-		bcd => switch,
+		bcdl => switch(7 downto 4),
+		bcdh => switch(3 downto 0),
 		bin => binary
 	);
 
