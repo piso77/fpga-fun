@@ -67,7 +67,7 @@ NET LED(0)         LOC="P123" | IOSTANDARD=LVTTL;                               
 NET LED(1)         LOC="P124" | IOSTANDARD=LVTTL;                                # C9
 NET LED(2)         LOC="P126" | IOSTANDARD=LVTTL;                                # C10
 NET LED(3)         LOC="P127" | IOSTANDARD=LVTTL;                                # C11
-#NET LED(4)         LOC="P131" | IOSTANDARD=LVTTL;                                # C12
+NET LED(4)         LOC="P131" | IOSTANDARD=LVTTL;                                # C12
 #NET LED(5)         LOC="P132" | IOSTANDARD=LVTTL;                                # C13
 #NET LED(6)         LOC="P133" | IOSTANDARD=LVTTL;                                # C14
 #NET LED(7)         LOC="P134" | IOSTANDARD=LVTTL;                                # C15

@@ -15,7 +15,7 @@ entity bcdfibonaccibcd_test is
 		clk : in  STD_LOGIC;
 		switch : in  STD_LOGIC_VECTOR (7 downto 0);
 		btn : STD_LOGIC_VECTOR(1 downto 0);
-		led : out  STD_LOGIC_VECTOR (3 downto 0);
+		led : out  STD_LOGIC_VECTOR (4 downto 0);
 		an : out  STD_LOGIC_VECTOR (3 downto 0);
 		sseg : out  STD_LOGIC_VECTOR (7 downto 0)
 	);
@@ -56,33 +56,38 @@ begin
 			if start='1' then
 				startbcd <= '1';
 				state_next <= bcdtob;
+				led <= "00001";
 			end if;
-			led <= "0001";
+			led <= "10001";
 		when bcdtob =>
 			if donebcd='1' then
 				startfib <= '1';
 				state_next <= fibona;				
+				led <= "00010";
 			end if;
-			led <= "0010";
+			led <= "10010";
 		when fibona =>
 			if donefib='1' then
 				startbin <= '1';
 				state_next <= bintob;
+				led <= "00100";
 			end if;
-			led <= "0100";
+			led <= "10100";
 		when bintob =>
 			if donebin='1' then
 				state_next <= waito;
+				led <= "01000";
 			end if;
-			led <= "1000";
+			led <= "11000";
 		when others =>
-			led <= "1111";
+			led <= "11111";
 	end case;
 end process;
 
-bcdtobin: entity work.bcdtobin(arch)
+bcdtobin: entity work.bcdtobin(fsmd)
 	port map(
 		clk => clk,
+		reset => reset,
 		start => startbcd,
 		done => donebcd,
 		bcdl => switch(7 downto 4),
