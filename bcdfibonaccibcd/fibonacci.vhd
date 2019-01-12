@@ -4,26 +4,26 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity fibonacci is
 	generic(
-		inbit: integer := 4;
-		outbit: integer := 19
+		inbit: integer := 5;
+		outbit: integer := 20
 	);
 	port(
 		clk : in  STD_LOGIC;
 		reset : in  STD_LOGIC;
 		start : in  STD_LOGIC;
-		i : in  STD_LOGIC_VECTOR (inbit downto 0);
+		i : in  STD_LOGIC_VECTOR (inbit-1 downto 0);
 		ready : out  STD_LOGIC;
 		done_tick : out  STD_LOGIC;
-		f : out  STD_LOGIC_VECTOR (outbit downto 0)
+		f : out  STD_LOGIC_VECTOR (outbit-1 downto 0)
 	);
 end fibonacci;
 
 architecture arch of fibonacci is
 	type state_type is (idle, op, done);
 	signal state_reg, state_next: state_type;
-	signal n_reg, n_next: unsigned(inbit downto 0);
-	signal t0_reg, t0_next: unsigned(outbit downto 0);
-	signal t1_reg, t1_next: unsigned(outbit downto 0);
+	signal n_reg, n_next: unsigned(inbit-1 downto 0);
+	signal t0_reg, t0_next: unsigned(outbit-1 downto 0);
+	signal t1_reg, t1_next: unsigned(outbit-1 downto 0);
 begin
 
 process(clk, reset)
