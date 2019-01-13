@@ -14,6 +14,7 @@ entity fibonacci is
 		i : in  STD_LOGIC_VECTOR (inbit-1 downto 0);
 		ready : out  STD_LOGIC;
 		done_tick : out  STD_LOGIC;
+		overflow : out STD_LOGIC;
 		f : out  STD_LOGIC_VECTOR (outbit-1 downto 0)
 	);
 end fibonacci;
@@ -22,8 +23,8 @@ architecture arch of fibonacci is
 	type state_type is (idle, op, done);
 	signal state_reg, state_next: state_type;
 	signal n_reg, n_next: unsigned(inbit-1 downto 0);
-	signal t0_reg, t0_next: unsigned(outbit-1 downto 0);
-	signal t1_reg, t1_next: unsigned(outbit-1 downto 0);
+	signal t0_reg, t0_next: unsigned(outbit downto 0);
+	signal t1_reg, t1_next: unsigned(outbit downto 0);
 begin
 
 process(clk, reset)
@@ -41,7 +42,7 @@ begin
 	end if;
 end process;
 
-process(state_reg, i, n_reg, t0_reg, t1_reg, start)
+process(state_reg, i, n_reg, t0_reg, t1_reg, start, t1_next)
 begin
 	ready <= '0'; 
 	done_tick <= '0';
@@ -68,6 +69,9 @@ begin
 				t0_next <= t1_reg;
 				t1_next <= t1_reg + t0_reg;
 				n_next <= n_reg - 1;
+				if t1_next(outbit)='1' then
+					state_next <= done;
+				end if;
 			end if;
 		when done =>
 			done_tick <= '1';
@@ -75,5 +79,6 @@ begin
 	end case;
 end process;
 
-f <= std_logic_vector(t1_reg);
+overflow <= '1' when t1_reg(outbit)='1' else '0';
+f <= std_logic_vector(t1_reg(outbit-1 downto 0));
 end arch;
