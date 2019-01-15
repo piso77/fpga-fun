@@ -8,11 +8,12 @@ use IEEE.NUMERIC_STD.ALL;
 --use UNISIM.VComponents.all;
 
 entity bin2bcd is
+	generic(WIDTH: integer := 13);
 	port(
 		clk : in  STD_LOGIC;
 		reset : in  STD_LOGIC;
 		start : in  STD_LOGIC;
-		bin : in  STD_LOGIC_VECTOR (12 downto 0);
+		bin : in  STD_LOGIC_VECTOR (WIDTH-1 downto 0);
 		ready : out  STD_LOGIC;
 		done_tick : out  STD_LOGIC;
 		bcd3 : out  STD_LOGIC_VECTOR (3 downto 0);
@@ -25,7 +26,7 @@ end bin2bcd;
 architecture arch of bin2bcd is
 	type state_type is (idle, op, done);
 	signal state_reg, state_next: state_type;
-	signal p2s_reg, p2s_next: std_logic_vector(12 downto 0);
+	signal p2s_reg, p2s_next: std_logic_vector(WIDTH-1 downto 0);
 	signal n_reg, n_next: unsigned(3 downto 0);
 	signal bcd3_reg, bcd3_next: unsigned(3 downto 0);
 	signal bcd2_reg, bcd2_next: unsigned(3 downto 0);
@@ -78,14 +79,15 @@ begin
 				bcd2_next <= (others => '0');
 				bcd1_next <= (others => '0');
 				bcd0_next <= (others => '0');
-				n_next <= "1101";					-- index
-				p2s_next <= bin;					-- input shift register
+				--n_next <= "1101";					-- index
+				n_next <= to_unsigned(WIDTH, n_next'length);	-- index
+				p2s_next <= bin;										-- input shift register
 			end if;
 		when op =>
 			-- shift in binary bit -- parallel to serial shift register
-			p2s_next <= p2s_reg(11 downto 0) & '0';
+			p2s_next <= p2s_reg(WIDTH-2 downto 0) & '0';
 			-- shift 4 BCD digits
-			bcd0_next <= bcd0_tmp(2 downto 0) & p2s_reg(12);
+			bcd0_next <= bcd0_tmp(2 downto 0) & p2s_reg(WIDTH-1);
 			bcd1_next <= bcd1_tmp(2 downto 0) & bcd0_tmp(3);
 			bcd2_next <= bcd2_tmp(2 downto 0) & bcd1_tmp(3);
 			bcd3_next <= bcd3_tmp(2 downto 0) & bcd2_tmp(3);
