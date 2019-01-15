@@ -31,7 +31,7 @@ architecture fsmd of bcdfibonaccibcd_test is
 	signal overflow : std_logic;
 	signal binary : std_logic_vector(6 downto 0);
 	signal fibo : std_logic_vector(12 downto 0);
-	signal tmp : std_logic_vector(12 downto 0);
+	signal tmp : std_logic_vector(13 downto 0);
 	signal bcds : std_logic_vector(15 downto 0);
 begin
 
@@ -110,9 +110,10 @@ fib: entity work.fibonacci(arch)
 		f => fibo
 	);
 
-tmp <= fibo when overflow='0' else (others => '1');
+tmp <= '0'&fibo when overflow='0' else "10011100001111"; -- 9999 in binary
 
 bintobcd: entity work.bin2bcd(arch)
+	generic map(WIDTH => 14)
 	port map(
 		clk => clk,
 		reset => reset,
