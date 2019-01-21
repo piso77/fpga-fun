@@ -98,12 +98,15 @@ bcdtobin: entity work.bcdtobin(fsmd)
 	);
 
 fib: entity work.fibonacci(arch)
-	generic map(outbit => 13)
+	generic map(
+		inbit => 7,
+		outbit => 13
+	)
 	port map(
 		clk => clk,
 		reset => reset,
 		start => startfib,
-		i => binary(4 downto 0),
+		i => binary,
 		ready => open,
 		done_tick => donefib,
 		overflow => overflow,
