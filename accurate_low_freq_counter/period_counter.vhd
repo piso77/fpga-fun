@@ -3,7 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity period_counter is
-	generic(W: integer := 10);
+	generic(W: integer := 20);
 	port(
 		clk : in  STD_LOGIC;
 		reset : in  STD_LOGIC;
@@ -16,11 +16,12 @@ entity period_counter is
 end period_counter;
 
 architecture arch of period_counter is
-	constant CLK_TO_MS_COUNT: integer := 100000; -- 1ms tick
+	--constant CLK_TO_MS_COUNT: integer := 100000; -- 1ms tick
+	constant CLK_TO_US_COUNT: integer := 100; -- 1us tick
 	type state_type is (idle, waite, count, done);
 	signal state_reg, state_next: state_type;
-	signal t_reg, t_next: unsigned(16 downto 0); -- up to 100000 * 10ns = 1ms
-	signal p_reg, p_next: unsigned(W-1 downto 0); -- up to 1 sec - 1000 * 1ms
+	signal t_reg, t_next: unsigned(6 downto 0); -- up to 100 * 10ns = 1us
+	signal p_reg, p_next: unsigned(W-1 downto 0); -- up to 1 sec - 1000000 * 1us
 	signal delay_reg, edge: std_logic;
 begin
 
@@ -63,7 +64,7 @@ begin
 			end if;
 		when count =>
 			if edge='0' then -- count
-				if t_reg = CLK_TO_MS_COUNT-1 then -- 1ms tick
+				if t_reg = CLK_TO_US_COUNT-1 then -- 1us tick
 					t_next <= (others => '0');
 					p_next <= p_reg + 1;
 				else

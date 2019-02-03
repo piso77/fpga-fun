@@ -19,8 +19,8 @@ architecture arch of accurate_low_freq_counter is
 	type state_type is (idle, count, frq, b2b);
 	signal state_reg, state_next: state_type;
 	
-	signal period: std_logic_vector(9 downto 0);
-	signal dvsr, dvnd, quo: std_logic_vector(19 downto 0);
+	signal period: std_logic_vector(19 downto 0);
+	signal dvnd, quo: std_logic_vector(19 downto 0);
 	
 	signal period_done, period_start: std_logic;
 	signal division_done, division_start: std_logic;
@@ -37,7 +37,9 @@ begin
 		ready => open,
 		done_tick => period_done
 	);
-	
+
+	dvnd <= std_logic_vector(to_unsigned(1000000, 20));
+
 	divisioncircuit: entity work.division(arch)
 	generic map(
 		W => 20,
@@ -49,7 +51,7 @@ begin
 		start => division_start,
 		ready => open,
 		done_tick => division_done,
-		dvsr => dvsr,
+		dvsr => period,
 		dvnd => dvnd,
 		rmd => open,
 		quo => quo
@@ -68,9 +70,6 @@ begin
 		bcd1 => bcd1,
 		bcd0 => bcd0
 	);
-
-	dvnd <= std_logic_vector(to_unsigned(1000000, 20));
-	dvsr <= "0000000000" & period;
 
 	process(clk, reset)
 	begin
