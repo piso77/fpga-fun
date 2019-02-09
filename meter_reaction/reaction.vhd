@@ -11,7 +11,8 @@ entity reaction is
 		error : out STD_LOGIC;
 		ready : out STD_LOGIC;
 		led : out STD_LOGIC;
-		delay : out STD_LOGIC_VECTOR(15 downto 0)
+		done_tick: out STD_LOGIC;
+		delay : out STD_LOGIC_VECTOR(12 downto 0)
 	);
 end reaction;
 
@@ -20,7 +21,7 @@ architecture arch of reaction is
 	signal state_reg, state_next: state_type;
 	constant CLK_TO_MS: integer := 100000; 					-- 1ms tick
 	signal ms_cnt, ms_cnt_next: unsigned(16 downto 0); 	-- up to CLK_TO_MS * 10ns = 1ms
-	signal cnt, cnt_next: unsigned(15 downto 0);
+	signal cnt, cnt_next: unsigned(12 downto 0);
 	signal tmp: std_logic_vector(7 downto 0);
 	-- XXX do we really need a rand_next???
 	signal rand, rand_next: unsigned(11 downto 0);
@@ -61,6 +62,7 @@ begin
 	error <= '0';
 	ready <= '0';
 	led <= '0';
+	done_tick <= '0';
 	case state_reg is
 		when idle =>
 			ready <= '1';
@@ -90,6 +92,7 @@ begin
 			led <= '1';
 			if stop='1' or cnt=1000 then
 				state_next <= idle;
+				done_tick <= '1';
 			elsif (ms_cnt=CLK_TO_MS) then
 				ms_cnt_next <= (others => '0');
 				cnt_next <= cnt+1;				
