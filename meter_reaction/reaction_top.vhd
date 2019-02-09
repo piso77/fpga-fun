@@ -25,9 +25,9 @@ architecture arch of reaction_top is
 	signal delay : std_logic_vector(15 downto 0);
 begin
 
-	clr <= switch(0);
-	star <= switch(1);
-	stp <= switch(2);
+	clr <= not switch(0);
+	star <= not switch(1);
+	stp <= not switch(2);
 
 	Inst_reaction: entity work.reaction(arch)
 	PORT MAP(
