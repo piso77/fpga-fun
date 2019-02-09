@@ -37,27 +37,32 @@ r_next <= r_reg + 1;
 -- 2 MSBs of counter used to control 4-to-1 multiplexing
 sel <= std_logic_vector(r_reg(N-1 downto N-2));
 
-process(sel, hex0, hex1, hex2, hex3, dp_in)
+process(reset, sel, hex0, hex1, hex2, hex3, dp_in)
 begin
-	-- XXX what if i use IFs?
-	case sel is
-		when "00" =>
-			an <= "1110";
-			hex <= hex0;
-			dp <= dp_in(0);
-		when "01" =>
-			an <= "1101";
-			hex <= hex1;
-			dp <= dp_in(1);
-		when "10" =>
-			an <= "1011";
-			hex <= hex2;
-			dp <= dp_in(2);
-		when others =>
-			an <= "0111";
-			hex <= hex3;
-			dp <= dp_in(3);
-	end case;
+	if reset='1' then
+		an <= "0000";
+		hex <= "0000";
+		dp <= '1';
+	else
+		case sel is
+			when "00" =>
+				an <= "1110";
+				hex <= hex0;
+				dp <= dp_in(0);
+			when "01" =>
+				an <= "1101";
+				hex <= hex1;
+				dp <= dp_in(1);
+			when "10" =>
+				an <= "1011";
+				hex <= hex2;
+				dp <= dp_in(2);
+			when others =>
+				an <= "0111";
+				hex <= hex3;
+				dp <= dp_in(3);
+		end case;
+	end if;
 end process;
 
 -- hex to 7-segs decoding
