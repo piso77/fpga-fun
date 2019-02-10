@@ -23,6 +23,7 @@ end reaction_top;
 architecture arch of reaction_top is
 	signal clr, star, stp: std_logic;
 	signal delay : std_logic_vector(12 downto 0);
+	signal t0, t1, t2, t3 : std_logic_vector(3 downto 0);
 	signal h0, h1, h2, h3 : std_logic_vector(3 downto 0);
 	signal done_tick: std_logic;
 begin
@@ -44,6 +45,8 @@ begin
 		delay => delay
 	);
 
+	led(1) <= error;
+
 	Inst_bin2bcd: entity work.bin2bcd(arch) PORT MAP(
 		clk => clk,
 		reset => clr,
@@ -51,11 +54,16 @@ begin
 		bin => delay,
 		ready => open,
 		done_tick => open,
-		bcd3 => h3,
-		bcd2 => h2,
-		bcd1 => h1,
-		bcd0 => h0
+		bcd3 => t3,
+		bcd2 => t2,
+		bcd1 => t1,
+		bcd0 => t0
 	);
+
+	h3 <= t3 when delay/="1111111111111" else "1001";
+	h2 <= t2 when delay/="1111111111111" else "1001";
+	h1 <= t1 when delay/="1111111111111" else "1001";
+	h0 <= t0 when delay/="1111111111111" else "1001";
 
 	Inst_disp_hex_mux: entity work.disp_hex_mux(arch)
 	PORT MAP(

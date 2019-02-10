@@ -76,7 +76,7 @@ begin
 			if stop='1' then
 				state_next <= idle;
 				error <= '1';
-				cnt_next <= to_unsigned(9999, cnt_next'length);
+				cnt_next <= (others => '1');
 			-- wait rand ms
 			elsif (cnt=rand) then
 				state_next <= run;
