@@ -22,6 +22,60 @@ entity vga_test is
 end vga_test;
 
 architecture arch of vga_test is
+	signal clko 	: std_logic;
+	signal hcount	: unsigned(9 downto 0) := (others => '0');
+	signal vcount	: unsigned(9 downto 0) := (others => '0');
+begin
+
+clk25mhz : entity work.clk_wiz_v3_6(xilinx)
+	port map(
+    CLK_IN1 => clk,
+    CLK_OUT1 => clko
+	);
+
+
+process(clko)
+begin
+	if rising_edge(clko) then
+		if hcount=799 then
+			hcount <= (others => '0');
+			if vcount=524 then
+				vcount <= (others => '0');
+			else
+				vcount <= vcount + 1;
+			end if;
+		else
+			hcount <= hcount + 1;
+		end if;
+	end if;
+end process;
+
+process(hcount, vcount)
+begin
+	vga_hsync <= '1';
+	vga_vsync <= '1';
+	vga_blue <= "00";
+	vga_green <= "000";
+	vga_red <= "000";
+
+	if vcount >= 490 and vcount < 492 then
+		vga_vsync <= '0';
+	end if;
+
+	if hcount >= 656 and hcount < 752 then
+		vga_hsync <= '0';
+	end if;
+
+	if hcount < 640 and vcount < 480 then
+		vga_blue 	<= "11";
+		vga_green 	<= "000";
+		vga_red 		<= "000";
+	end if;
+end process;
+
+end arch;
+
+architecture pchu of vga_test is
 	signal clko : std_logic;
 	signal hcount, hcount_next : unsigned(9 downto 0);
 	signal vcount, vcount_next : unsigned(9 downto 0);
@@ -81,4 +135,4 @@ begin
 end process;
 
 
-end arch;
+end pchu;
