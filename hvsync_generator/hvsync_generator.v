@@ -17,9 +17,23 @@ input reset;
 output reg hsync;
 output reg vsync;
 output display_on;
-output reg [8:0] hpos;
-output reg [8:0] vpos;
+output reg [9:0] hpos;
+output reg [9:0] vpos;
 
+`define VGADISPLAY
+`ifdef VGADISPLAY
+// declarations for VGA 640x480@60hz sync parameters
+// horizontal constants
+parameter H_DISPLAY			= 640; // horizontal display width
+parameter H_FRONT				=  16; // horizontal right border (front porch)
+parameter H_SYNC				=  96; // horizontal sync width
+parameter H_BACK				=  48; // horizontal left border (back porch)
+// vertical constants
+parameter V_DISPLAY			= 480; // vertical display height
+parameter V_BOTTOM			=  10; // vertical bottom border
+parameter V_SYNC				=   2; // vertical sync # lines
+parameter V_TOP				=  33; // vertical top border
+`else
 // declarations for TV-simulator sync parameters
 // horizontal constants
 parameter H_DISPLAY			= 256; // horizontal display width
@@ -31,6 +45,8 @@ parameter V_DISPLAY			= 240; // vertical display height
 parameter V_TOP				=   5; // vertical top border
 parameter V_BOTTOM			=  14; // vertical bottom border
 parameter V_SYNC				=   3; // vertical sync # lines
+`endif
+
 // derived constants
 parameter H_SYNC_START		= H_DISPLAY + H_FRONT;
 parameter H_SYNC_END			= H_DISPLAY + H_FRONT + H_SYNC - 1;
@@ -67,5 +83,4 @@ end
 assign display_on = (hpos < H_DISPLAY) && (vpos < V_DISPLAY);
 
 endmodule
-
 `endif
