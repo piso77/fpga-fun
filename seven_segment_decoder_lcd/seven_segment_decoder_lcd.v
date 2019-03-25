@@ -108,7 +108,7 @@ hvsync_generator hvsync_gen(
   );
 
   wire r = display_on && 0;
-  wire g = display_on && bits[~xofs];
+  wire g = display_on && (xofs >= 3'b011) && bits[~xofs];
   wire b = display_on && 0;
   assign rgb = {b,g,r};
 
