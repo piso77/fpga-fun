@@ -74,3 +74,6 @@ _xmsgs/
 *.wdb
 *.ini
 isim/
+
+# Makefile output dir
+build/
