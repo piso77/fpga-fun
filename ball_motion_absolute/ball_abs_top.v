@@ -1,14 +1,17 @@
 `timescale 1ns / 1ps
 
-module ball_abs_top(clk, reset, hsync, vsync, rgb);
+module ball_abs_top(clk, stop, res, hsync, vsync, rgb, ledh, ledv);
 
-input clk, reset;
+input clk, res, stop;
 output hsync, vsync;
 output [2:0] rgb;
+output ledh, ledv;
 
 localparam BALL_SIZE		= 4;				// ball size (in pixels)
-localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
-localparam ball_v_initial	= 240 - BALL_SIZE;	// ball initial Y position
+//localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
+//localparam ball_v_initial	= 240 - BALL_SIZE;	// ball initial Y position
+localparam ball_h_initial	= 0;	// ball initial X position
+localparam ball_v_initial	= 0;	// ball initial Y position
 
 reg [9:0] ball_hpos = ball_h_initial;			// ball current X, Y position
 reg [9:0] ball_vpos = ball_v_initial;
@@ -18,6 +21,9 @@ reg [9:0] ball_v_mov = 2;
 wire clk25;
 wire display_on;
 wire [9:0] hpos, vpos;
+wire reset;
+
+assign reset = ~res;
 
 clk_wiz_v3_6 clk_wiz_25(
         .clk_in1(clk),
@@ -43,16 +49,21 @@ begin
 		ball_hpos <= ball_h_initial;
 		ball_vpos <= ball_v_initial;
 	end else begin
-		// add velocity vector to ball position
-		ball_hpos <= ball_hpos + ball_h_mov;
-		ball_vpos <= ball_vpos + ball_v_mov;
+		if (!stop) begin
+			// add velocity vector to ball position
+			ball_hpos <= ball_hpos + ball_h_mov;
+			ball_vpos <= ball_vpos + ball_v_mov;
+		end
 	end
 end
 
 
 // collision with h and v boundaries (e.g. touch a border)
-wire ball_h_collide = ball_hpos >= 640 - BALL_SIZE;
-wire ball_v_collide = ball_vpos >= 480 - BALL_SIZE;
+wire ball_h_collide = ball_hpos >= (640 - BALL_SIZE);
+wire ball_v_collide = ball_vpos >= (480 - BALL_SIZE);
+
+assign ledh = ball_h_collide;
+assign ledv = ball_v_collide;
 
 // bounces
 always @(posedge ball_h_collide)
@@ -64,6 +75,7 @@ always @(posedge ball_v_collide)
 begin
 	ball_v_mov <= -ball_v_mov;
 end
+// end of update ball position
 
 // offset of ball position from video beam
 wire [9:0] ball_hdiff = hpos - ball_hpos;

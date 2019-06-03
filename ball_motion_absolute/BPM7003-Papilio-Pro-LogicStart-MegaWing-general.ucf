@@ -70,6 +70,7 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET JOY_DOWN       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
 #NET JOY_UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 #NET JOY_SELECT     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
+NET res     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 #NET SWITCH(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
 #NET SWITCH(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # C1
 #NET SWITCH(2)      LOC="P116" | IOSTANDARD=LVTTL;                                # C2
@@ -78,8 +79,9 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET SWITCH(5)      LOC="P119" | IOSTANDARD=LVTTL;                                # C5
 #NET SWITCH(6)      LOC="P120" | IOSTANDARD=LVTTL;                                # C6
 #NET SWITCH(7)      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
-NET reset      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
+NET stop      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET LED(0)         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
+NET ledh         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
 #NET LED(1)         LOC="P124" | IOSTANDARD=LVTTL;                                # C9
 #NET LED(2)         LOC="P126" | IOSTANDARD=LVTTL;                                # C10
 #NET LED(3)         LOC="P127" | IOSTANDARD=LVTTL;                                # C11
@@ -87,6 +89,7 @@ NET reset      LOC="P121" | IOSTANDARD=LVTTL;                                # C
 #NET LED(5)         LOC="P132" | IOSTANDARD=LVTTL;                                # C13
 #NET LED(6)         LOC="P133" | IOSTANDARD=LVTTL;                                # C14
 #NET LED(7)         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
+NET ledv         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
 #NET SDRAM_ADDR(0)  LOC="P140" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR0
 #NET SDRAM_ADDR(1)  LOC="P139" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR1
 #NET SDRAM_ADDR(2)  LOC="P138" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR2
