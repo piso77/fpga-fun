@@ -30,9 +30,9 @@ parameter H_SYNC				=  96; // horizontal sync width
 parameter H_BACK				=  48; // horizontal left border (back porch)
 // vertical constants
 parameter V_DISPLAY			= 480; // vertical display height
-parameter V_BOTTOM			=  10; // vertical bottom border
+parameter V_BOTTOM			=  10; // vertical bottom border - 11?
 parameter V_SYNC				=   2; // vertical sync # lines
-parameter V_TOP				=  33; // vertical top border
+parameter V_TOP				=  33; // vertical top border - 31?
 `else
 // declarations for TV-simulator sync parameters
 // horizontal constants
