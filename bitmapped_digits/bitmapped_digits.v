@@ -200,7 +200,7 @@ hvsync_generator hvsync_gen(
   wire [2:0] yofs = vpos[3:1];
   wire [4:0] bits;
   
-  digits10_case(
+  digits10_case digits10(
     .digit(digit),
     .yofs(yofs),
     .bits(bits)
