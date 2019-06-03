@@ -5,19 +5,19 @@ module ball_abs_top(clk, reset, hsync, vsync, rgb);
 input clk, reset;
 output hsync, vsync;
 output [2:0] rgb;
-wire display_on;
-wire [9:0] hpos, vpos;
 
-localparam BALL_SIZE	= 4;							// ball size (in pixels)
-localparam ball_h_initial = 320 - BALL_SIZE;	// ball initial X position
-localparam ball_v_initial = 240 - BALL_SIZE;	// ball initial Y position
+localparam BALL_SIZE		= 4;				// ball size (in pixels)
+localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
+localparam ball_v_initial	= 240 - BALL_SIZE;	// ball initial Y position
 
-reg [9:0] ball_hpos = ball_h_initial;	// ball current X, Y position
+reg [9:0] ball_hpos = ball_h_initial;			// ball current X, Y position
 reg [9:0] ball_vpos = ball_v_initial;
-reg [9:0] ball_h_mov = -2;					// ball current X, Y velocity
-reg [9:0] ball_v_mov = -2;
+reg [9:0] ball_h_mov = 2;						// ball current X, Y velocity
+reg [9:0] ball_v_mov = 2;
 
 wire clk25;
+wire display_on;
+wire [9:0] hpos, vpos;
 
 clk_wiz_v3_6 clk_wiz_25(
         .clk_in1(clk),
@@ -33,9 +33,9 @@ clk_wiz_v3_6 clk_wiz_25(
     .display_on(display_on),
     .hpos(hpos),
     .vpos(vpos)
-  );
+);
 
-// update horizontal timer
+// update ball position
 always @(posedge vsync or posedge reset)
 begin
 	if (reset) begin
