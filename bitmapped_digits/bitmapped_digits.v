@@ -164,9 +164,9 @@ module digits10_array(digit, yofs, bits);
     bitarray[9][4] = 5'b11111;
 
     // clear unused array entries
-//    for (i = 10; i <= 15; i++)
-//     for (j = 0; j <= 4; j++) 
-//        bitarray[i][j] = 0; 
+    for (i = 10; i <= 15; i = i+1)
+     for (j = 0; j <= 4; j = j+1)
+        bitarray[i][j] = 0;
   end
 endmodule
 
@@ -200,7 +200,7 @@ hvsync_generator hvsync_gen(
   wire [2:0] yofs = vpos[3:1];
   wire [4:0] bits;
   
-  digits10_case digits10(
+  digits10_array digits10(
     .digit(digit),
     .yofs(yofs),
     .bits(bits)
