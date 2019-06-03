@@ -1,11 +1,10 @@
 `timescale 1ns / 1ps
 
-module ball_abs_top(clk, stop, res, hsync, vsync, rgb, ledh, ledv);
+module ball_abs_top(clk, stop, res, hsync, vsync, rgb);
 
 input clk, res, stop;
 output hsync, vsync;
 output [2:0] rgb;
-output ledh, ledv;
 
 localparam BALL_SIZE		= 4;				// ball size (in pixels)
 //localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
@@ -61,9 +60,6 @@ end
 // collision with h and v boundaries (e.g. touch a border)
 wire ball_h_collide = ball_hpos >= (640 - BALL_SIZE);
 wire ball_v_collide = ball_vpos >= (480 - BALL_SIZE);
-
-assign ledh = ball_h_collide;
-assign ledv = ball_v_collide;
 
 // bounces
 always @(posedge ball_h_collide)
