@@ -7,10 +7,8 @@ output hsync, vsync;
 output [2:0] rgb;
 
 localparam BALL_SIZE		= 4;				// ball size (in pixels)
-//localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
-//localparam ball_v_initial	= 240 - BALL_SIZE;	// ball initial Y position
-localparam ball_h_initial	= 0;	// ball initial X position
-localparam ball_v_initial	= 0;	// ball initial Y position
+localparam ball_h_initial	= 320 - BALL_SIZE;	// ball initial X position
+localparam ball_v_initial	= 240 - BALL_SIZE;	// ball initial Y position
 
 reg [9:0] ball_hpos = ball_h_initial;			// ball current X, Y position
 reg [9:0] ball_vpos = ball_v_initial;
