@@ -22,10 +22,13 @@ wire reset;
 
 assign reset = ~res;
 
+`ifdef XILINX
 clk_wiz_v3_6 clk_wiz_25(
         .clk_in1(clk),
         .clk_out1(clk25)
 );
+`else
+`endif
 
 // video sync generator
   hvsync_generator hvsync_gen(
