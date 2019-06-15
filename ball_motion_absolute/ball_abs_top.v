@@ -38,7 +38,10 @@ clk_wiz_v3_6 clk_wiz_25(
     .vpos(vpos)
 );
 
+//`define NONBLOCKING
+
 // update ball position
+`ifdef NONBLOCKING
 always @(posedge vsync or posedge reset)
 begin
 	if (reset) begin
@@ -69,6 +72,30 @@ always @(posedge ball_v_collide)
 begin
 	ball_v_mov <= -ball_v_mov;
 end
+
+`else // BLOCKING - default behaviour
+
+always @(posedge vsync or posedge reset)
+begin
+	if (reset) begin
+		// reset ball position
+		ball_hpos = ball_h_initial;
+		ball_vpos = ball_v_initial;
+	end else begin
+		if (!stop) begin
+			// add velocity vector to ball position
+			ball_hpos = ball_hpos + ball_h_mov;
+			ball_vpos = ball_vpos + ball_v_mov;
+			if (ball_hpos <= BALL_SIZE || ball_hpos >= (640 - BALL_SIZE)) begin
+				ball_h_mov = -ball_h_mov;
+			end
+			if (ball_vpos <= BALL_SIZE || ball_vpos >= (480 - BALL_SIZE)) begin
+				ball_v_mov = -ball_v_mov;
+			end
+		end
+	end
+end
+`endif
 // end of update ball position
 
 // offset of ball position from video beam
