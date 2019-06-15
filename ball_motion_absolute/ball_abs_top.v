@@ -98,6 +98,8 @@ end
 `endif
 // end of update ball position
 
+
+// output graphics block
 // offset of ball position from video beam
 wire [9:0] ball_hdiff = hpos - ball_hpos;
 wire [9:0] ball_vdiff = vpos - ball_vpos;
@@ -109,8 +111,10 @@ wire ball_gfx = ball_hgfx && ball_vgfx;
 
 // combine signals to RGB output
 wire grid_gfx = (((hpos&7)==0) && ((vpos&7)==0));
+wire bordh_coll = hpos == 0 || hpos == 639;
+wire bordv_coll = vpos == 0 || vpos == 479;
 wire r = display_on && (ball_hgfx | ball_gfx);
-wire g = display_on && (grid_gfx | ball_gfx);
+wire g = display_on && (grid_gfx | ball_gfx | bordh_coll | bordv_coll);
 wire b = display_on && (ball_vgfx | ball_gfx);
 assign rgb = {b,g,r};
 
