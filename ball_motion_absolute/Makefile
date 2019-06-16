@@ -1,11 +1,11 @@
 default:
 	$(error BOARD not defined)
 
-papilio:
+papi:
 	$(MAKE) BOARD=papilio -f ./Makefile.xilinx
 
-icoboard:
-	$(MAKE) BOARD=icoboard -f ./Makefile.ice40
+ico:
+	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
 clean:
 	rm -rf build
