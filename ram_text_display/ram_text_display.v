@@ -70,7 +70,7 @@ wire g = display_on && rom_bits[~xofs];
 wire b = display_on && 0;
 assign rgb = {b,g,r};
 
-always @(posedge clk)
+always @(posedge clk25)
 	case (hpos[2:0])
 		// on 7th pixel of cell
 		6: begin

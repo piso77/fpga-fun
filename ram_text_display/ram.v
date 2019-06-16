@@ -18,14 +18,18 @@ module ram_sync(clk, addr, din, dout, we);
 	input [W-1:0] din;
 	output [W-1:0] dout;
 
+	reg [W-1:0] tmp;
+
 	reg [W-1:0] ram[0:(1<<D)-1]; // (1<<D)xW bit memory
 
 	always @(posedge clk) begin
 		if (we) begin
 			ram[addr] <= din;
 		end
-		dout <= ram[addr];
+		tmp <= ram[addr];
 	end
+
+	assign dout = tmp;
 
 endmodule
 

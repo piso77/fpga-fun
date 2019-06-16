@@ -79,7 +79,7 @@ NET reset     LOC="P47"  | IOSTANDARD=LVTTL;                                # B1
 #NET SWITCH(5)      LOC="P119" | IOSTANDARD=LVTTL;                                # C5
 #NET SWITCH(6)      LOC="P120" | IOSTANDARD=LVTTL;                                # C6
 #NET SWITCH(7)      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
-NET stop      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
+#NET stop      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET LED(0)         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
 #NET ledh         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
 #NET LED(1)         LOC="P124" | IOSTANDARD=LVTTL;                                # C9
