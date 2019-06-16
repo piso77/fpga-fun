@@ -70,7 +70,7 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET JOY_DOWN       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
 #NET JOY_UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 #NET JOY_SELECT     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
-NET res     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
+NET reset     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 #NET SWITCH(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
 #NET SWITCH(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # C1
 #NET SWITCH(2)      LOC="P116" | IOSTANDARD=LVTTL;                                # C2
