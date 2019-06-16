@@ -16,9 +16,7 @@ module ram_sync(clk, addr, din, dout, we);
 	input clk, we;
 	input [D-1:0] addr;
 	input [W-1:0] din;
-	output [W-1:0] dout;
-
-	reg [W-1:0] tmp;
+	output reg [W-1:0] dout;
 
 	reg [W-1:0] ram[0:(1<<D)-1]; // (1<<D)xW bit memory
 
@@ -26,10 +24,8 @@ module ram_sync(clk, addr, din, dout, we);
 		if (we) begin
 			ram[addr] <= din;
 		end
-		tmp <= ram[addr];
+		dout <= ram[addr];
 	end
-
-	assign dout = tmp;
 
 endmodule
 
