@@ -1,6 +1,4 @@
-PROJECT = ball_motion_absolute
-VSOURCE = ball_abs_top.v clk_ice40_pll.v hvsync_generator.v
-CONSTRAINTS = icoboard.ucf
+include project.cfg
 
 BITFILE = $(PROJECT).bin
 
@@ -16,6 +14,3 @@ $(PROJECT).asc: $(PROJECT).blif $(CONSTRAINTS)
 $(PROJECT).bin: $(PROJECT).asc
 	icetime -d hx8k -c 25 build/$(PROJECT).asc
 	icepack build/$(PROJECT).asc build/$(PROJECT).bin
-
-clean:
-	rm -rf build
