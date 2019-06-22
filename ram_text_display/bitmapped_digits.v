@@ -17,15 +17,15 @@ These two modules are functionally equivalent.
 // module for 10-digit bitmap ROM
 module digits10_case(digit, yofs, bits);
   
-  input [3:0] digit;		// digit 0-9
-  input [2:0] yofs;		// vertical offset (0-4)
+  input [3:0] digit;		// digit 0-9, A-F not implemented
+  input [2:0] yofs;			// vertical offset (0-4)
   output reg [4:0] bits;	// output (5 bits)
 
   // combine {digit,yofs} into single ROM address
   wire [6:0] caseexpr = {digit,yofs};
   
   always @(*)
-    case (caseexpr)/*{w:5,h:5,count:10}*/
+    case (caseexpr)			// {w:5,h:5,count:10}
       7'o00: bits = 5'b11111;
       7'o01: bits = 5'b10001;
       7'o02: bits = 5'b10001;
