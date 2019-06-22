@@ -59,31 +59,31 @@ wire [2:0] xofs = hpos[2:0];		// which pixel to draw (0-7)
 assign ram_addr = {row, col};
 
 // digits ROM
+`ifdef CASE
 digits10_case numbers(
 	.digit(digit),
 	.yofs(rom_yofs),
 	.bits(rom_bits)
 );
+`else
+digits10_array numbers(
+	.digit(digit),
+	.yofs(rom_yofs),
+	.bits(rom_bits)
+);
+`endif
+
 
 wire r = display_on && 0;
-wire g = display_on && rom_bits[~xofs];
+wire g = display_on && (xofs >= 3'b011) && rom_bits[~xofs];
 wire b = display_on && 0;
 assign rgb = {b,g,r};
 
-always @(posedge clk25)
-	case (hpos[2:0])
-		// on 7th pixel of cell
-		6: begin
-			// increment RAM cell
-			ram_write <= (ram_read + 1);
-			// enable write on last scanline of cell
-			ram_we <= (vpos[2:0] == 7);
-		end
-		// on 8th pixel of cell
-		7: begin
-		// disable write
-		ram_we <= 0;
-		end
-	endcase
-
+always @(posedge clk25) begin
+	ram_we <= 0;
+	ram_write <= (ram_read + 1);
+	if (hpos[2:0]==0 && vpos[2:0]==0) begin
+		ram_we <= 1;
+	end
+end
 endmodule
