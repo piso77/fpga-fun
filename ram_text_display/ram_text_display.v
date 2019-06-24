@@ -78,12 +78,16 @@ wire r = display_on && 0;
 wire g = display_on && (xofs >= 3'b011) && rom_bits[~xofs];
 wire b = display_on && 0;
 assign rgb = {b,g,r};
+reg [1:0] cnt;
 
 always @(posedge clk25) begin
 	ram_we <= 0;
-	ram_write <= (ram_read + 1);
-	if (hpos[2:0]==0 && vpos[2:0]==0) begin
+	if (hpos==0 && vpos==0) begin
+		cnt <= cnt + 1;
+	end
+	if (hpos[2:0]==0 && vpos[2:0]==0 && cnt==3) begin
 		ram_we <= 1;
+		ram_write <= (ram_read + 1);
 	end
 end
 endmodule
