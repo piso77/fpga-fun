@@ -59,14 +59,14 @@ wire [2:0] xofs = hpos[2:0];		// which pixel to draw (0-7)
 assign ram_addr = {row, col};
 
 // digits ROM
-`ifdef CASE
-digits10_case numbers(
+`ifdef ARRAY
+digits10_array numbers(
 	.digit(digit),
 	.yofs(rom_yofs),
 	.bits(rom_bits)
 );
 `else
-digits10_array numbers(
+digits10_case numbers(
 	.digit(digit),
 	.yofs(rom_yofs),
 	.bits(rom_bits)
