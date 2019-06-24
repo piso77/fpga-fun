@@ -10,7 +10,7 @@ W - memory width (default = 8)
 
 module ram_sync(clk, addr, din, dout, we);
 
-	parameter D = 10; // # of address bits
+	parameter D = 14; // # of address bits
 	parameter W = 8;  // # of data bits
 
 	input clk, we;

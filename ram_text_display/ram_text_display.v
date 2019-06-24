@@ -23,7 +23,7 @@ pll clk_pll_25(
 `endif
 
 wire display_on;
-wire [8:0] hpos, vpos;
+wire [9:0] hpos, vpos;
 
 wire [9:0] ram_addr;
 wire [7:0] ram_read;
@@ -48,8 +48,8 @@ hvsync_generator hvsync_gen(
 	.vpos(vpos)
 );
 
-wire [4:0] row = vpos[7:3];			// 5-bit row, vpos / 8
-wire [4:0] col = hpos[7:3];			// 5-bit col, hpos / 8
+wire [6:0] row = vpos[9:3];			// 7-bit row, vpos / 8
+wire [6:0] col = hpos[9:3];			// 7-bit col, hpos / 8
 wire [2:0] rom_yofs = vpos[2:0];	// scanline of cell
 wire [4:0] rom_bits;				// 5 pixels per scanline
 
