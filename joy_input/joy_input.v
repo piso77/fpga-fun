@@ -2,6 +2,8 @@
 4 way joystick input demonstration
 */
 
+`include "header.v"
+
 module clk_div_100hz(clk, reset, clkout);
 
 	input clk, reset;
@@ -77,21 +79,21 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 	);
 
 	// player position (only set at VSYNC)
-	reg [8:0] player_x;
-	reg [8:0] player_y;
+	reg [9:0] player_x;
+	reg [9:0] player_y;
 
 	// joy position (set continuosly during frame)
-	reg [8:0] joy_x = 320;
-	reg [8:0] joy_y = 240;
+	reg [9:0] joy_x = 320;
+	reg [9:0] joy_y = 240;
 
 	always @(posedge clk100hz)
-		if (left == 1'b1)
+		if (left == 1'b1 && joy_x != 0)
 			joy_x <= joy_x - 1;
-		else if (right == 1'b1)
+		else if (right == 1'b1 && joy_x != H_DISPLAY)
 			joy_x <= joy_x + 1;
-		else if (up == 1'b1)
+		else if (up == 1'b1 && joy_y != 0)
 			joy_y <= joy_y - 1;
-		else if (down == 1'b1)
+		else if (down == 1'b1 && joy_y != V_DISPLAY)
 			joy_y <= joy_y + 1;
 
 	always @(posedge vsync)
@@ -101,8 +103,8 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 		end
 
 	// display joy position on screen
-	wire h = hpos[8:0] >= joy_x;
-	wire v = vpos[8:0] >= joy_y;
+	wire h = hpos[9:0] >= joy_x;
+	wire v = vpos[9:0] >= joy_y;
 
 	assign rgb = {1'b0, display_on && h, display_on && v};
 
