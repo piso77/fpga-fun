@@ -2,7 +2,7 @@
 4 way joystick input demonstration
 */
 
-module clk_div_50hz(clk, reset, clkout);
+module clk_div_100hz(clk, reset, clkout);
 
 	input clk, reset;
 	output reg clkout;
@@ -12,7 +12,9 @@ module clk_div_50hz(clk, reset, clkout);
 	// 25MHz * cntEndVal = 5Hz
 	//parameter cntEndVal = 24'h2625A0;
 	// 25MHz * cntEndVal = 50Hz
-	parameter cntEndVal = 24'h3D090;
+	//parameter cntEndVal = 24'h3D090;
+	// 25MHz * cntEndVal = 100Hz
+	parameter cntEndVal = 24'h1E848;
 	reg [23:0] clk_cnt = 24'h000000;
 
 	always @(posedge clk) begin
@@ -43,7 +45,7 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 	wire display_on;
 	wire [9:0] hpos, vpos;
 
-	wire clk25mhz, clk50hz;
+	wire clk25mhz, clk100hz;
 
 	`ifdef XILINX
 	clk_wiz_v3_6 clk_pll_25(
@@ -58,10 +60,10 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 	);
 	`endif
 
-	clk_div_50hz clkdiv50hz(
+	clk_div_100hz clkdiv100hz(
 		.clk(clk25mhz),
 		.reset(reset),
-		.clkout(clk50hz)
+		.clkout(clk100hz)
 	);
 
 	hvsync_generator hvsync_gen(
@@ -82,7 +84,7 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 	reg [8:0] joy_x = 320;
 	reg [8:0] joy_y = 240;
 
-	always @(posedge clk50hz)
+	always @(posedge clk100hz)
 		if (left == 1'b1)
 			joy_x <= joy_x - 1;
 		else if (right == 1'b1)
