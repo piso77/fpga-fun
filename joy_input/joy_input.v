@@ -8,7 +8,9 @@ module clk_div_5hz(clk, reset, clkout);
 	output reg clkout;
 
 	// 100MHz * cntEndVal = 5Hz
-	parameter cntEndVal = 24'h989680;
+	//parameter cntEndVal = 24'h989680;
+	// 25MHz * cntEndVal = 5Hz
+	parameter cntEndVal = 24'h2625A0;
 	reg [23:0] clk_cnt = 24'h000000;
 
 	always @(posedge clk) begin
@@ -41,12 +43,6 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 
 	wire clk25mhz, clk5hz;
 
-	clk_div_5hz clkdiv5hz(
-		.clk(clk),
-		.reset(reset),
-		.clkout(clk5hz)
-	);
-
 	`ifdef XILINX
 	clk_wiz_v3_6 clk_pll_25(
 		.clk_in1(clk),
@@ -59,6 +55,12 @@ module joy_input_top(clk, reset, hsync, vsync, rgb, left, right, up, down);
 		.locked()
 	);
 	`endif
+
+	clk_div_5hz clkdiv5hz(
+		.clk(clk25mhz),
+		.reset(reset),
+		.clkout(clk5hz)
+	);
 
 	hvsync_generator hvsync_gen(
 		.clk(clk25mhz),
