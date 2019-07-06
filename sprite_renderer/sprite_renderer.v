@@ -118,9 +118,9 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 
 endmodule
 
-module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down);
+module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
-	input clk;
+	input clk, reset;
 	input left, right, up, down;
 	output hsync, vsync;
 	output [2:0] rgb;
