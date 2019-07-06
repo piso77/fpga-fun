@@ -47,6 +47,14 @@ set_io vsync    A9
 #set_io pmod3_8    P9
 #set_io pmod3_9    M8
 #set_io pmod3_10   N7
+set_io led[0]   L9
+set_io led[1]   G5
+set_io led[2]   L7
+set_io led[3]   N6
+set_io led[4]   N9
+set_io led[5]   P9
+set_io led[6]   M8
+set_io led[7]	N7
 
 #set_io pmod4_1    T15
 #set_io pmod4_2    T14

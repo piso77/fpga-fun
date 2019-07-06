@@ -1,7 +1,7 @@
 `ifndef SPRITE_RENDERER_H
 `define SPRITE_RENDERER_H
 
-`include "header.v"
+`include "hvsync_generator.v"
 
 module clk_div_100hz(clk, reset, clkout);
 
@@ -47,9 +47,9 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 	input vstart;			// start drawing (reached top border)
 	input load;				// ok to load sprite data? (reached hsync area)
 	input hstart;			// start drawing scanline (reached left border)
-	output [3:0] rom_addr;	// select ROM address
+	output reg [3:0] rom_addr;	// select ROM address
 	input [7:0] rom_bits;	// input bits from ROM
-	output gfx;				// output pixel
+	output reg gfx;				// output pixel
 	output in_progress;		// 0 if waiting for vstart
 
 	reg [2:0] state;		// FSM state
@@ -72,14 +72,14 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 	begin
 		case (state)
 			WAIT_FOR_VSTART: begin
-				ycount <= 0;			// init vertical count
-				gfx <= 0;				// turn off pixel out
+				ycount <= 1'b0;			// init vertical count
+				gfx <= 1'b0;				// turn off pixel out
 				if (vstart)
 					state <= WAIT_FOR_LOAD;
 			end
 			WAIT_FOR_LOAD: begin
-				xcount <= 0;			// init horiz. count
-				gfx <= 0;
+				xcount <= 1'b0;			// init horiz. count
+				gfx <= 1'b0;
 				if (load)
 					state <= LOAD_SETUP;
 			end
@@ -118,7 +118,7 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 
 endmodule
 
-module sprite_renderer_top(clk, hsync, vsync, rgb left, right, up, down);
+module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down);
 
 	input clk;
 	input left, right, up, down;
