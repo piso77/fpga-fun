@@ -6,7 +6,7 @@ default: $(BITFILE)
 
 $(PROJECT).blif: $(VSOURCE)
 	@mkdir -p build
-	yosys -p 'synth_ice40 -blif build/$(PROJECT).blif' $(VSOURCE)
+	yosys -p 'synth_ice40 -top $(TOPLEVEL) -blif build/$(PROJECT).blif' $(VSOURCE)
 
 $(PROJECT).asc: $(PROJECT).blif $(CONSTRAINTS)
 	arachne-pnr -d 8k -p $(CONSTRAINTS) -o build/$(PROJECT).asc build/$(PROJECT).blif
