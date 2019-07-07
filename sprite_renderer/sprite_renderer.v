@@ -1,7 +1,7 @@
 `ifndef SPRITE_RENDERER_H
 `define SPRITE_RENDERER_H
 
-`include "hvsync_generator.v"
+`include "header.v"
 
 module clk_div_100hz(clk, reset, clkout);
 

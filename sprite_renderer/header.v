@@ -1,4 +1,8 @@
 `define VGADISPLAY
+
+`ifndef HEADER_H
+`define HEADER_H
+
 `ifdef VGADISPLAY
 // declarations for VGA 640x480@60hz sync parameters
 // horizontal constants
@@ -32,3 +36,5 @@ parameter H_MAX				= H_DISPLAY + H_FRONT + H_SYNC + H_BACK - 1;
 parameter V_SYNC_START		= V_DISPLAY + V_BOTTOM;
 parameter V_SYNC_END		= V_DISPLAY + V_BOTTOM + V_SYNC - 1;
 parameter V_MAX				= V_DISPLAY + V_BOTTOM + V_SYNC + V_TOP - 1;
+
+`endif
