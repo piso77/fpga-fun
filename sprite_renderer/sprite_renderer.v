@@ -169,11 +169,11 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset)
 	always @(posedge clk100hz)
 		if (left == 1'b1 && joy_x != 0)
 			joy_x <= joy_x - 1;
-		else if (right == 1'b1 && joy_x != H_DISPLAY)
+		else if (right == 1'b1 && joy_x != H_DISPLAY-16)
 			joy_x <= joy_x + 1;
 		else if (up == 1'b1 && joy_y != 0)
 			joy_y <= joy_y - 1;
-		else if (down == 1'b1 && joy_y != V_DISPLAY)
+		else if (down == 1'b1 && joy_y != V_DISPLAY-16)
 			joy_y <= joy_y + 1;
 
 	always @(posedge vsync)
