@@ -163,8 +163,8 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset)
 	reg [9:0] player_y;
 
 	// joy position (set continuosly during frame)
-	reg [9:0] joy_x = 320;
-	reg [9:0] joy_y = 240;
+	reg [9:0] joy_x = H_DISPLAY / 2;
+	reg [9:0] joy_y = V_DISPLAY / 2;
 
 	always @(posedge clk100hz)
 		if (left == 1'b1 && joy_x != 0)
