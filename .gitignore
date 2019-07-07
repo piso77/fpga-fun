@@ -77,3 +77,6 @@ isim/
 
 # Makefile output dir
 build/
+
+#vim temp file
+*.swp
