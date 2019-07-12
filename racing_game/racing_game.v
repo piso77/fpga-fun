@@ -41,16 +41,16 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	// joy position (set continuosly during frame)
 	reg [9:0] joy_x = H_DISPLAY / 2;
-	reg [9:0] joy_y = V_DISPLAY / 2;
+	reg [9:0] joy_y = 16;
 
 	always @(posedge clk100hz)
 		if (left == 1'b1 && joy_x != 0)
 			joy_x <= joy_x - 1;
 		else if (right == 1'b1 && joy_x != H_DISPLAY-16)
 			joy_x <= joy_x + 1;
-		else if (up == 1'b1 && joy_y != 0)
+		else if (up == 1'b1 && joy_y != 16)
 			joy_y <= joy_y - 1;
-		else if (down == 1'b1 && joy_y != V_DISPLAY-16)
+		else if (down == 1'b1 && joy_y != 128)
 			joy_y <= joy_y + 1;
 
 	// select player or enemy access to ROM
@@ -116,7 +116,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	always @(posedge vsync)
 		begin
 			player_x <= joy_x;
-			player_y <= 180;
+			player_y <= V_DISPLAY-64;
 			track_pos <= track_pos + {11'b0,speed[7:4]};
 			enemy_y <= enemy_y + {3'b0,speed[7:4]};
 			if (enemy_hit_edge)
@@ -128,7 +128,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 			// collision check
 			if (frame_collision)
 				speed <= 16;
-			else if (speed < ~joy_y)
+			else if (speed < joy_y)
 				speed <= speed + 1;
 			else
 				speed <= speed - 1;
