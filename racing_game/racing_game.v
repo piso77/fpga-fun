@@ -144,8 +144,8 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 			frame_collision <= 0;
 
 	// track graphics signals
-	wire track_offside = (hpos[7:5]==0) || (hpos[7:5]==7);
-	wire track_shoulder = (hpos[7:3]==3) || (hpos[7:3]==28);
+	wire track_offside = (hpos[9:6]==0) || (hpos[9:6]==9);		// offside < 64 || > 576
+	wire track_shoulder = (hpos[9:3]==7) || (hpos[9:3]==72);	// shoulder 56-64 || 576-584
 	wire track_gfx = (vpos[5:1]!=track_pos[5:1]) && track_offside;
 
 	// RGB output
