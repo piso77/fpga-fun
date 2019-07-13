@@ -66,10 +66,10 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 		.bits(car_sprite_bits));
 
 	// player and enemy car position
-	reg [8:0] player_x;
-	reg [8:0] player_y;
-	reg [8:0] enemy_x = H_DISPLAY / 2;
-	reg [8:0] enemy_y = V_DISPLAY / 8;
+	reg [9:0] player_x;
+	reg [9:0] player_y;
+	reg [9:0] enemy_x = H_DISPLAY / 2;
+	reg [9:0] enemy_y = V_DISPLAY / 8;
 	// enemy car direction, 1=right, 0=left
 	reg enemy_dir = 0;
 
@@ -108,8 +108,8 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	// signals for enemy bouncing off left/right borders
 	wire enemy_hit_left = (enemy_x == 64);
-	wire enemy_hit_right = (enemy_x == H_DISPLAY - 64);
-	wire enemy_hit_edge =enemy_hit_left || enemy_hit_right;
+	wire enemy_hit_right = (enemy_x == H_DISPLAY - 64 - 16);
+	wire enemy_hit_edge = enemy_hit_left || enemy_hit_right;
 
 	// update player, enemy, track counters
 	// run once per frame
@@ -118,13 +118,13 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 			player_x <= joy_x;
 			player_y <= V_DISPLAY-64;
 			track_pos <= track_pos + {11'b0,speed[7:4]};
-			enemy_y <= enemy_y + {3'b0,speed[7:4]};
+			enemy_y <= (enemy_y >= V_DISPLAY) ? 0 : enemy_y + {3'b0,speed[7:4]};
 			if (enemy_hit_edge)
 				enemy_dir <= !enemy_dir;
 			if (enemy_dir ^ enemy_hit_edge)
 				enemy_x <= enemy_x + 1;
 			else
-				enemy_x <= enemy_x + 1;
+				enemy_x <= enemy_x - 1;
 			// collision check
 			if (frame_collision)
 				speed <= 16;
