@@ -110,9 +110,10 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 
 	input clk, vstart, load, hstart;
 	input hmirror, vmirror;
-	output [4:0] rom_addr;
+	output reg [4:0] rom_addr;
 	input [7:0] rom_bits;
-	output gfx, busy;
+	output reg gfx;
+	output busy;
 
 	assign busy = state != WAIT_FOR_VSTART;
 	
@@ -148,7 +149,7 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 				state <= LOAD1_FETCH;
 			end
 			LOAD1_FETCH: begin
-				outbits[7:0] <= rombits;
+				outbits[7:0] <= rom_bits;
 				state <= LOAD2_SETUP;
 			end
 			LOAD2_SETUP: begin
@@ -156,7 +157,7 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 				state <= LOAD1_FETCH;
 			end
 			LOAD2_FETCH: begin
-				outbits[15:8] <= rombits;
+				outbits[15:8] <= rom_bits;
 				state <= WAIT_FOR_HSTART;
 			end
 			WAIT_FOR_HSTART: begin
@@ -164,7 +165,7 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 			end
 			DRAW: begin
 				// mirror graphics left / right
-				gfx <= outbits[mirror ? ~xcount[3:0] : xcount[3:0]];
+				gfx <= outbits[hmirror ? ~xcount[3:0] : xcount[3:0]];
 				xcount <= xcount + 1;
 				if (xcount == 15) begin // pre-increment value (shouldn't be 14???)
 					ycount <= ycount + 1;
