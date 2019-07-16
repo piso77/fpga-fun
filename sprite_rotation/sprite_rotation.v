@@ -183,8 +183,8 @@ endmodule
 module rotation_selector(rotation, bitmap_num, hmirror, vmirror);
 
 	input [3:0] rotation;		// angle (0..15)
-	output [2:0] bitmap_num;	// bitmap index (0..4)
-	output hmirror, vmirror;	// h & v mirror flags
+	output reg [2:0] bitmap_num;	// bitmap index (0..4)
+	output reg hmirror, vmirror;	// h & v mirror flags
 
 	always @(*)
 		case (rotation[3:2])	// 4 quadrants
