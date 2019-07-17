@@ -296,6 +296,10 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 		else if (collistion_gfx)
 			collision_detected <= 1;
 
+	function [3:0] trunc_int_to_4(input integer val);
+		trunc_int_to_4 = val[3:0];
+	endfunction
+
 	// sine lookup (4bits input, 4 signed bits output)
 	function signed [3:0] sin_16x4;
 		input [3:0] in;			// input angle 0..15
@@ -307,10 +311,10 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 			3: y = 6;
 		endcase
 		case (in[3:2])			// 4 quadrants
-			0: sin_16x4 = 4'(y);
-			1: sin_16x4 = 4'(7-y);
-			2: sin_16x4 = 4'(-y);
-			3: sin_16x4 = 4'(y-7);
+			0: sin_16x4 = trunc_int_to_4(y);
+			1: sin_16x4 = trunc_int_to_4(7-y);
+			2: sin_16x4 = trunc_int_to_4(y);
+			3: sin_16x4 = trunc_int_to_4(y-7);
 		endcase
 	endfunction
 
@@ -323,19 +327,18 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 			// collistion detected? move backwards
 			if (collision_detected && vpos[3:1] == 0) begin
 				if (vpos[0])
-					player_x_fixed <= player_x_fixed + 12'(sin_16x4(player_rot+8));
+					player_x_fixed <= player_x_fixed + {8'b0,sin_16x4(player_rot+8)};
 				else
-					player_y_fixed <= player_y_fixed - 12'(sin_16x4(player_rot+12));
+					player_y_fixed <= player_y_fixed - {8'b0,sin_16x4(player_rot+12)};
 			end else
 				// forward movement
-				if (vpos < 9'(player_speed) begin
+				if (vpos < {5'b0,player_speed}) begin
 					if (vpos[0])
-						player_x_fixed <= player_x_fixed + 12'(sin_16x4(player_rot));
+						player_x_fixed <= player_x_fixed + {8'b0,sin_16x4(player_rot)};
 					else
-						player_x_fixed <= player_x_fixed - 12'(sin_16x4(player_rot+4));
+						player_x_fixed <= player_x_fixed - {8'b0,sin_16x4(player_rot+4)};
 				end
 			end
-		end
 endmodule
 
 module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up);
