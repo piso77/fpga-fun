@@ -293,7 +293,7 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 	always @(posedge clk)
 		if  (vstart)
 			collision_detected <= 0;
-		else if (collistion_gfx)
+		else if (collision_gfx)
 			collision_detected <= 1;
 
 	function [3:0] trunc_int_to_4(input integer val);
@@ -304,18 +304,20 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 	function signed [3:0] sin_16x4;
 		input [3:0] in;			// input angle 0..15
 		integer y;
-		case (in[1:0])			// 4 values per quadrant
-			0: y = 0;
-			1: y = 3;
-			2: y = 5;
-			3: y = 6;
-		endcase
-		case (in[3:2])			// 4 quadrants
-			0: sin_16x4 = trunc_int_to_4(y);
-			1: sin_16x4 = trunc_int_to_4(7-y);
-			2: sin_16x4 = trunc_int_to_4(y);
-			3: sin_16x4 = trunc_int_to_4(y-7);
-		endcase
+		begin
+			case (in[1:0])			// 4 values per quadrant
+				0: y = 0;
+				1: y = 3;
+				2: y = 5;
+				3: y = 6;
+			endcase
+			case (in[3:2])			// 4 quadrants
+				0: sin_16x4 = trunc_int_to_4(y);
+				1: sin_16x4 = trunc_int_to_4(7-y);
+				2: sin_16x4 = trunc_int_to_4(y);
+				3: sin_16x4 = trunc_int_to_4(y-7);
+			endcase
+		end
 	endfunction
 
 	always @(posedge hsync or posedge reset)
@@ -384,6 +386,9 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up);
 		.bits(tank_sprite_bits)
 	);
 
+	wire tank1_gfx;
+	wire playfield_gfx = hpos[5] && vpos [5];
+
 	tank_controller tank1(
 		.clk(clk25mhz),
 		.reset(reset),
@@ -397,11 +402,9 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up);
 		.playfield(playfield_gfx),
 		.switch_left(left),
 		.switch_right(right),
-		.switch_up(up),
+		.switch_up(up)
 	);
 
-	wire tank1_gfx;
-	wire playfield_gfx = hpos[5] && vpos [5];
 	
 	wire r = display_on && tank1_gfx;
 	wire g = display_on && tank1_gfx;
