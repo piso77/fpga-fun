@@ -228,7 +228,7 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 
 	input clk, reset;
 	input hsync, vsync;
-	input [8:0] hpos, vpos;		// XXX should be 9:0
+	input [9:0] hpos, vpos;
 	output [7:0] sprite_addr;
 	input [7:0] sprite_bits;
 	output gfx;
@@ -256,8 +256,8 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 	reg [3:0] player_speed;
 	reg [3:0] frame = 0;
 
-	wire hstart = {1'b0,player_x} == hpos;
-	wire vstart = {1'b0,player_y} == vpos;
+	wire hstart = {2'b0,player_x} == hpos;
+	wire vstart = {2'b0,player_y} == vpos;
 
 	sprite_renderer2 renderer(
 		.clk(clk),
