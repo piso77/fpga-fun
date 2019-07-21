@@ -350,7 +350,7 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 					if (vpos[0])
 						player_x_fixed <= player_x_fixed + {8'b0,sin_16x4(player_rot)};
 					else
-						player_x_fixed <= player_x_fixed - {8'b0,sin_16x4(player_rot+4)};
+						player_y_fixed <= player_y_fixed - {8'b0,sin_16x4(player_rot+4)};
 				end
 			end
 endmodule
