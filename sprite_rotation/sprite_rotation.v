@@ -106,7 +106,7 @@ endmodule
 
 // 16x16 sprinte renderer that supports rotation
 module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
-						vmirror, gfx, busy);
+						vmirror, gfx, busy, led);
 
 	input clk, vstart, load, hstart;
 	input hmirror, vmirror;
@@ -114,6 +114,7 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 	input [7:0] rom_bits;
 	output reg gfx;
 	output busy;
+	output reg [7:0] led;
 
 	assign busy = state != WAIT_FOR_VSTART;
 	
@@ -135,35 +136,44 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 	always @(posedge clk)
 	begin
 		gfx <= 0;
+		led <= 8'b0;
 		case (state)
 			WAIT_FOR_VSTART: begin
+				led[0] <= 1;
 				ycount <= 0;
 				if (vstart) state <= WAIT_FOR_LOAD;
 			end
 			WAIT_FOR_LOAD: begin
+				led[1] <= 1;
 				xcount <= 0;
 				if (load) state <= LOAD1_SETUP;
 			end
 			LOAD1_SETUP: begin
+				led[2] <= 1;
 				rom_addr <= {vmirror?~ycount:ycount, 1'b0};
 				state <= LOAD1_FETCH;
 			end
 			LOAD1_FETCH: begin
+				led[3] <= 1;
 				outbits[7:0] <= rom_bits;
 				state <= LOAD2_SETUP;
 			end
 			LOAD2_SETUP: begin
+				led[4] <= 1;
 				rom_addr <= {vmirror?~ycount:ycount, 1'b1};
 				state <= LOAD1_FETCH;
 			end
 			LOAD2_FETCH: begin
+				led[5] <= 1;
 				outbits[15:8] <= rom_bits;
 				state <= WAIT_FOR_HSTART;
 			end
 			WAIT_FOR_HSTART: begin
+				led[6] <= 1;
 				if (hstart) state <= DRAW;
 			end
 			DRAW: begin
+				led[7] <= 1;
 				// mirror graphics left / right
 				gfx <= outbits[hmirror ? ~xcount[3:0] : xcount[3:0]];
 				xcount <= xcount + 1;
@@ -214,7 +224,7 @@ endmodule
 // tank_controller module -- handles rendering and movement
 module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 					   sprite_bits, gfx, playfield, switch_left, switch_right,
-					   switch_up);
+					   switch_up, led);
 
 	input clk, reset;
 	input hsync, vsync;
@@ -224,6 +234,7 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 	output gfx;
 	input playfield;
 	input switch_left, switch_right, switch_up;
+	output [7:0] led;
 
 	parameter initial_x		= 128;
 	parameter initial_y		= 120;
@@ -258,7 +269,8 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 		.rom_addr(sprite_addr[4:0]),
 		.rom_bits(sprite_bits),
 		.gfx(gfx),
-		.busy(busy));
+		.busy(busy),
+		.led(led));
 
 	rotation_selector rotsel(
 		.rotation(player_rot),
@@ -343,12 +355,13 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 			end
 endmodule
 
-module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up);
+module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up, led);
 
 	input clk, reset;
 	output hsync, vsync;
 	output [2:0] rgb;
 	input left, right, up;
+	output [7:0] led;
 
 	wire display_on;
 	wire [9:0] hpos, vpos;
@@ -402,7 +415,8 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up);
 		.playfield(playfield_gfx),
 		.switch_left(left),
 		.switch_right(right),
-		.switch_up(up)
+		.switch_up(up),
+		.led(led)
 	);
 
 	
