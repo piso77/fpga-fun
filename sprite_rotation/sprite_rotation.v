@@ -161,7 +161,7 @@ module sprite_renderer2(clk, vstart, load, hstart, rom_addr, rom_bits, hmirror,
 			LOAD2_SETUP: begin
 				led[4] <= 1;
 				rom_addr <= {vmirror?~ycount:ycount, 1'b1};
-				state <= LOAD1_FETCH;
+				state <= LOAD2_FETCH;
 			end
 			LOAD2_FETCH: begin
 				led[5] <= 1;
