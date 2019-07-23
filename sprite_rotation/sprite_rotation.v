@@ -326,7 +326,7 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 			case (in[3:2])			// 4 quadrants
 				0: sin_16x4 = trunc_int_to_4(y);
 				1: sin_16x4 = trunc_int_to_4(7-y);
-				2: sin_16x4 = trunc_int_to_4(y);
+				2: sin_16x4 = trunc_int_to_4(-y);
 				3: sin_16x4 = trunc_int_to_4(y-7);
 			endcase
 		end
