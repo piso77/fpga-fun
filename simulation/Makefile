@@ -1,11 +1,16 @@
 SRCS = test.v test_tb.v
+SRCS8 = prsgen8_tb.v prsgen8.v
 
-.PHONY: pre post
+.PHONY: pre pre8 post
 
 # presynthesys
 pre: $(SRCS)
-	iverilog -o test_pre test.v test_tb.v
+	iverilog -o test_pre $(SRCS)
 	./test_pre
+
+pre8: $(SRCS8)
+	iverilog -o prsgen8_tb $(SRCS8)
+	./prsgen8_tb
 
 # postsynthesis
 post: $(SRCS)
