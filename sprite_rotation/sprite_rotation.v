@@ -308,27 +308,26 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 		else if (collision_gfx)
 			collision_detected <= 1;
 
-	function [3:0] trunc_int_to_4(input integer val);
-		trunc_int_to_4 = val[3:0];
-	endfunction
-
-	// sine lookup (4bits input, 4 signed bits output)
-	function signed [3:0] sin_16x4;
-		input [3:0] in;			// input angle 0..15
-		integer y;
+	// sine lookup (4bits input, 16 signed bits output)
+	function signed [15:0] sin_16x4(input [3:0] in); // input angle 0..15
+		reg [3:0] y;
+		reg [3:0] out;
 		begin
 			case (in[1:0])			// 4 values per quadrant
-				0: y = 0;
-				1: y = 3;
-				2: y = 5;
-				3: y = 6;
+				0		: y = 0;
+				1		: y = 3;
+				2		: y = 5;
+				3		: y = 6;
+				default : y = 0;
 			endcase
 			case (in[3:2])			// 4 quadrants
-				0: sin_16x4 = trunc_int_to_4(y);
-				1: sin_16x4 = trunc_int_to_4(7-y);
-				2: sin_16x4 = trunc_int_to_4(-y);
-				3: sin_16x4 = trunc_int_to_4(y-7);
+				0		: out = y;
+				1		: out = 7-y;
+				2		: out = -y;
+				3		: out = y-7;
+				default : out = y;
 			endcase
+			sin_16x4 = { {12 { out[3] }}, out};
 		end
 	endfunction
 
@@ -341,16 +340,16 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 			// collistion detected? move backwards
 			if (collision_detected && vpos[3:1] == 0) begin
 				if (vpos[0])
-					player_x_fixed <= player_x_fixed + {8'b0,sin_16x4(player_rot+8)};
+					player_x_fixed <= player_x_fixed + sin_16x4(player_rot+8);
 				else
-					player_y_fixed <= player_y_fixed - {8'b0,sin_16x4(player_rot+12)};
+					player_y_fixed <= player_y_fixed - sin_16x4(player_rot+12);
 			end else
 				// forward movement
 				if (vpos < {5'b0,player_speed}) begin
 					if (vpos[0])
-						player_x_fixed <= player_x_fixed + {8'b0,sin_16x4(player_rot)};
+						player_x_fixed <= player_x_fixed + sin_16x4(player_rot);
 					else
-						player_y_fixed <= player_y_fixed - {8'b0,sin_16x4(player_rot+4)};
+						player_y_fixed <= player_y_fixed - sin_16x4(player_rot+4);
 				end
 			end
 endmodule
