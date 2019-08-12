@@ -244,20 +244,20 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 	wire busy;
 	wire collision_gfx = gfx && playfield;
 
-	reg [11:0] player_x_fixed;
-	wire [7:0] player_x = player_x_fixed[11:4];
+	reg [13:0] player_x_fixed;
+	wire [9:0] player_x = player_x_fixed[13:4];
 	wire [3:0] player_x_frac = player_x_fixed[3:0];
  
-	reg [11:0] player_y_fixed;
-	wire [7:0] player_y = player_y_fixed[11:4];
+	reg [13:0] player_y_fixed;
+	wire [9:0] player_y = player_y_fixed[13:4];
 	wire [3:0] player_y_frac = player_y_fixed[3:0];
 
 	reg [3:0] player_rot;
 	reg [3:0] player_speed;
 	reg [3:0] frame = 0;
 
-	wire hstart = {2'b0,player_x} == hpos;
-	wire vstart = {2'b0,player_y} == vpos;
+	wire hstart = player_x == hpos;
+	wire vstart = player_y == vpos;
 
 	sprite_renderer2 renderer(
 		.clk(clk),
