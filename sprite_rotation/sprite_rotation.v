@@ -334,8 +334,8 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up, led);
 	);
 
 	
-	wire r = display_on && tank1_gfx;
-	wire g = display_on && tank1_gfx;
+	wire r = display_on && (tank1_gfx || hpos == 0 || hpos == H_DISPLAY-1);
+	wire g = display_on && (tank1_gfx || vpos == 0 || vpos == V_DISPLAY-1);
 	wire b = display_on && (tank1_gfx || playfield_gfx);
 	assign rgb = {b,g,r};
 endmodule
