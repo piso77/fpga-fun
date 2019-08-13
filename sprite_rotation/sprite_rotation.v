@@ -314,7 +314,27 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up, led);
 	);
 
 	wire tank1_gfx;
+
+`ifdef BOUNCEWALL
+    // walls
+    wire    [0  : 0]    top_wall;
+    wire    [0  : 0]    bottom_wall;
+    wire    [0  : 0]    right_wall;
+    wire    [0  : 0]    left_wall;
+    wire    [0  : 0]    wall_gfx;
+    /*******************************************************
+    *                      ASSIGNMENT                      *
+    *******************************************************/
+    // walls
+    assign top_wall     = vpos < 5;
+    assign bottom_wall  = vpos > 475;
+    assign right_wall   = hpos < 5;
+    assign left_wall    = hpos > 635;
+    assign wall_gfx     = top_wall || bottom_wall || right_wall || left_wall;
+`else
+	wire wall_gfx = 0;
 	wire playfield_gfx = hpos[5] && vpos [5];
+`endif
 
 	tank_controller tank1(
 		.clk(clk25mhz),
@@ -326,7 +346,7 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up, led);
 		.sprite_addr(tank_sprite_addr),
 		.sprite_bits(tank_sprite_bits),
 		.gfx(tank1_gfx),
-		.playfield(playfield_gfx),
+		.playfield(wall_gfx || playfield_gfx),
 		.switch_left(left),
 		.switch_right(right),
 		.switch_up(up),
@@ -334,8 +354,8 @@ module control_test_top(clk, reset, hsync, vsync, rgb, left, right, up, led);
 	);
 
 	
-	wire r = display_on && (tank1_gfx || hpos == 0 || hpos == H_DISPLAY-1);
-	wire g = display_on && (tank1_gfx || vpos == 0 || vpos == V_DISPLAY-1);
+	wire r = display_on && (tank1_gfx || wall_gfx);
+	wire g = display_on && tank1_gfx;
 	wire b = display_on && (tank1_gfx || playfield_gfx);
 	assign rgb = {b,g,r};
 endmodule
