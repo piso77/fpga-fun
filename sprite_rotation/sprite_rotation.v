@@ -163,11 +163,9 @@ module tank_controller(clk, reset, hpos, vpos, hsync, vsync, sprite_addr,
 
 	reg [13:0] player_x_fixed;
 	wire [9:0] player_x = player_x_fixed[13:4];
-	wire [3:0] player_x_frac = player_x_fixed[3:0];
  
 	reg [13:0] player_y_fixed;
 	wire [9:0] player_y = player_y_fixed[13:4];
-	wire [3:0] player_y_frac = player_y_fixed[3:0];
 
 	reg [3:0] player_rot;
 	reg [3:0] player_speed;
