@@ -34,7 +34,8 @@ module startfield_top(clk, reset, hsync, vsync, rgb);
 	);
 
 	// enable LFSR only in 256x256 aread
-	wire start_enable  = !hpos[8] & !vpos[8];
+	//wire start_enable  = !hpos[8] & !vpos[8];
+	wire start_enable  = !vpos[9];
 
 	// LFSR with period = 2^16-1 = 256*256-1
 	LFSR #(16'b1000000001011,0,16) lfsr_gen(
