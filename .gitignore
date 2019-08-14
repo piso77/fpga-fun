@@ -80,3 +80,5 @@ build/
 
 #vim temp file
 *.swp
+*.vcd
+dsn
