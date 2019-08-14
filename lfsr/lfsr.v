@@ -4,7 +4,7 @@
 /*
 Configurable Linear Feedback Shift Register
 */
-module lfsr(clk, reset, enable, lfsr);
+module LFSR(clk, reset, enable, lfsr);
 	parameter TAPS		= 8'b11101;		// bitmask for taps
 	parameter INVERT	= 0;			// invert feedback bit?
 	//localparam NBITS	= $size(TAPS);	// bit width
@@ -18,10 +18,10 @@ module lfsr(clk, reset, enable, lfsr);
 
 	always @(posedge clk)
 	begin
-		if (reset)
-			lfsr = {lfsr[NBITS-2:0], 1'b1};	// reset loads with all 1s
+		if (reset) // XXX - reset period >= NBITS or undefined
+			lfsr <= {lfsr[NBITS-2:0], 1'b1}; // fill reg with 1s from LSB
 		else if (enable)
-			lfsr = {lfsr[NBITS-2:0], 1'b0} ^ (feedback ? TAPS : 0);
+			lfsr <= {lfsr[NBITS-2:0], 1'b0} ^ (feedback ? TAPS : 0);
 	end
 endmodule
 
