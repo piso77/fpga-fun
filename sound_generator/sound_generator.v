@@ -25,7 +25,7 @@ reg noise_state;				// Noise output
 reg [12:0] vco_count;			// VCO counter
 reg vco_state;					// VCO output
 
-reg [15:0] lfsr;				// LFSR output
+wire [15:0] lfsr;				// LFSR output
 
 LFSR #(16'b1000000001011,0) lfsr_gen(
 	.clk(clk),
@@ -82,13 +82,36 @@ output hsync, vsync;
 output spkr;
 output [2:0] rgb;
 
-// don't output a valid sync signal
-assign hsync = 0;
-assign vsync = 0;
-assign rgb = {spkr, 1'b0, 1'b0};
+wire display_on;
+wire [9:0] hpos, vpos;
+
+wire clk25;
+
+`ifdef XILINX
+clk_wiz_v3_6 clk_pll_25(
+	.clk_in1(clk),
+	.clk_out1(clk25)
+);
+`else
+pll clk_pll_25(
+	.clock_in(clk),
+	.clock_out(clk25),
+	.locked()
+);
+`endif
+
+hvsync_generator hvsync_gen(
+	.clk(clk25),
+	.reset(reset),
+	.hsync(hsync),
+	.vsync(vsync),
+	.display_on(display_on),
+	.hpos(hpos),
+	.vpos(vpos)
+);
 
 sound_generator sndgen(
-	.clk(clk),
+	.clk(clk25),
 	.reset(reset),
 	.spkr(spkr),
 	.lfo_freq(1000),
@@ -99,5 +122,10 @@ sound_generator sndgen(
 	.lfo_shift(1),
 	.mixer(3)
 );
+
+// don't output a valid sync signal
+//assign hsync = 0;
+//assign vsync = 0;
+assign rgb = {spkr, 1'b0, 1'b0};
 
 endmodule
