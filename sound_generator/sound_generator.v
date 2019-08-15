@@ -123,9 +123,6 @@ sound_generator sndgen(
 	.mixer(3)
 );
 
-// don't output a valid sync signal
-//assign hsync = 0;
-//assign vsync = 0;
 assign rgb = {spkr, 1'b0, 1'b0};
 
 endmodule
