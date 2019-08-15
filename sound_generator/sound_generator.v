@@ -85,6 +85,8 @@ output [2:0] rgb;
 wire display_on;
 wire [9:0] hpos, vpos;
 
+reg [2:0] div5 = 0;
+reg clk5;
 wire clk25;
 
 `ifdef XILINX
@@ -110,8 +112,16 @@ hvsync_generator hvsync_gen(
 	.vpos(vpos)
 );
 
+always @(posedge clk25) begin
+	div5 <= div5 + 1;
+	if (div5[2]) begin
+		clk5 <= ~clk5;
+		div5 <= 3'b0;
+	end
+end
+
 sound_generator sndgen(
-	.clk(clk25),
+	.clk(clk5),
 	.reset(reset),
 	.spkr(spkr),
 	.lfo_freq(1000),
