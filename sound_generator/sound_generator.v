@@ -82,9 +82,6 @@ output hsync, vsync;
 output spkr;
 output [2:0] rgb;
 
-wire display_on;
-wire [9:0] hpos, vpos;
-
 reg [2:0] div5 = 0;
 reg clk5;
 wire clk25;
@@ -107,9 +104,9 @@ hvsync_generator hvsync_gen(
 	.reset(reset),
 	.hsync(hsync),
 	.vsync(vsync),
-	.display_on(display_on),
-	.hpos(hpos),
-	.vpos(vpos)
+	.display_on(),
+	.hpos(),
+	.vpos()
 );
 
 always @(posedge clk25) begin
