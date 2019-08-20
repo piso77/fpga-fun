@@ -110,7 +110,7 @@ hvsync_generator hvsync_gen(
 );
 
 always @(posedge clk25) begin
-	div5 <= div5 + 1;
+	div5 <= div5 + 1'b1;
 	if (div5[2]) begin
 		clk5 <= ~clk5;
 		div5 <= 3'b0;
