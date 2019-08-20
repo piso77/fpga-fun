@@ -21,7 +21,7 @@ module LFSR(clk, reset, enable, lfsr);
 		if (reset) // XXX - reset period >= NBITS or undefined
 			lfsr <= {lfsr[NBITS-2:0], 1'b1}; // fill reg with 1s from LSB
 		else if (enable)
-			lfsr <= {lfsr[NBITS-2:0], 1'b0} ^ (feedback ? TAPS : 0);
+			lfsr <= {lfsr[NBITS-2:0], 1'b0} ^ (feedback ? TAPS : 8'b0);
 	end
 endmodule
 
