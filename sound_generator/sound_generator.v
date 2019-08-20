@@ -40,7 +40,7 @@ wire [11:0] vco_delta = lfo_triangle >> lfo_shift;
 
 always @(posedge clk) begin
 	// divide clock by 64
-	div16 <= div16 + 1;
+	div16 <= div16 + 1'b1;
 	if (div16 == 0) begin
 		// VCO oscillator
 		if (reset || vco_count == 0) begin
@@ -48,15 +48,15 @@ always @(posedge clk) begin
 			if (vco_select)
 				vco_count <= vco_freq + vco_delta;
 			else
-				vco_count <= vco_freq + 0;
+				vco_count <= vco_freq + 1'b0;
 		end else
-			vco_count <= vco_count  - 1;
+			vco_count <= vco_count  - 1'b1;
 		// LFO oscillator
 		if (reset || lfo_count == 0) begin
 			lfo_state <= ~lfo_state;
 			lfo_count <= {lfo_freq, 8'b0};
 		end else
-			lfo_count <= lfo_count - 1;
+			lfo_count <= lfo_count - 1'b1;
 		// Noise oscillator
 		if (reset || noise_count == 0) begin
 			if (lfsr[0])
@@ -64,9 +64,9 @@ always @(posedge clk) begin
 			if (noise_select)
 				noise_count <= noise_freq + vco_delta;
 			else
-				noise_count <= noise_freq + 0;
+				noise_count <= noise_freq + 1'b0;
 		end else
-			noise_count <= noise_count - 1;
+			noise_count <= noise_count - 1'b1;
 		// Mixer
 		spkr <= (lfo_state | ~mixer[2]) &
 				(noise_state | ~mixer[1]) &
