@@ -121,13 +121,13 @@ sound_generator sndgen(
 	.clk(clk5),
 	.reset(reset),
 	.spkr(spkr),
-	.lfo_freq(1000),
-	.noise_freq(90),
-	.vco_freq(250),
-	.vco_select(1),
-	.noise_select(1),
-	.lfo_shift(1),
-	.mixer(3)
+	.lfo_freq(10'd1000),
+	.noise_freq(12'd90),
+	.vco_freq(12'd250),
+	.vco_select(1'b1),
+	.noise_select(1'b1),
+	.lfo_shift(3'd1),
+	.mixer(3'd3)
 );
 
 assign rgb = {spkr, 1'b0, 1'b0};
