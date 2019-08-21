@@ -92,6 +92,37 @@ endmodule
 `define I_BRANCH_IF_ZERO(zero) `I_BRANCH_IF(zero, 1'b1, 1'b0, 1'b0)
 `define I_CLEAR_ZERO `I_COMPUTE(`DEST_NOP, `OP_ZERO)
 
+module CPU(clk, reset, address, data_in, data_out, write);
+	input clk, reset;
+	output [7:0] address;
+	input [7:0] data_in;
+	output [7:0] data_out;
+	output write;
 
+	reg [7:0] IP;
+	reg [7:0] A, B;
+	reg [8:0] Y;
+	reg [2:0] state;
 
+	reg carry, zero;
+	wire [1:0] flags = {zero, carry};
 
+	reg [7:0] opcode;
+	wire [3:0] aluop = opcode[3:0];
+	wire [1:0] opdest = opcode[5:4];
+	wire B_or_data = opcode[6];
+
+	localparam S_RESET =  0;
+	localparam S_SELECT = 1;
+	localparam S_DECODE = 2;
+	localparam S_COMPUTE = 3;
+	localparam S_READ_IP = 4;
+
+	ALU alu(
+		.A(A),
+		.B(B_or_data ? data_in : B),
+		.Y(Y),
+		.aluop(aluop),
+		.carry(carry)
+	);
+endmodule
