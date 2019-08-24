@@ -125,4 +125,99 @@ module CPU(clk, reset, address, data_in, data_out, write);
 		.aluop(aluop),
 		.carry(carry)
 	);
+
+	always @(posedge clk)
+		if (reset) begin
+			state <= 0;
+			write <= 0;
+		end else begin
+			case (state)
+				// state 0: reset
+				S_RESET: begin
+					IP <= 8'h80;
+					write <= 0;
+					state <= S_SELECT;
+				end
+				// state 1: select opcode address
+				S_SELECT: begin
+					address <= IP;
+					IP <= IP + 1;
+					write <= 0;
+					state <= S_DECODE;
+				end
+				// state 2: read/decode opcode
+				S_DECODE: begin
+					opcode <= data_in; // only use opcode next cycle
+					casez (data_in)
+						// ALU A + B -> dest
+						8'b00??????: begin
+							state <= S_COMPUTE;
+						end
+						// ALU A + immediate -> dest
+						8'b01??????: begin
+							address <= IP;
+							IP <= IP + 1;
+							state <= S_COMPUTE;
+						end
+						// ALU A + read [B] -> dest
+						8'b11??????: begin
+							address <= B;
+							state <= S_COMPUTE;
+						end
+						// ALU -> write [nnnn]
+						8'b1001????: begin
+							address <= {4'b0, data_in[3:0]};
+							data_out <= A;
+							write <= 1;
+							state <= S_SELECT;
+						end
+						// swap A,B
+						8'b10000001: begin
+							A <= B;
+							B <= A;
+							state <= S_SELECT;
+						end
+						// conditional branch
+						8'b1010????: begin
+							if (
+								(data_in[0] && (data_in[1] == carry)) ||
+								(data_in[2] && (data_in[3] == zero))
+							) begin
+								address <= IP;
+								state <= S_READ_IP;
+							end else begin
+								state <= S_SELECT;
+							end
+							IP <= IP + 1; // skip immediate
+						end
+						// fall-through RESET
+						default: begin
+							state <= S_RESET; // reset
+						end
+					endcase // casez
+				end
+				// state 3: compute ALU op and flags
+				S_COMPUTE: begin
+					// transfer ALU output to destination
+					case (opdest)
+						`DEST_A: A <= Y[7:0];
+						`DEST_B: B <= Y[7:0];
+						`DEST_IP: IP <= Y[7:0];
+						`DEST_NOP: ;
+					endcase
+					// set carry for certain operations (4-7, 12-15)
+					if (aluop[2]) carry <= Y[8];
+					// set zero flag
+					zero <= ~|Y[7:0]
+					// repeat CPU loop
+					state <= S_SELECT;
+				end
+				// state 4: read new IP from memory (immediate mode)
+				S_READ_IP: begin
+					IP <= data_in;
+					state <= S_SELECT;
+				end
+			endcase // case (state)
+		end
+
 endmodule
