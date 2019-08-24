@@ -1,3 +1,6 @@
+`ifndef ALU_H
+`define ALU_H
+
 // ALU operations
 `define OP_ZERO		4'h0
 `define OP_LOAD_A	4'h1
@@ -221,3 +224,77 @@ module CPU(clk, reset, address, data_in, data_out, write);
 		end
 
 endmodule
+
+`ifdef TOPMOD__test_CPU_top
+
+module test_CPU_top(
+	input clk,
+	input reset,
+	output [7:0] address_bus,
+	output reg [7:0] to_cpu,
+	output [7:0] from_cpu,
+	output write_enable,
+	output [7:0] IP,
+	output [7:0] A,
+	output [7:0] B,
+	output zero,
+	output carry
+);
+
+	reg [7:0] ram[0:127];
+	reg [7:0] rom[0:127];
+
+	assign IP = cpu.IP;
+	assign A = cpu.A;
+	assign B = cpu.B;
+	assign zero = cpu.zero;
+	assign carry = cpu.carry;
+
+	CPU cpu(
+		.clk(clk),
+		.reset(reset),
+		.address(address_bus),
+		.data_in(to_cpu),
+		.data_out(from_cpu),
+		.write(write_enable)
+	);
+
+	always @(posedge clk)
+		if (write_enable) begin
+			ram[address_bus[6:0]] <= from_cpu;
+		end
+
+	always @(*)
+		if (address_bus[7] == 0)
+			to_cpu = ram[address[6:0]];
+		else
+			to_cpu = rom[address[6:0]];
+
+	initial begin
+`ifdef EXT_INLINE_ASM
+	// example code: Fibonacci sequence
+	rom = '{
+		__asm
+
+.arch femto8
+.org 128
+.len 128
+
+Start:
+	zero A		; A <= 0
+	ldb #1		; B <= 1
+Loop:
+	add A,B		; A <= A + B
+	swapab		; swap A, B
+	bcc Loop	; repeat until carry set
+	reset		; end of loop; reset CPU
+
+	__endasm
+	};
+`endif
+	end
+
+endmodule
+
+`endif // TOPMOD
+`endif // ALU_H
