@@ -26,7 +26,7 @@ module ALU(A, B, carry, aluop, Y);
 	input [N-1:0] B;
 	input carry;
 	input [3:0] aluop;
-	output [N:0] Y;
+	output reg [N:0] Y;
 
 	always @(*)
 		case (aluop)
@@ -97,10 +97,10 @@ endmodule
 
 module CPU(clk, reset, address, data_in, data_out, write);
 	input clk, reset;
-	output [7:0] address;
+	output reg [7:0] address;
 	input [7:0] data_in;
-	output [7:0] data_out;
-	output write;
+	output reg [7:0] data_out;
+	output reg write;
 
 	reg [7:0] IP;
 	reg [7:0] A, B;
@@ -211,7 +211,7 @@ module CPU(clk, reset, address, data_in, data_out, write);
 					// set carry for certain operations (4-7, 12-15)
 					if (aluop[2]) carry <= Y[8];
 					// set zero flag
-					zero <= ~|Y[7:0]
+					zero <= ~|Y[7:0];
 					// repeat CPU loop
 					state <= S_SELECT;
 				end
