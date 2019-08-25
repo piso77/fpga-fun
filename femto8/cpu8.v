@@ -266,9 +266,9 @@ module test_CPU_top(
 
 	always @(*)
 		if (address_bus[7] == 0)
-			to_cpu = ram[address[6:0]];
+			to_cpu = ram[address_bus[6:0]];
 		else
-			to_cpu = rom[address[6:0]];
+			to_cpu = rom[address_bus[6:0]];
 
 	initial begin
 `ifdef EXT_INLINE_ASM
