@@ -104,7 +104,7 @@ module CPU(clk, reset, address, data_in, data_out, write);
 
 	reg [7:0] IP;
 	reg [7:0] A, B;
-	reg [8:0] Y;
+	wire [8:0] Y;
 	reg [2:0] state;
 
 	reg carry, zero;
@@ -244,12 +244,6 @@ module test_CPU_top(
 	reg [7:0] ram[0:127];
 	reg [7:0] rom[0:127];
 
-	assign IP = cpu.IP;
-	assign A = cpu.A;
-	assign B = cpu.B;
-	assign zero = cpu.zero;
-	assign carry = cpu.carry;
-
 	CPU cpu(
 		.clk(clk),
 		.reset(reset),
@@ -258,6 +252,12 @@ module test_CPU_top(
 		.data_out(from_cpu),
 		.write(write_enable)
 	);
+
+	assign IP = cpu.IP;
+	assign A = cpu.A;
+	assign B = cpu.B;
+	assign zero = cpu.zero;
+	assign carry = cpu.carry;
 
 	always @(posedge clk)
 		if (write_enable) begin
