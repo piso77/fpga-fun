@@ -11,4 +11,4 @@ ico: fib8.hex
 	node ../../nanoasm/src/asmmain.js femto8.json $< > $@
 
 clean:
-	rm -rf build
+	rm -rf build *.hex

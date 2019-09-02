@@ -1,4 +1,4 @@
-// example code: Fibonacci sequence
+; example code: Fibonacci sequence
 .arch femto8
 .org 128
 .len 128
