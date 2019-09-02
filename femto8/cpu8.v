@@ -270,29 +270,8 @@ module test_CPU_top(
 		else
 			to_cpu = rom[address_bus[6:0]];
 
-	initial begin
-`ifdef EXT_INLINE_ASM
-	// example code: Fibonacci sequence
-	rom = '{
-		__asm
-
-.arch femto8
-.org 128
-.len 128
-
-Start:
-	zero A		; A <= 0
-	ldb #1		; B <= 1
-Loop:
-	add A,B		; A <= A + B
-	swapab		; swap A, B
-	bcc Loop	; repeat until carry set
-	reset		; end of loop; reset CPU
-
-	__endasm
-	};
-`endif
-	end
+	initial
+		$readmemh("fib8.hex", rom);
 
 endmodule
 
