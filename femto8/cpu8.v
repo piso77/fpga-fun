@@ -253,11 +253,13 @@ module test_CPU_top(
 		.write(write_enable)
 	);
 
+`ifdef DEBUG
 	assign IP = cpu.IP;
 	assign A = cpu.A;
 	assign B = cpu.B;
 	assign zero = cpu.zero;
 	assign carry = cpu.carry;
+`endif
 
 	always @(posedge clk)
 		if (write_enable) begin
