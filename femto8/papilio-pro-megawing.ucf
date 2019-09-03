@@ -49,11 +49,11 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 #NET SPI_MOSI       LOC="P98"  | IOSTANDARD=LVTTL;                                # A14
 #NET SPI_SCLK       LOC="P100" | IOSTANDARD=LVTTL;                                # A15
 
-NET VSYNC      LOC="P99"  | IOSTANDARD=LVTTL;                                # B0
-NET HSYNC      LOC="P97"  | IOSTANDARD=LVTTL;                                # B1
-NET rgb(2)     LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
-NET rgb(1)     LOC="P84"  | IOSTANDARD=LVTTL;                                # B4
-NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B7
+#NET VSYNC      LOC="P99"  | IOSTANDARD=LVTTL;                                # B0
+#NET HSYNC      LOC="P97"  | IOSTANDARD=LVTTL;                                # B1
+#NET rgb(2)     LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
+#NET rgb(1)     LOC="P84"  | IOSTANDARD=LVTTL;                                # B4
+#NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B7
 
 #NET VGA_BLUE(0)    LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
 #NET VGA_BLUE(1)    LOC="P87"  | IOSTANDARD=LVTTL;                                # B3
@@ -70,7 +70,7 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET JOY_DOWN       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
 #NET JOY_UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 #NET JOY_SELECT     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
-#NET reset     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
+NET reset     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 #NET SWITCH(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
 #NET SWITCH(1)      LOC="P115" | IOSTANDARD=LVTTL;                                # C1
 #NET SWITCH(2)      LOC="P116" | IOSTANDARD=LVTTL;                                # C2
