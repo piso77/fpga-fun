@@ -21,21 +21,21 @@ set_io clk R9
 #set_io r1    A2
 #set_io r2    C3
 #set_io r3    B4
-set_io rgb[0]   B4
+#set_io rgb[0]   B4
 
 #set_io b0    B7
 #set_io b1    B6
 #set_io b2    B3
 #set_io b3   B5
-set_io rgb[2]    B5
+#set_io rgb[2]    B5
 
 #set_io g0    D8
 #set_io g1    B9
 #set_io g2    B10
 #set_io g3    B11
-set_io rgb[1]    B11
-set_io hsync    B8
-set_io vsync    A9
+#set_io rgb[1]    B11
+#set_io hsync    B8
+#set_io vsync    A9
 #set_io nc    A10
 #set_io nc   A11
 
@@ -47,14 +47,14 @@ set_io vsync    A9
 #set_io pmod3_8    P9
 #set_io pmod3_9    M8
 #set_io pmod3_10   N7
-set_io led[0]   L9
-set_io led[1]   G5
-set_io led[2]   L7
-set_io led[3]   N6
-set_io led[4]   N9
-set_io led[5]   P9
-set_io led[6]   M8
-set_io led[7]	N7
+#set_io led[0]   L9
+#set_io led[1]   G5
+#set_io led[2]   L7
+#set_io led[3]   N6
+#set_io led[4]   N9
+#set_io led[5]   P9
+#set_io led[6]   M8
+#set_io led[7]	N7
 
 #set_io pmod4_1    T15
 #set_io pmod4_2    T14
@@ -74,9 +74,9 @@ set_io reset    T15
 #set_io pmod4_8    T13
 #set_io pmod4_9    T10
 #set_io pmod4_10   T9
-set_io left    R14
-set_io right    T13
-set_io up    T10
+#set_io left    R14
+#set_io right    T13
+#set_io up    T10
 #set_io down   T9
 
 #set_io matrix_00  C13
