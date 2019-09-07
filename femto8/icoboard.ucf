@@ -96,6 +96,23 @@ set_io reset    T15
 #set_io matrix_0e  D14
 #set_io matrix_0f  C16
 #
+set_io address_bus[0]  C13
+set_io address_bus[1]  E9
+set_io address_bus[2]  B14
+set_io address_bus[3]  A16
+set_io address_bus[4]  D15
+set_io address_bus[5]  D16
+set_io address_bus[6]  F16
+set_io address_bus[7]  G15
+#set_io matrix_08  G10
+#set_io matrix_09  J10
+#set_io matrix_0a  G16
+#set_io matrix_0b  H16
+#set_io matrix_0c  F15
+#set_io matrix_0d  E16
+#set_io matrix_0e  D14
+set_io write_enable  C16
+
 #set_io matrix_10  A15
 #set_io matrix_11  C11
 #set_io matrix_12  E10
@@ -113,6 +130,23 @@ set_io reset    T15
 #set_io matrix_1e  C12
 #set_io matrix_1f  B12
 #
+set_io from_cpu[0]  A15
+set_io from_cpu[1]  C11
+set_io from_cpu[2]  E10
+set_io from_cpu[3]  F9
+set_io from_cpu[4]  E13
+set_io from_cpu[5]  G11
+set_io from_cpu[6]  D10
+set_io from_cpu[7]  D11
+set_io to_cpu[0]  E11
+set_io to_cpu[1]  F12
+set_io to_cpu[2]  E14
+set_io to_cpu[3]  F11
+set_io to_cpu[4]  G12
+set_io to_cpu[5]  B13
+set_io to_cpu[6]  C12
+set_io to_cpu[7]  B12
+
 #set_io matrix_20  L12
 #set_io matrix_21  P14
 #set_io matrix_22  T16
