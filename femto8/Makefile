@@ -1,5 +1,7 @@
-default:
-	$(error BOARD not defined)
+default: fib8.hex
+	iverilog -o dsn cpu8_tb.v cpu8.v
+	vvp dsn
+	#gtkwave test_cpu8.vcd
 
 papi: fib8.hex
 	$(MAKE) BOARD=papilio -f ./Makefile.xilinx
