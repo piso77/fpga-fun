@@ -49,7 +49,7 @@ module test_cpu8;
 		$readmemh("fib8.hex", rom);
 
 	initial
-		$monitor("At time %t, address_bus = %h (%0d)",
-				 $time, address_bus, address_bus);
+		$monitor("At time %t: addr=%h, tc=%h, fc=%h, we=%h",
+				 $time, address_bus, to_cpu, from_cpu, write_enable);
 
 endmodule
