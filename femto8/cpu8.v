@@ -95,12 +95,14 @@ endmodule
 `define I_BRANCH_IF_ZERO(zero) `I_BRANCH_IF(zero, 1'b1, 1'b0, 1'b0)
 `define I_CLEAR_ZERO `I_COMPUTE(`DEST_NOP, `OP_ZERO)
 
-module CPU(clk, reset, address, data_in, data_out, write);
-	input clk, reset;
-	output reg [7:0] address;
-	input [7:0] data_in;
-	output reg [7:0] data_out;
-	output reg write;
+module CPU(
+	input clk,
+	input reset,
+	output reg [7:0] address,
+	input [7:0] data_in,
+	output reg [7:0] data_out,
+	output reg write
+);
 
 	reg [7:0] IP;
 	reg [7:0] A, B;
