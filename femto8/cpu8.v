@@ -96,6 +96,13 @@ endmodule
 `define I_CLEAR_ZERO `I_COMPUTE(`DEST_NOP, `OP_ZERO)
 
 module CPU(
+`ifdef DEBUG
+	output reg [7:0] IP,
+	output reg [7:0] A,
+	output reg [7:0] B,
+	output reg carry,
+	output reg zero,
+`endif
 	input clk,
 	input reset,
 	output reg [7:0] address,
@@ -104,12 +111,14 @@ module CPU(
 	output reg write
 );
 
+`ifndef DEBUG
 	reg [7:0] IP;
 	reg [7:0] A, B;
+	reg carry, zero;
+`endif
+
 	wire [8:0] Y;
 	reg [2:0] state;
-
-	reg carry, zero;
 	wire [1:0] flags = {zero, carry};
 
 	reg [7:0] opcode;
@@ -230,23 +239,32 @@ endmodule
 `ifdef TOPMOD__test_CPU_top
 
 module test_CPU_top(
+`ifdef DEBUG
+	output [7:0] IP,
+	output [7:0] A,
+	output [7:0] B,
+	output zero,
+	output carry,
+`endif
 	input clk,
 	input reset,
 	output [7:0] address_bus,
 	output reg [7:0] to_cpu,
 	output [7:0] from_cpu,
-	output write_enable,
-	output [7:0] IP,
-	output [7:0] A,
-	output [7:0] B,
-	output zero,
-	output carry
+	output write_enable
 );
 
 	reg [7:0] ram[0:127];
 	reg [7:0] rom[0:127];
 
 	CPU cpu(
+`ifdef DEBUG
+		.IP(IP),
+		.A(A),
+		.B(B),
+		.carry(carry),
+		.zero(zero),
+`endif
 		.clk(clk),
 		.reset(reset),
 		.address(address_bus),
@@ -254,14 +272,6 @@ module test_CPU_top(
 		.data_out(from_cpu),
 		.write(write_enable)
 	);
-
-`ifdef DEBUG
-	assign IP = cpu.IP;
-	assign A = cpu.A;
-	assign B = cpu.B;
-	assign zero = cpu.zero;
-	assign carry = cpu.carry;
-`endif
 
 	always @(posedge clk)
 		if (write_enable) begin
