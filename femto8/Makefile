@@ -1,5 +1,5 @@
 default: fib8.hex
-	iverilog -o dsn cpu8_tb.v cpu8.v
+	iverilog -DDEBUG -o dsn cpu8_tb.v cpu8.v
 	vvp dsn
 	#gtkwave test_cpu8.vcd
 

@@ -6,11 +6,9 @@ module test_cpu8;
 		$dumpfile("test_cpu8.vcd");
 		$dumpvars(0, test_cpu8);
 
-		# 17 reset = 1;
-		# 11 reset = 0;
-		# 29 reset = 1;
-		# 5  reset = 0;
-		# 513 $finish;
+		# 4 reset = 1;
+		# 4 reset = 0;
+		# 248 $finish;
 	end
 
 	/* Make a regular pulsing clock. */	
@@ -21,11 +19,14 @@ module test_cpu8;
 	reg [7:0] to_cpu;
 	wire [7:0] from_cpu;
 	wire write_enable;
+	wire [7:0] A, B;
 
 	reg [7:0] ram[0:127];
 	reg [7:0] rom[0:127];
 
 	CPU cpu(
+		.A(A),
+		.B(B),
 		.clk(clk),
 		.reset(reset),
 		.address(address_bus),
@@ -49,7 +50,7 @@ module test_cpu8;
 		$readmemh("fib8.hex", rom);
 
 	initial
-		$monitor("At time %t: addr=%h, tc=%h, fc=%h, we=%h",
-				 $time, address_bus, to_cpu, from_cpu, write_enable);
+		$monitor("At time %t: addr=0x%h to_cpu=0x%h A=0x%h B=0x%h",
+				 $time, address_bus, to_cpu, A, B);
 
 endmodule
