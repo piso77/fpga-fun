@@ -1,0 +1,17 @@
+include project.cfg
+
+BITFILE = $(PROJECT).bin
+
+default: $(BITFILE)
+
+$(PROJECT).blif: $(VHDSOURCE)
+	@mkdir -p build
+#	yosys -p 'synth_ice40 -top $(TOPLEVEL) -blif build/$(PROJECT).blif' $(VHDSOURCE)
+	yosys -m ghdl -p 'ghdl $(TOPLEVEL); synth_ice40 -top $(TOPLEVEL) -blif build/$(PROJECT).blif'
+
+$(PROJECT).asc: $(PROJECT).blif $(CONSTRAINTS)
+	arachne-pnr -d 8k -p $(CONSTRAINTS) -o build/$(PROJECT).asc build/$(PROJECT).blif
+
+$(PROJECT).bin: $(PROJECT).asc
+	icetime -d hx8k -c 25 build/$(PROJECT).asc
+	icepack build/$(PROJECT).asc build/$(PROJECT).bin
