@@ -1,22 +1,18 @@
+#include project.cfg
+
 GHDL=ghdl
 GHDLFLAGS=
-MODULES=\
-	full_adder.o \
-	full_adder_testbench
+MODULES=full_adder full_adder_testbench
 
 
 test: $(MODULES)
 	$(GHDL) -r full_adder_testbench --vcd=full_adder_testbench.vcd
 	#./full_adder_testbench --vcd=full_adder_testbench.vcd
 
-# Binary depends on the object file
-%: %.o
-	$(GHDL) -e $(GHDLFLAGS) $@
-
-# Object file depends on source
-%.o: %.vhd
+%: %.vhd
 	$(GHDL) -a $(GHDLFLAGS) $<
+	$(GHDL) -e $(GHDLFLAGS) $@
 
 clean:
 	echo "Cleaning up..."
-	rm -f *.o *_testbench work*.cf e*.lst
+	rm -f *.o *_testbench work*.cf e*.lst *.vcd
