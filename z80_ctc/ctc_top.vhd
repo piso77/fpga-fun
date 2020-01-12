@@ -27,7 +27,7 @@ begin
 
 	en_rd(0) <= n_ce or n_rd or chan(0);
 	en_wr(0) <= n_ce or n_wr or chan(0);
-	ctc0: entity work.ctc
+	ctc0: entity work.ctc_counter
 	port map(
 		clk => clk,
 		rst => '0',

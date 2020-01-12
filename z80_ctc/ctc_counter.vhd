@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
-entity ctc is
+entity ctc_counter is
 	Port (
 			clk 			: in  STD_LOGIC;
 			rst 			: in  STD_LOGIC;
@@ -13,9 +13,9 @@ entity ctc is
 			dbus_in 		: in  STD_LOGIC_VECTOR(7 downto 0);
 			dbus_out 		: out STD_LOGIC_VECTOR(7 downto 0)
 		);
-end ctc;
+end ctc_counter;
 
-architecture Behavioral of ctc is
+architecture Behavioral of ctc_counter is
 	type states is (setctrl, settime);
 	signal state		: states := setctrl;
 --	signal nextstate	: states := setctrl;
