@@ -14,8 +14,8 @@ architecture arch of ctc_tb is
 	signal trg		: std_logic;
 	signal trgs		: std_logic_vector(3 downto 0);
 	signal zcto		: std_logic_vector(3 downto 0);
-	signal sw		: std_logic_vector(7 downto 0);
-	signal led		: std_logic_vector(7 downto 0);
+	signal input	: std_logic_vector(7 downto 0);
+	signal output	: std_logic_vector(7 downto 0);
 begin
 
 	-- 10 ns clock period
@@ -37,26 +37,33 @@ begin
 		cs => "00",
 		clk_trg => trgs,
 		zc_to => zcto,
-		dbus_in => sw,
-		dbus_out => led
+		dbus_in => input,
+		dbus_out => output
 	);
 
-	process
+	stim_proc: process
 	begin
-	-- initial input
 	n_ce <= '0';
-	n_rd <= '1';
+	n_rd <= '0';
 	n_wr <= '0';
 	trg <= '0';
-	sw <= "00011111"; -- ctrl word
+	input <= "11110000"; -- ctrl word
 	wait until falling_edge(clk);
-	sw <= "11111111"; -- time word
-	wait until falling_edge(clk);
+	--wait for 10 ns;
+	assert output = x"F0" report "ctrword failed";
 
+	input <= "11110100"; -- ctrl word
+	wait until falling_edge(clk);
+	assert output = x"F4" report "ctrword failed";
+
+	trg <= '1';
+	input <= "10101100"; -- time word
+	wait until falling_edge(clk);
+	assert output = x"AC" report "timeword failed";
+	n_wr <= '1';
 
 	-- terminate simulation
-	assert false
-	report "Simulation completed"
-	severity failure;
+	report "Simulation completed";
+	wait;
 	end process;
 end arch;
