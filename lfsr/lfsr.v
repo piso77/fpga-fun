@@ -4,7 +4,7 @@
 /*
 Configurable Linear Feedback Shift Register
 */
-module LFSR(clk, reset, enable, lfsr);
+module LFSR(clk, reset, enable, ready, lfsr);
 	parameter TAPS		= 8'b11101;		// bitmask for taps
 	parameter INVERT	= 0;			// invert feedback bit?
 	//localparam NBITS	= $size(TAPS);	// bit width
@@ -12,6 +12,7 @@ module LFSR(clk, reset, enable, lfsr);
 
 	input clk, reset;
 	input enable;
+	output ready;
 	output reg [NBITS-1:0] lfsr;		// actual shift register
 
 	wire feedback = lfsr[NBITS-1] ^ INVERT;
@@ -23,6 +24,8 @@ module LFSR(clk, reset, enable, lfsr);
 		else if (enable)
 			lfsr <= {lfsr[NBITS-2:0], 1'b0} ^ (feedback ? TAPS : 0);
 	end
+
+	assign ready = &lfsr;
 endmodule
 
 `endif

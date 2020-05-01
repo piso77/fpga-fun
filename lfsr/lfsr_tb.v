@@ -2,18 +2,16 @@
 
 module test;
 
-  localparam cycle = 1; // timescale
-  localparam warmup = 2*cycle;
-  localparam setup = 16*cycle;
-  localparam complete = 513*cycle;
+  localparam complete = 513;
 
   /* Make a reset that pulses once. */
   reg clk = 0;
   reg reset = 0;
   reg enable = 1;
+  wire ready;
   wire [7:0] value;
 
-  LFSR l1(.clk(clk), .reset(reset), .enable(enable), .lfsr(value));
+  LFSR l1(.clk(clk), .reset(reset), .enable(enable), .ready(ready), .lfsr(value));
 
   // when the sensitive list is omitted in always block
   // always-block run forever
@@ -21,30 +19,23 @@ module test;
   always
   begin
     clk = !clk;
-    #cycle;
+    #1;
   end
 
   initial begin
     $dumpfile("test.vcd");
     $dumpvars(0,test);
-    $monitor("At time %t, value = %h (%0d)",
-             $time, value, value);
+    $monitor("At time %t, rdy: %d value = %h (%0d)",
+             $time, ready, value, value);
   end
 
   integer i;
   always @(clk)
   begin
-    #warmup;
     reset = 1;
-
-    #setup;
+    wait(ready);
     reset = 0;
     if (^value===1'bX) begin
-      $display($time, "Value=%b has x's", value);
-      for(i=0; i<8; i++) begin
-        if(value[i]===1'bX) $display("value[%0d] is X",i);
-        if(value[i]===1'bZ) $display("value[%0d] is Z",i);
-      end
       $error("Testbench failed");
       $finish;
     end
