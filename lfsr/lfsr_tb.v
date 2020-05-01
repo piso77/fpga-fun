@@ -1,25 +1,26 @@
 module test;
 
   /* Make a reset that pulses once. */
+  reg clk = 0;
   reg reset = 0;
   reg enable = 1;
-  initial begin
-     $dumpfile("test.vcd");
-     $dumpvars(0,test);
+  wire [7:0] value;
 
-     # 4 reset = 1;
-     # 16 reset = 0;
-     # 513 $finish;
-  end
+  LFSR l1(.clk(clk), .reset(reset), .enable(enable), .lfsr(value));
 
   /* Make a regular pulsing clock. */
-  reg clk = 0;
   always #1 clk = !clk;
 
-  wire [7:0] value;
-  LFSR l1 (clk, reset, enable, value);
+  initial begin
+    $dumpfile("test.vcd");
+    $dumpvars(0,test);
+
+    # 4 reset = 1;
+    # 16 reset = 0;
+    # 513 $finish;
+  end
 
   initial
-     $monitor("At time %t, value = %h (%0d)",
-              $time, value, value);
+    $monitor("At time %t, value = %h (%0d)",
+             $time, value, value);
 endmodule // test
