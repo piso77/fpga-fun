@@ -3,9 +3,9 @@
 module test;
 
   localparam cycle = 1; // timescale
-  localparam init = 4*cycle;
-  localparam start = 16*cycle;
-  localparam finish = 513*cycle;
+  localparam warmup = 2*cycle;
+  localparam setup = 16*cycle;
+  localparam complete = 513*cycle;
 
   /* Make a reset that pulses once. */
   reg clk = 0;
@@ -27,13 +27,29 @@ module test;
   initial begin
     $dumpfile("test.vcd");
     $dumpvars(0,test);
-
-    #init reset = 1;
-    #start reset = 0;
-    #finish $finish;
-  end
-
-  initial
     $monitor("At time %t, value = %h (%0d)",
              $time, value, value);
+  end
+
+  integer i;
+  always @(clk)
+  begin
+    #warmup;
+    reset = 1;
+
+    #setup;
+    reset = 0;
+    if (^value===1'bX) begin
+      $display($time, "Value=%b has x's", value);
+      for(i=0; i<8; i++) begin
+        if(value[i]===1'bX) $display("value[%0d] is X",i);
+        if(value[i]===1'bZ) $display("value[%0d] is Z",i);
+      end
+      $error("Testbench failed");
+      $finish;
+    end
+
+    #complete;
+    $finish;
+  end
 endmodule // test
