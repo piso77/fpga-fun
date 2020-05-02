@@ -75,10 +75,18 @@ wire display_on;
 wire [9:0] hpos, vpos;
 wire clk25;
 
-clk_wiz_v3_6 clk_wiz_25(
-	.clk_in1(clk),
-	.clk_out1(clk25)
+`ifdef XILINX
+clk_wiz_v3_6 clk_pll_25(
+        .clk_in1(clk),
+        .clk_out1(clk25)
 );
+`else
+pll clk_pll_25(
+        .clock_in(clk),
+        .clock_out(clk25),
+        .locked()
+);
+`endif
 
 hvsync_generator hvsync_gen(
     .clk(clk25),
