@@ -2,7 +2,7 @@
 4 way joystick input demonstration
 */
 
-`include "header.v"
+`include "hvsync_generator/header.v"
 
 module clk_div_100hz(clk, reset, clkout);
 
