@@ -1,4 +1,4 @@
-`include "header.v"
+`include "hvsync_generator/header.v"
 
 module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	input clk, reset;
