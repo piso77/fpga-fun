@@ -79,6 +79,7 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET SWITCH(5)      LOC="P119" | IOSTANDARD=LVTTL;                                # C5
 #NET SWITCH(6)      LOC="P120" | IOSTANDARD=LVTTL;                                # C6
 #NET SWITCH(7)      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
+NET RESET      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET stop      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET LED(0)         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
 #NET ledh         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
