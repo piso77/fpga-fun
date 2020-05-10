@@ -1,9 +1,10 @@
 /* Scrolling starfield generator using a period (2^16-1) LFSR. */
 
-module startfield_top(clk, reset, hsync, vsync, rgb);
+module startfield_top(clk, reset, hsync, vsync, led, rgb);
 	input clk, reset;
 	output hsync, vsync;
 	output [2:0] rgb;
+	output led;
 	wire display_on;
 	wire [9:0] hpos, vpos;
 	wire [15:0] lfsr;
@@ -38,10 +39,11 @@ module startfield_top(clk, reset, hsync, vsync, rgb);
 	wire start_enable  = !vpos[9];
 
 	// LFSR with period = 2^16-1 = 256*256-1
-	LFSR #(16'b1000000001011,0,16) lfsr_gen(
+	LFSR #(16'b1000110010001011,0,16) lfsr_gen(
 		.clk(clk25),
 		.reset(reset),
 		.enable(start_enable),
+		.ready(led),
 		.lfsr(lfsr)
 	);
 
