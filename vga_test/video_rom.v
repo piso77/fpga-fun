@@ -12,6 +12,6 @@ module video_rom(clka, addra, douta);
   end
   
   initial
-        $readmemh("blk_mem_gen_v7_3.mif", rom);
+        $readmemh("test_image.mif", rom);
   
 endmodule

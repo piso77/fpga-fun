@@ -51,9 +51,6 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 
 NET VSYNC      LOC="P99"  | IOSTANDARD=LVTTL;                                # B0
 NET HSYNC      LOC="P97"  | IOSTANDARD=LVTTL;                                # B1
-NET rgb(2)     LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
-NET rgb(1)     LOC="P84"  | IOSTANDARD=LVTTL;                                # B4
-NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B7
 
 #NET VGA_BLUE(0)    LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
 #NET VGA_BLUE(1)    LOC="P87"  | IOSTANDARD=LVTTL;                                # B3
@@ -63,6 +60,14 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET VGA_RED(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B7
 #NET VGA_RED(1)     LOC="P74"  | IOSTANDARD=LVTTL;                                # B8
 #NET VGA_RED(2)     LOC="P95"  | IOSTANDARD=LVTTL;                                # B9
+NET BLUE(0)    LOC="P92"  | IOSTANDARD=LVTTL;                                # B2
+NET BLUE(1)    LOC="P87"  | IOSTANDARD=LVTTL;                                # B3
+NET GREEN(0)   LOC="P84"  | IOSTANDARD=LVTTL;                                # B4
+NET GREEN(1)   LOC="P82"  | IOSTANDARD=LVTTL;                                # B5
+NET GREEN(2)   LOC="P80"  | IOSTANDARD=LVTTL;                                # B6
+NET RED(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B7
+NET RED(1)     LOC="P74"  | IOSTANDARD=LVTTL;                                # B8
+NET RED(2)     LOC="P95"  | IOSTANDARD=LVTTL;                                # B9
 
 #NET AUDIO          LOC="P62"  | IOSTANDARD=LVTTL;                                # B10
 #NET JOY_RIGHT      LOC="P59"  | IOSTANDARD=LVTTL;                                # B11
@@ -79,7 +84,7 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET SWITCH(5)      LOC="P119" | IOSTANDARD=LVTTL;                                # C5
 #NET SWITCH(6)      LOC="P120" | IOSTANDARD=LVTTL;                                # C6
 #NET SWITCH(7)      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
-NET RESET      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
+#NET RESET      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET stop      LOC="P121" | IOSTANDARD=LVTTL;                                # C7
 #NET LED(0)         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
 #NET ledh         LOC="P123" | IOSTANDARD=LVTTL;                                # C8
@@ -90,7 +95,7 @@ NET RESET      LOC="P121" | IOSTANDARD=LVTTL;                                # C
 #NET LED(5)         LOC="P132" | IOSTANDARD=LVTTL;                                # C13
 #NET LED(6)         LOC="P133" | IOSTANDARD=LVTTL;                                # C14
 #NET LED(7)         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
-NET LED         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
+#NET LED         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
 #NET ledv         LOC="P134" | IOSTANDARD=LVTTL;                                # C15
 #NET SDRAM_ADDR(0)  LOC="P140" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR0
 #NET SDRAM_ADDR(1)  LOC="P139" | IOSTANDARD=LVTTL;                                # SDRAM_ADDR1

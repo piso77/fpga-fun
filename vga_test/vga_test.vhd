@@ -15,11 +15,11 @@ entity vga_test is
 	);
 	port(
 		clk 			: in  STD_LOGIC;
-		vga_hsync 	: out  STD_LOGIC;
-		vga_vsync 	: out  STD_LOGIC;
-		vga_blue 	: out  STD_LOGIC_VECTOR (1 downto 0);
-		vga_green 	: out  STD_LOGIC_VECTOR (2 downto 0);
-		vga_red 		: out  STD_LOGIC_VECTOR (2 downto 0)
+		hsync 	: out  STD_LOGIC;
+		vsync 	: out  STD_LOGIC;
+		blue 	: out  STD_LOGIC_VECTOR (1 downto 0);
+		green 	: out  STD_LOGIC_VECTOR (2 downto 0);
+		red 	: out  STD_LOGIC_VECTOR (2 downto 0)
 	);
 end vga_test;
 
@@ -36,8 +36,8 @@ begin
 
 clk25mhz : entity work.clk_wiz_v3_6(xilinx)
 	port map(
-    CLK_IN1 => clk,
-    CLK_OUT1 => clko
+		CLK_IN1 => clk,
+		CLK_OUT1 => clko
 	);
 
 vrom : entity work.video_rom(video_rom)
@@ -68,18 +68,18 @@ addr <= tmp(15 downto 0);
 
 process(hcount, vcount, data)
 begin
-	vga_hsync <= '1';
-	vga_vsync <= '1';
-	vga_blue <= "00";
-	vga_green <= "000";
-	vga_red <= "000";
+	hsync <= '1';
+	vsync <= '1';
+	blue <= "00";
+	green <= "000";
+	red <= "000";
 
 	if (vcount >= v_area+v_fp and vcount < v_area+v_fp+v_sp) then
-		vga_vsync <= '0';
+		vsync <= '0';
 	end if;
 
 	if (hcount >= h_area+h_fp and hcount < h_area+h_fp+h_sp) then
-		vga_hsync <= '0';
+		hsync <= '0';
 	end if;
 
 --	if hcount < 640 then
@@ -99,9 +99,9 @@ begin
 --	end if;
 
 	if hcount < 640 and vcount < 400 then
-		vga_red <= data(7 downto 5);
-		vga_green <= data(4 downto 2);
-		vga_blue <= data(1 downto 0);
+		red <= data(7 downto 5);
+		green <= data(4 downto 2);
+		blue <= data(1 downto 0);
 	end if;
 end process;
 
