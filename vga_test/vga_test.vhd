@@ -40,7 +40,7 @@ clk25mhz : entity work.clk_wiz_v3_6(xilinx)
     CLK_OUT1 => clko
 	);
 
-vrom : entity work.blk_mem_gen_v7_3(blk_mem_gen_v7_3_a)
+vrom : entity work.video_rom(video_rom)
   PORT MAP (
     clka => clko,
     addra => addr,
