@@ -7,8 +7,8 @@ Configurable Linear Feedback Shift Register
 module LFSR(clk, reset, enable, ready, lfsr);
 	parameter TAPS		= 8'b11101;		// bitmask for taps
 	parameter INVERT	= 0;			// invert feedback bit?
+	parameter NBITS		= 8;
 	//localparam NBITS	= $size(TAPS);	// bit width
-	localparam NBITS	= 8;
 
 	input clk, reset;
 	input enable;
