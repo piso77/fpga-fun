@@ -4,34 +4,34 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity vga_test is
 	generic(
-		h_area		: integer := 640; -- horizontal display area in pixels
+		h_area			: integer := 640;	-- horizontal display area in pixels
 		h_fp			: integer := 16;	-- horizontal front porch in pixels
 		h_sp			: integer := 96;	-- horizontal sync pulse in pixels
 		h_bp			: integer := 48;	-- horizontal back porch in pixels
-		v_area		: integer := 480; -- vertical display area in pixels
+		v_area			: integer := 480;	-- vertical display area in pixels
 		v_fp			: integer := 10;	-- vertical front porch in pixels
-		v_sp			: integer := 2;	-- vertical sync pulse in pixels
-		v_bp			: integer := 33	-- vertical back porch in pixels
+		v_sp			: integer := 2;		-- vertical sync pulse in pixels
+		v_bp			: integer := 33		-- vertical back porch in pixels
 	);
 	port(
-		clk 			: in  STD_LOGIC;
-		hsync 	: out  STD_LOGIC;
-		vsync 	: out  STD_LOGIC;
-		blue 	: out  STD_LOGIC_VECTOR (1 downto 0);
-		green 	: out  STD_LOGIC_VECTOR (2 downto 0);
-		red 	: out  STD_LOGIC_VECTOR (2 downto 0)
+		clk				: in  STD_LOGIC;
+		hsync			: out  STD_LOGIC;
+		vsync			: out  STD_LOGIC;
+		blue			: out  STD_LOGIC_VECTOR (1 downto 0);
+		green			: out  STD_LOGIC_VECTOR (2 downto 0);
+		red				: out  STD_LOGIC_VECTOR (2 downto 0)
 	);
 end vga_test;
 
 architecture arch of vga_test is
-	constant        h_period        :       integer := h_sp + h_bp + h_area + h_fp;  --total number of pixel clocks in a row
-	constant        v_period        :       integer := v_sp + v_bp + v_area + v_fp;  --total number of rows in column
-	signal clko 	: std_logic;
-	signal hcount	: unsigned(9 downto 0) := (others => '0');
-	signal vcount	: unsigned(9 downto 0) := (others => '0');
-	signal addr : std_logic_vector(15 downto 0) := (others => '0');
-	signal tmp : std_logic_vector(19 downto 0) := (others => '0');
-	signal data : std_logic_vector(7 downto 0) := (others => '0');
+	constant h_period	: integer := h_sp + h_bp + h_area + h_fp;  --total number of pixel clocks in a row
+	constant v_period	: integer := v_sp + v_bp + v_area + v_fp;  --total number of rows in column
+	signal clko			: std_logic;
+	signal hcount		: unsigned(9 downto 0) := (others => '0');
+	signal vcount		: unsigned(9 downto 0) := (others => '0');
+	signal addr			: std_logic_vector(15 downto 0) := (others => '0');
+	signal tmp			: std_logic_vector(19 downto 0) := (others => '0');
+	signal data			: std_logic_vector(7 downto 0) := (others => '0');
 begin
 
 clk25mhz : entity work.clk_wiz_v3_6(xilinx)
