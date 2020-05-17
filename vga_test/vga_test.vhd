@@ -17,9 +17,9 @@ entity vga_test is
 		clk				: in  STD_LOGIC;
 		hsync			: out  STD_LOGIC;
 		vsync			: out  STD_LOGIC;
-		blue			: out  STD_LOGIC_VECTOR (1 downto 0);
-		green			: out  STD_LOGIC_VECTOR (2 downto 0);
-		red				: out  STD_LOGIC_VECTOR (2 downto 0)
+		blue			: out  STD_LOGIC_VECTOR (3 downto 0);
+		green			: out  STD_LOGIC_VECTOR (3 downto 0);
+		red				: out  STD_LOGIC_VECTOR (3 downto 0)
 	);
 end vga_test;
 
@@ -29,9 +29,10 @@ architecture arch of vga_test is
 	signal clko			: std_logic;
 	signal hcount		: unsigned(9 downto 0) := (others => '0');
 	signal vcount		: unsigned(9 downto 0) := (others => '0');
-	signal addr			: std_logic_vector(15 downto 0) := (others => '0');
+	signal addr			: std_logic_vector(18 downto 0) := (others => '0');
 	signal tmp			: std_logic_vector(19 downto 0) := (others => '0');
-	signal data			: std_logic_vector(7 downto 0) := (others => '0');
+	signal palidx		: std_logic_vector(7 downto 0) := (others => '0');
+	signal color		: std_logic_vector(11 downto 0) := (others => '0');
 begin
 
 clk25mhz : entity work.clk_wiz_v3_6(xilinx)
@@ -40,11 +41,18 @@ clk25mhz : entity work.clk_wiz_v3_6(xilinx)
 		CLK_OUT1 => clko
 	);
 
-vrom : entity work.video_rom(video_rom)
+imagerom : entity work.video_rom(video_rom)
   PORT MAP (
     clka => clko,
     addra => addr,
-    douta => data
+    douta => palidx
+  );
+
+palrom : entity work.pal_rom(pal_rom)
+  PORT MAP (
+    clka => clko,
+    addra => palidx,
+    douta => color
   );
 
 process(clko)
@@ -63,16 +71,16 @@ begin
 	end if;
 end process;
 
-tmp <= std_logic_vector(shift_right(hcount, 1) + (shift_right(vcount, 1) * 320));
-addr <= tmp(15 downto 0);
+tmp <= std_logic_vector(shift_right(hcount, 1) + (shift_right(vcount, 1) * 640));
+addr <= tmp(18 downto 0);
 
-process(hcount, vcount, data)
+process(hcount, vcount, color)
 begin
 	hsync <= '1';
 	vsync <= '1';
-	blue <= "00";
-	green <= "000";
-	red <= "000";
+	blue <= "0000";
+	green <= "0000";
+	red <= "0000";
 
 	if (vcount >= v_area+v_fp and vcount < v_area+v_fp+v_sp) then
 		vsync <= '0';
@@ -98,10 +106,10 @@ begin
 --		end if;
 --	end if;
 
-	if hcount < 640 and vcount < 400 then
-		red <= data(7 downto 5);
-		green <= data(4 downto 2);
-		blue <= data(1 downto 0);
+	if hcount < 640 and vcount < 480 then
+		red <= color(11 downto 8);
+		green <= color(7 downto 4);
+		blue <= color(3 downto 0);
 	end if;
 end process;
 

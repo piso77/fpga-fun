@@ -1,10 +1,10 @@
 module video_rom(clka, addra, douta);
 
-  input [15:0] addra;
+  input [18:0] addra;
   output reg [7:0] douta;
   input clka;
   
-  reg [7:0] rom[0:65535];
+  reg [7:0] rom[0:307199];
 
   always @(posedge clka)
   begin
@@ -12,6 +12,6 @@ module video_rom(clka, addra, douta);
   end
   
   initial
-        $readmemh("test_image.mif", rom);
+        $readmemh("640_480_test.mem", rom);
   
 endmodule
