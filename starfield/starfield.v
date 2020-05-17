@@ -34,6 +34,12 @@ module startfield_top(clk, reset, hsync, vsync, led, rgb);
 		.vpos(vpos)
 	);
 
+	wire reset_lfsr;
+	pon_reset pon(
+		.clk(clk25),
+		.reset_n(reset_lfsr)
+	);
+
 	// enable LFSR only in 256x256 aread
 	//wire start_enable  = !hpos[8] & !vpos[8];
 	wire start_enable  = !vpos[9];
@@ -41,7 +47,7 @@ module startfield_top(clk, reset, hsync, vsync, led, rgb);
 	// LFSR with period = 2^16-1 = 256*256-1
 	LFSR #(16'b1000110010001011,0,16) lfsr_gen(
 		.clk(clk25),
-		.reset(reset),
+		.reset(!reset_lfsr),
 		.enable(start_enable),
 		.ready(led),
 		.lfsr(lfsr)
