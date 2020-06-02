@@ -2,8 +2,8 @@
 Displays a grid of digits on the CRT using a RAM module.
 */
 
-module ram_text_top(clk, hsync, vsync, rgb);
-input clk;
+module ram_text_top(clk, stop, hsync, vsync, rgb);
+input clk, stop;
 output hsync, vsync;
 output [2:0] rgb;
 
@@ -97,7 +97,7 @@ LFSR lfsr_gen(
 reg [2:0] cnt;
 always @(posedge clk25) begin
 	ram_we <= 0;
-	if (hpos==0 && vpos==0) begin
+	if (hpos==0 && vpos==0 && stop==0) begin
 		cnt <= cnt + 1;
 	end
 	if (hpos[2:0]==0 && vpos[2:0]==0 && cnt==7) begin

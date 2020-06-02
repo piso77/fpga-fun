@@ -57,7 +57,7 @@ set_io pmod3_10   N7
 #set_io pmod4_9    T10
 #set_io pmod4_10   T9
 #set_io swt0    T15
-#set_io reset    T15
+set_io stop    T15
 #set_io swt1    T14
 #set_io swt2    T11
 #set_io swt3    R10
