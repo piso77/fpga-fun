@@ -21,7 +21,7 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 #NET LED5           LOC="P124" | IOSTANDARD=LVTTL;                                # A7
 #NET LED6           LOC="P126" | IOSTANDARD=LVTTL;                                # A8
 #NET LED7           LOC="P127" | IOSTANDARD=LVTTL;                                # A9
-NET RESET           LOC="P127" | IOSTANDARD=LVTTL;                                # A9
+#NET RESET           LOC="P127" | IOSTANDARD=LVTTL;                                # A9
 #NET DIR_RIGHT      LOC="P131" | IOSTANDARD=LVTTL;                                # A10
 #NET DIR_UP         LOC="P132" | IOSTANDARD=LVTTL;                                # A11
 #NET DIR_DOWN       LOC="P133" | IOSTANDARD=LVTTL;                                # A12

@@ -2,12 +2,12 @@
 Displays a grid of digits on the CRT using a RAM module.
 */
 
-module ram_text_top(clk, reset, hsync, vsync, rgb);
-input clk, reset;
+module ram_text_top(clk, hsync, vsync, rgb);
+input clk;
 output hsync, vsync;
 output [2:0] rgb;
 
-wire clk25;
+wire clk25, reset;
 
 `ifdef XILINX
 clk_wiz_v3_6 clk_pll_25(
@@ -21,6 +21,12 @@ pll clk_pll_25(
 	.locked()
 );
 `endif
+
+// global power-on reset
+pon_reset pon(
+	.clk(clk25),
+	.reset_n(reset)
+);
 
 wire display_on;
 wire [9:0] hpos, vpos;
@@ -40,7 +46,7 @@ ram_sync ram(
 
 hvsync_generator hvsync_gen(
 	.clk(clk25),
-	.reset(reset),
+	.reset(!reset),
 	.hsync(hsync),
 	.vsync(vsync),
 	.display_on(display_on),
@@ -78,16 +84,25 @@ wire r = display_on && 0;
 wire g = display_on && (xofs >= 3'b011) && rom_bits[~xofs];
 wire b = display_on && 0;
 assign rgb = {b,g,r};
-reg [3:0] cnt;
 
+wire [7:0] lfsr;
+// LFSR with period = 2^8-1
+LFSR lfsr_gen(
+	.clk(clk25),
+	.reset(!reset),
+	.enable(1),
+	.lfsr(lfsr)
+);
+
+reg [2:0] cnt;
 always @(posedge clk25) begin
 	ram_we <= 0;
 	if (hpos==0 && vpos==0) begin
 		cnt <= cnt + 1;
 	end
-	if (hpos[2:0]==0 && vpos[2:0]==0 && cnt==15) begin
+	if (hpos[2:0]==0 && vpos[2:0]==0 && cnt==7) begin
 		ram_we <= 1;
-		ram_write <= (ram_read + 1);
+		ram_write <= lfsr;
 	end
 end
 endmodule
