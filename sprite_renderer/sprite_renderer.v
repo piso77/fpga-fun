@@ -118,12 +118,13 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 
 endmodule
 
-module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
+module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset, led);
 
 	input clk, reset;
 	input left, right, up, down;
 	output hsync, vsync;
 	output [2:0] rgb;
+	output [3:0] led;
 	wire display_on;
 	wire [9:0] hpos, vpos;
 
@@ -175,6 +176,8 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset)
 			joy_y <= joy_y - 1;
 		else if (down == 1'b1 && joy_y != V_DISPLAY-16)
 			joy_y <= joy_y + 1;
+
+	assign led = {up, down, left, right};
 
 	always @(posedge vsync)
 		begin
