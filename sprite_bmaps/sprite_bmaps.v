@@ -1,6 +1,37 @@
 `ifndef SPRITE_BITMAP_H
 `define SPRITE_BITMAP_H
 
+module mario_bitmap(yofs, bits);
+
+	input [3:0] yofs;
+	output [15:0] bits;
+
+	reg [15:0] bitarray[0:15];
+
+	assign bits = bitarray[yofs];
+
+	/* w:16, h:16 */
+	initial begin
+		bitarray[0]  = 16'b0000111111000000;
+		bitarray[1]  = 16'b0001111111111000;
+		bitarray[2]  = 16'b0001111110100000;
+		bitarray[3]  = 16'b0011111110111000;
+		bitarray[4]  = 16'b0011111111111100;
+		bitarray[5]  = 16'b0011111111111000;
+		bitarray[6]  = 16'b0000111111110000;
+		bitarray[7]  = 16'b0001111111000000;
+		bitarray[8]  = 16'b0011111111111000;
+		bitarray[9]  = 16'b0111111111111100;
+		bitarray[10] = 16'b0111110110111100;
+		bitarray[11] = 16'b0111111111111100;
+		bitarray[12] = 16'b0111111111111100;
+		bitarray[13] = 16'b0001111111110000;
+		bitarray[14] = 16'b0011111111111000;
+		bitarray[15] = 16'b0111111111111100;
+	end
+
+endmodule
+
 /*
 Simple sprite renderer example.
 
