@@ -190,12 +190,21 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset,
 		end
 
 	// bitmap ROM and wiring
-	wire [3:0] mario_sprite_addr;
-	wire [15:0] mario_sprite_bits;
+	wire [3:0]  sprite_addr;
+	wire [15:0] sprite_bits;
+	wire mirror;
 
+`ifdef MARIO
 	mario_bitmap mario(
-		.yofs(mario_sprite_addr),
-		.bits(mario_sprite_bits));
+		.yofs(sprite_addr),
+		.bits(sprite_bits));
+	assign mirror = 0;
+`else
+	car_bitmap car(
+		.yofs(sprite_addr),
+		.bits(sprite_bits));
+	assign mirror = 1;
+`endif
 
 	// compare player X/Y to CRT hpos/vpos
 	wire hstart = player_x == hpos;
@@ -209,9 +218,9 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset,
 		.vstart(vstart),
 		.load(hsync),
 		.hstart(hstart),
-		.rom_addr(mario_sprite_addr),
-		.rom_bits(mario_sprite_bits),
-		.mirror(0),
+		.rom_addr(sprite_addr),
+		.rom_bits(sprite_bits),
+		.mirror(mirror),
 		.gfx(sprite_gfx),
 		.in_progress(in_progress));
 
