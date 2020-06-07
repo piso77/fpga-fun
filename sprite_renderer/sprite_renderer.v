@@ -40,7 +40,7 @@ endmodule
 Display a 16x16 sprite (8 bits mirrored left / right)
 */
 
-module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
+module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, mirror, gfx,
 						in_progress);
 
 	input clk;
@@ -48,7 +48,8 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 	input load;				// ok to load sprite data? (reached hsync area)
 	input hstart;			// start drawing scanline (reached left border)
 	output reg [3:0] rom_addr;	// select ROM address
-	input [7:0] rom_bits;	// input bits from ROM
+	input [15:0] rom_bits;	// input bits from ROM
+	input mirror;
 	output reg gfx;				// output pixel
 	output in_progress;		// 0 if waiting for vstart
 
@@ -56,7 +57,7 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 	reg [3:0] ycount;		// sprite's scanlines drawn so far
 	reg [3:0] xcount;		// sprite's horiz. pixels drawn so far
 
-	reg [7:0] outbits;		// latch sprite bits from ROM
+	reg [15:0] outbits;		// latch sprite bits from ROM
 
 	// FSM states
 	localparam WAIT_FOR_VSTART	= 0;
@@ -97,7 +98,10 @@ module sprite_renderer(clk, vstart, load, hstart, rom_addr, rom_bits, gfx,
 			end
 			DRAW: begin
 				// get pixel, and mirror graphics left/right
-				gfx <= outbits[xcount < 8 ? xcount[2:0] : ~xcount[2:0]];
+				if (mirror == 0)
+					gfx <= outbits[xcount];
+				else
+					gfx <= outbits[xcount < 8 ? xcount[2:0] : ~xcount[2:0]];
 				xcount <= xcount + 1;
 				// finished drawing horizontal slice?
 				if (xcount == 15) begin
@@ -207,6 +211,7 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset,
 		.hstart(hstart),
 		.rom_addr(car_sprite_addr),
 		.rom_bits(car_sprite_bits),
+		.mirror(1),
 		.gfx(car_gfx),
 		.in_progress(in_progress));
 
