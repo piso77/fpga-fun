@@ -189,19 +189,19 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset,
 			player_y <= joy_y;
 		end
 
-	// car bitbamp ROM and wiring
-	wire [3:0] car_sprite_addr;
-	wire [7:0] car_sprite_bits;
+	// bitmap ROM and wiring
+	wire [3:0] mario_sprite_addr;
+	wire [15:0] mario_sprite_bits;
 
-	car_bitmap car(
-		.yofs(car_sprite_addr),
-		.bits(car_sprite_bits));
+	mario_bitmap mario(
+		.yofs(mario_sprite_addr),
+		.bits(mario_sprite_bits));
 
 	// compare player X/Y to CRT hpos/vpos
 	wire hstart = player_x == hpos;
 	wire vstart = player_y == vpos;
 
-	wire car_gfx;			// car sprite video signal
+	wire sprite_gfx;		// sprite video signal
 	wire in_progress;		// 1 = rendering taking place
 
 	sprite_renderer renderer(
@@ -209,15 +209,15 @@ module sprite_renderer_top(clk, hsync, vsync, rgb, left, right, up, down, reset,
 		.vstart(vstart),
 		.load(hsync),
 		.hstart(hstart),
-		.rom_addr(car_sprite_addr),
-		.rom_bits(car_sprite_bits),
-		.mirror(1),
-		.gfx(car_gfx),
+		.rom_addr(mario_sprite_addr),
+		.rom_bits(mario_sprite_bits),
+		.mirror(0),
+		.gfx(sprite_gfx),
 		.in_progress(in_progress));
 
 	// video RGB output
-	wire r = display_on && car_gfx;
-	wire g = display_on && car_gfx;
+	wire r = display_on && sprite_gfx;
+	wire g = display_on && sprite_gfx;
 	wire b = display_on && in_progress;
 	assign rgb = {b,g,r};
 
