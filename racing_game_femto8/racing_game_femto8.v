@@ -4,9 +4,9 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	input clk, reset;
 	input left, right, up, down;
 	output hsync, vsync;
-	output [2:0] rgb;
 	wire display_on;
 	wire [9:0] hpos, vpos;
+	output [2:0] rgb;
 
 	wire clk25mhz, clk100hz;
 
@@ -28,6 +28,65 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 		.reset(reset),
 		.clkout(clk100hz)
 	);
+
+	parameter PADDLE_X = 0;	// paddle X coordinate
+	parameter PADDLE_Y = 1;	// paddle Y coordinate
+	parameter PLAYER_X = 2;	// player X coordinate
+	parameter PLAYER_Y = 3;	// player Y coordinate
+	parameter ENEMY_X = 4;	// enemy X coordinate
+	parameter ENEMY_Y = 5;	// enemy Y coordinate
+	parameter ENEMY_DIR = 6;	// enemy direction (1, -1)
+	parameter SPEED = 7;		// player speed
+	parameter TRACKPOS_LO = 8;	// track position (lo byte)
+	parameter TRACKPOS_HI = 9;	// track position (hi byte)
+
+	parameter IN_HPOS = 8'h40;	// CRT horizontal position
+	parameter IN_VPOS = 8'h41;	// CRT vertical position
+	// flags: [0, 0, collision, vsync, hsync, vpaddle, hpaddle, display_on]
+	parameter IN_FLAGS = 8'h42;
+
+	reg [7:0] ram[0:15];	// 16 bytes of RAM
+	reg [7:0] rom[0:127];	// 128 bytes of ROM
+
+	wire [7:0] address_bus;	// CPU address bus
+	reg  [7:0] to_cpu;		// data bus to CPU
+	wire [7:0] from_cpu;		// data bus from CPU
+	wire write_enable;		// write enable bit from CPU
+
+	// 8-bit CPU module
+	CPU cpu(
+		.clk(clk),
+		.reset(reset),
+		.address(address_bus),
+		.data_in(to_cpu),
+		.data_out(from_cpu),
+		.write(write_enable)
+	);
+
+	initial
+		$readmemh("racing8.hex", rom);
+
+	// RAM write from CPU
+	always @(posedge clk)
+		if (write_enable)
+			ram[address_bus[3:0]] <= from_cpu;
+
+	// RAM read from CPU
+	always @(*)
+		casez (address_bus)
+			// RAM
+			8'b00??????: to_cpu = ram[address_bus[3:0]];
+
+			// special read registers
+			IN_HPOS:  to_cpu = hpos[7:0];
+			IN_VPOS:  to_cpu = vpos[7:0];
+			IN_FLAGS: to_cpu = {2'b0, frame_collision, vsync, hsync, vpaddle, hpaddle, display_on};
+
+			// ROM
+			8'b1???????: to_cpu = rom[address_bus[6:0]];
+
+			default: to_cpu = 8'bxxxxxxxx;
+		endcase
 
 	hvsync_generator hvsync_gen(
 		.clk(clk25mhz),
@@ -53,6 +112,18 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 		else if (down == 1'b1 && joy_y != 128)
 			joy_y <= joy_y + 1;
 
+	// flags for player sprite renderer module
+	wire player_vstart = {1'b0,ram[PLAYER_Y]} == vpos;
+	wire player_hstart = {1'b0,ram[PLAYER_X]} == hpos;
+	wire player_gfx;
+	wire player_is_drawing;
+
+	// flags for enemy sprite renderer module
+	wire enemy_vstart = {1'b0,ram[ENEMY_Y]} == vpos;
+	wire enemy_hstart = {1'b0,ram[ENEMY_X]} == hpos;
+	wire enemy_gfx;
+	wire enemy_is_drawing;
+
 	// select player or enemy access to ROM
 	// multiplexing between player and enemy ROM address
 	wire player_load = (hpos >= H_DISPLAY) && (hpos < H_DISPLAY+4);
@@ -64,27 +135,6 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	car_bitmap car(
 		.yofs(car_sprite_yofs),
 		.bits(car_sprite_bits));
-
-	// player and enemy car position
-	reg [9:0] player_x;
-	reg [9:0] player_y;
-	reg [9:0] enemy_x = H_DISPLAY / 2;
-	reg [9:0] enemy_y = V_DISPLAY / 8;
-	// enemy car direction, 1=right, 0=left
-	reg enemy_dir = 0;
-
-	reg [15:0] track_pos = 0;		// player position along track
-	reg [7:0] speed = 31;			// player speed along track
-
-	wire player_vstart = {1'b0,player_y} == vpos;
-	wire player_hstart = {1'b0,player_x} == hpos;
-	wire player_gfx;
-	wire player_is_drawing;
-
-	wire enemy_vstart = {1'b0,enemy_y} == vpos;
-	wire enemy_hstart = {1'b0,enemy_x} == hpos;
-	wire enemy_gfx;
-	wire enemy_is_drawing;
 
 	sprite_renderer player_renderer(
 		.clk(clk25mhz),
@@ -106,37 +156,8 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 		.gfx(enemy_gfx),
 		.in_progress(enemy_is_drawing));
 
-	// signals for enemy bouncing off left/right borders
-	wire enemy_hit_left = (enemy_x == 64);
-	wire enemy_hit_right = (enemy_x == H_DISPLAY - 64 - 16);
-	wire enemy_hit_edge = enemy_hit_left || enemy_hit_right;
-
-	// update player, enemy, track counters
-	// run once per frame
-	always @(posedge vsync)
-		begin
-			player_x <= joy_x;
-			player_y <= V_DISPLAY-64;
-			track_pos <= track_pos + {11'b0,speed[7:4]};
-			enemy_y <= (enemy_y >= V_DISPLAY) ? 0 : enemy_y + {3'b0,speed[7:4]};
-			if (enemy_hit_edge)
-				enemy_dir <= !enemy_dir;
-			if (enemy_dir ^ enemy_hit_edge)
-				enemy_x <= enemy_x + 1;
-			else
-				enemy_x <= enemy_x - 1;
-			// collision check
-			if (frame_collision)
-				speed <= 16;
-			else if (speed < joy_y)
-				speed <= speed + 1;
-			else
-				speed <= speed - 1;
-		end
-
 	// set to 1 when player collides with enemy or track
 	reg frame_collision;
-
 	always @(posedge clk25mhz)
 		if (player_gfx && (enemy_gfx || track_gfx))
 			frame_collision <= 1;
@@ -146,7 +167,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	// track graphics signals
 	wire track_offside = (hpos[9:6]==0) || (hpos[9:6]==9);		// offside < 64 || > 576
 	wire track_shoulder = (hpos[9:3]==7) || (hpos[9:3]==72);	// shoulder 56-64 || 576-584
-	wire track_gfx = (vpos[5:1]!=track_pos[5:1]) && track_offside;
+	wire track_gfx = (vpos[5:1]!=ram[TRACKPOS_LO]) && track_offside;
 
 	// RGB output
 	wire r = display_on && (player_gfx || enemy_gfx || track_shoulder);
