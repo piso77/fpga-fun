@@ -141,6 +141,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	sprite_renderer player_renderer(
 		.clk(clk25mhz),
+		.mirror(1),
 		.vstart(player_vstart),
 		.load(player_load),
 		.hstart(player_hstart),
@@ -151,6 +152,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	sprite_renderer enemy_renderer(
 		.clk(clk25mhz),
+		.mirror(1),
 		.vstart(enemy_vstart),
 		.load(enemy_load),
 		.hstart(enemy_hstart),
