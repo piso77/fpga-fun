@@ -34,37 +34,37 @@ Start:
 	sta	PLAYER_Y	; player_y = 180
 	zero	A
 	sta	SPEED		; player speed = 0
-        inc	A
-        sta	ENEMY_DIR	; enemy dir = 1 (right)
+    inc	A
+    sta	ENEMY_DIR	; enemy dir = 1 (right)
 ; read horizontal paddle position
 DisplayLoop:
-;	lda	#F_HPADDLE	; paddle flag -> A
-;	ldb	#IN_FLAGS	; addr of IN_FLAGS -> B
-;        and	none,[B]	; read B, AND with A
-;	bz	DisplayLoop	; loop until paddle flag set
+	lda	#F_HPADDLE	; paddle flag -> A
+	ldb	#IN_FLAGS	; addr of IN_FLAGS -> B
+    and	none,[B]	; read B, AND with A
+	bz	DisplayLoop	; loop until paddle flag set
 	ldb	#IN_VPOS
-        mov	A,[B]		; load vertical position -> A
+    mov	A,[B]		; load vertical position -> A
 	sta	PLAYER_X	; store player x position
 ; wait for vsync
 	lda	#F_VSYNC
 	ldb	#IN_FLAGS
 WaitForVsyncOn:
-        and	none,[B]
+    and	none,[B]
 	bz	WaitForVsyncOn	; wait until VSYNC on
 WaitForVsyncOff:
-        and	none,[B]
+    and	none,[B]
 	bnz	WaitForVsyncOff	; wait until VSYNC off
 ; check collision
 	lda	#F_COLLIDE
 	ldb	#IN_FLAGS
-        and	none,[B]	; collision flag set?
+    and	none,[B]	; collision flag set?
 	bz	NoCollision	; skip ahead if not
 	lda	#16
 	sta	SPEED		; speed = 16
 NoCollision:
 ; update speed
 	ldb	#SPEED
-        mov	A,[B]		; speed -> A
+    mov	A,[B]		; speed -> A
 	inc	A		; increment speed
 	bz	MaxSpeed	; speed wraps to 0?
 	sta	SPEED		; no, store speed
@@ -91,21 +91,21 @@ MaxSpeed:
 NoCarry:
 ; update enemy vert pos
 	ldb	#ENEMY_Y
-        add	A,[B]
+    add	A,[B]
 	sta	ENEMY_Y		; enemy_y = enemy_y + speed/16
 ; update enemy horiz pos
-      	ldb	#ENEMY_X
-        mov	A,[B]
-        ldb	#ENEMY_DIR
-        add	A,[B]
-        sta	ENEMY_X		; enemy_x = enemy_x + enemy_dir
-        sub	A,#64
-      	and     A,#127		; A <- (enemy_x-64) & 127
-      	bnz     SkipXReverse	; skip if enemy_x is in range
+	ldb	#ENEMY_X
+    mov	A,[B]
+    ldb	#ENEMY_DIR
+    add	A,[B]
+    sta	ENEMY_X		; enemy_x = enemy_x + enemy_dir
+    sub	A,#64
+	and     A,#127		; A <- (enemy_x-64) & 127
+	bnz     SkipXReverse	; skip if enemy_x is in range
 ; load ENEMY_DIR and negate
-      	zero	A
-        sub	A,[B]
-        sta	ENEMY_DIR	; enemy_dir = -enemy_dir
+	zero	A
+    sub	A,[B]
+    sta	ENEMY_DIR	; enemy_dir = -enemy_dir
 SkipXReverse:
 ; back to display loop
 	jmp	DisplayLoop
