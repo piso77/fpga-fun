@@ -1,8 +1,5 @@
 FW=racing8.hex
 
-default:
-	$(error BOARD not defined)
-
 ico: $(FW)
 	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
