@@ -55,7 +55,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	// 8-bit CPU module
 	CPU cpu(
-		.clk(clk),
+		.clk(clk25mhz),
 		.reset(reset),
 		.address(address_bus),
 		.data_in(to_cpu),
@@ -67,9 +67,12 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 		$readmemh("racing8.hex", rom);
 
 	// RAM write from CPU
-	always @(posedge clk)
+	always @(posedge clk25mhz)
 		if (write_enable)
 			ram[address_bus[3:0]] <= from_cpu;
+
+	wire hpaddle = (joy_x == vpos);
+	wire vpaddle = (joy_y == vpos);
 
 	// RAM read from CPU
 	always @(*)
