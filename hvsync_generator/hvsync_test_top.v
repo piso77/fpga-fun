@@ -9,24 +9,24 @@ wire display_on;
 wire [9:0] hpos;
 wire [9:0] vpos;
 
-wire clk25mhz;
+wire pixclk;
 
 `ifdef XILINX
-clk_wiz_v3_6 clk_pll_25(
+clk_wiz_v3_6 pixclk_pll(
 				.clk_in1(clk),
-				.clk_out1(clk25mhz)
+				.clk_out1(pixclk)
 );
 `else
-pll clk_pll_25(
+pll pixclk_pll(
 				.clock_in(clk),
-				.clock_out(clk25mhz),
+				.clock_out(pixclk),
 				.locked()
 );
 `endif
 
 
 hvsync_generator hvsync_gen(
-	.clk(clk25mhz),
+	.clk(pixclk),
 	.reset(1'b0),
 	.hsync(hsync),
 	.vsync(vsync),
