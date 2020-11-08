@@ -1,6 +1,7 @@
 include project.cfg
 
 ico: $(FW)
+	icepll -i 100 -o $(PIXCLK) -mf clk_ice40_pll.v
 	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
 papi: $(FW)
