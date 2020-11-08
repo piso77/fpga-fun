@@ -11,7 +11,7 @@ ico_prog:
 	icoprog -p < build/$(PROJECT).bin
 
 papi_prog:
-	papilio-prog -vf build/$(PROJECT).bin
+	papilio-prog -vf build/$(PROJECT).bit
 
 %.hex: %.asm
 	node ../../nanoasm/src/asmmain.js femto8/femto8.json $< > $@
