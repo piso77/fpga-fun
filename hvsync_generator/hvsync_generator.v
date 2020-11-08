@@ -19,8 +19,8 @@ input reset;
 output reg hsync;
 output reg vsync;
 output display_on;
-output reg [9:0] hpos;
-output reg [9:0] vpos;
+output reg [H_LEN:0] hpos;
+output reg [V_LEN:0] vpos;
 
 wire hmaxxed = (hpos == H_MAX) || reset; // set when hpos is maximum
 wire vmaxxed = (vpos == V_MAX) || reset; // set when vpos is maximum

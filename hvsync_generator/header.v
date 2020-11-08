@@ -50,7 +50,9 @@ parameter V_SYNC			=   3;
 parameter H_SYNC_START	= H_DISPLAY + H_FRONT;
 parameter H_SYNC_END		= H_DISPLAY + H_FRONT + H_SYNC - 1;
 parameter H_MAX					= H_DISPLAY + H_FRONT + H_SYNC + H_BACK - 1;
+parameter H_LEN					= $clog2(H_MAX);
 parameter V_SYNC_START	= V_DISPLAY + V_BOTTOM;
 parameter V_SYNC_END		= V_DISPLAY + V_BOTTOM + V_SYNC - 1;
 parameter V_MAX					= V_DISPLAY + V_BOTTOM + V_SYNC + V_TOP - 1;
+parameter V_LEN					= $clog2(V_MAX);
 `endif

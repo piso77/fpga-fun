@@ -6,8 +6,8 @@ input clk;
 output hsync, vsync;
 output [2:0] rgb;
 wire display_on;
-wire [9:0] hpos;
-wire [9:0] vpos;
+wire [H_LEN:0] hpos;
+wire [V_LEN:0] vpos;
 
 wire pixclk;
 
