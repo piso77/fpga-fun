@@ -10,20 +10,10 @@ wire [H_LEN:0] hpos;
 wire [V_LEN:0] vpos;
 
 wire pixclk;
-
-`ifdef XILINX
-clk_wiz_v3_6 pixclk_pll(
-				.clk_in1(clk),
-				.clk_out1(pixclk)
-);
-`else
 pll pixclk_pll(
 				.clock_in(clk),
-				.clock_out(pixclk),
-				.locked()
+				.clock_out(pixclk)
 );
-`endif
-
 
 hvsync_generator hvsync_gen(
 	.clk(pixclk),

@@ -1,11 +1,10 @@
 include project.cfg
 
 ico: $(FW)
-	icepll -i 100 -o $(PIXCLK) -mf clk_ice40_pll.v
+	icepll -i 100 -o $(PIXCLK) -mf ice40_pll.v
 	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
 papi: $(FW)
-	#xilinxpll -i 32 -o $(PIXCLK) -mf clk_wiz_v3_6.vhd
 	$(MAKE) BOARD=papilio -f ./Makefile.xilinx
 
 ico_prog:
