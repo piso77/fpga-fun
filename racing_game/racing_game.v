@@ -10,18 +10,10 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	wire clk25mhz, clk100hz;
 
-	`ifdef XILINX
-	clk_wiz_v3_6 clk_pll_25(
-		.clk_in1(clk),
-		.clk_out1(clk25mhz)
-	);
-	`else
 	pll clk_pll_25(
 		.clock_in(clk),
-		.clock_out(clk25mhz),
-		.locked()
+		.clock_out(clk25mhz)
 	);
-	`endif
 
 	clk_div_100hz clkdiv100hz(
 		.clk(clk25mhz),
