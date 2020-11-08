@@ -5,6 +5,7 @@ ico: $(FW)
 	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
 papi: $(FW)
+	#xilinxpll -i 32 -o $(PIXCLK) -mf clk_wiz_v3_6.vhd
 	$(MAKE) BOARD=papilio -f ./Makefile.xilinx
 
 ico_prog:
