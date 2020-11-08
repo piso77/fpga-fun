@@ -17,4 +17,4 @@ papi_prog:
 	node ../../nanoasm/src/asmmain.js femto8/femto8.json $< > $@
 
 clean:
-	rm -rf build *.hex
+	rm -rf build *.hex ice40_pll.v
