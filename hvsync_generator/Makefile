@@ -4,8 +4,11 @@ ico: $(FW)
 	icepll -i 100 -o $(PIXCLK) -mf ice40_pll.v
 	$(MAKE) BOARD=icoboard -f ./Makefile.icestorm
 
-papi: $(FW)
-	$(MAKE) BOARD=papilio -f ./Makefile.xilinx
+papid: $(FW)
+	$(MAKE) CHIP=spartan6 BOARD=papiduo -f ./Makefile.xilinx
+
+papip: $(FW)
+	$(MAKE) CHIP=spartan6 BOARD=papipro -f ./Makefile.xilinx
 
 ico_prog:
 	icoprog -p < build/$(PROJECT).bin
