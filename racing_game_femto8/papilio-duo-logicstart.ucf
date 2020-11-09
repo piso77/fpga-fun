@@ -25,6 +25,10 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 #NET DIR_UP         LOC="P132" | IOSTANDARD=LVTTL;                                # A11
 #NET DIR_DOWN       LOC="P133" | IOSTANDARD=LVTTL;                                # A12
 #NET DIR_LEFT       LOC="P134" | IOSTANDARD=LVTTL;                                # A13
+NET RIGHT      LOC="P131" | IOSTANDARD=LVTTL;                                # A10
+NET UP         LOC="P132" | IOSTANDARD=LVTTL;                                # A11
+NET DOWN       LOC="P133" | IOSTANDARD=LVTTL;                                # A12
+NET LEFT       LOC="P134" | IOSTANDARD=LVTTL;                                # A13
 #NET SEVENSEG_SEG_B LOC="P115" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # B0
 #NET SEVENSEG_SEG_G LOC="P114" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # B1
 #NET SEVENSEG_SEG_C LOC="P112" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # B2

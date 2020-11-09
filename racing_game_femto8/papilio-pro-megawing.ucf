@@ -69,6 +69,10 @@ NET rgb(0)     LOC="P78"  | IOSTANDARD=LVTTL;                                # B
 #NET JOY_LEFT       LOC="P57"  | IOSTANDARD=LVTTL;                                # B12
 #NET JOY_DOWN       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
 #NET JOY_UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
+NET RIGHT      LOC="P59"  | IOSTANDARD=LVTTL;                                # B11
+NET LEFT       LOC="P57"  | IOSTANDARD=LVTTL;                                # B12
+NET DOWN       LOC="P55"  | IOSTANDARD=LVTTL;                                # B13
+NET UP         LOC="P50"  | IOSTANDARD=LVTTL;                                # B14
 #NET JOY_SELECT     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 #NET reset     LOC="P47"  | IOSTANDARD=LVTTL;                                # B15
 #NET SWITCH(0)      LOC="P114" | IOSTANDARD=LVTTL;                                # C0
