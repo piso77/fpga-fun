@@ -1,12 +1,19 @@
 `include "hvsync_generator/header.v"
 
-module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
-	input clk, reset;
+module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down);
+	input clk;
 	input left, right, up, down;
 	output hsync, vsync;
 	wire display_on;
 	wire [9:0] hpos, vpos;
 	output [2:0] rgb;
+
+	// global power-on reset
+	wire reset;
+	pon_reset pon(
+		.clk(clk25mhz),
+		.reset_n(reset)
+	);
 
 	wire clk25mhz, clk100hz;
 
@@ -17,7 +24,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	clk_div_100hz clkdiv100hz(
 		.clk(clk25mhz),
-		.reset(reset),
+		.reset(!reset),
 		.clkout(clk100hz)
 	);
 
@@ -48,7 +55,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 	// 8-bit CPU module
 	CPU cpu(
 		.clk(clk25mhz),
-		.reset(reset),
+		.reset(!reset),
 		.address(address_bus),
 		.data_in(to_cpu),
 		.data_out(from_cpu),
@@ -85,7 +92,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down, reset);
 
 	hvsync_generator hvsync_gen(
 		.clk(clk25mhz),
-		.reset(reset),
+		.reset(!reset),
 		.hsync(hsync),
 		.vsync(vsync),
 		.display_on(display_on),

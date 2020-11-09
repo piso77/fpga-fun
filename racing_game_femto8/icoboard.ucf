@@ -65,19 +65,17 @@ set_io led[7]	N7
 #set_io pmod4_9    T10
 #set_io pmod4_10   T9
 #set_io swt0    T15
-set_io reset    T15
 #set_io swt1    T14
 #set_io swt2    T11
 #set_io swt3    R10
-set_io stop    R10
+set_io left		T15
+set_io right	T14
+set_io up		T11
+set_io down		R10
 #set_io pmod4_7    R14
 #set_io pmod4_8    T13
 #set_io pmod4_9    T10
 #set_io pmod4_10   T9
-set_io left    R14
-set_io right    T13
-set_io up    T10
-set_io down   T9
 
 set_io matrix_00  C13
 set_io matrix_01  E9
