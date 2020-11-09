@@ -8,6 +8,13 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down);
 	wire [9:0] hpos, vpos;
 	output [2:0] rgb;
 
+	wire clk25mhz;
+
+	pll clk_pll_25(
+		.clock_in(clk),
+		.clock_out(clk25mhz)
+	);
+
 	// global power-on reset
 	wire reset;
 	pon_reset pon(
@@ -15,12 +22,7 @@ module racing_game_top(clk, hsync, vsync, rgb, left, right, up, down);
 		.reset_n(reset)
 	);
 
-	wire clk25mhz, clk100hz;
-
-	pll clk_pll_25(
-		.clock_in(clk),
-		.clock_out(clk25mhz)
-	);
+	wire clk100hz;
 
 	clk_div_100hz clkdiv100hz(
 		.clk(clk25mhz),
