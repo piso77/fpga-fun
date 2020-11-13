@@ -284,9 +284,9 @@ module processor(input clk,
   always @(*) begin
     nextPC = 16'd0;
 
-    case (nextPCSel)
+    casez (nextPCSel)
     // From register file
-    2'b1x: begin
+    2'b1?: begin
       nextPC = regOut1;
     end
 
