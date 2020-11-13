@@ -53,7 +53,7 @@ module decoder(input [15:0] instruction,
         dWE = 1'b0; // Read from memory
         regInSource = 1'b1; // Source the write back register data from memory
         regInEn = 1'b1; // Assert write back enabled
-        addr = {6'b0, instruction[11:1]}; // Zero fill addr to get full address
+        addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
       end
 
       // Register
@@ -75,7 +75,7 @@ module decoder(input [15:0] instruction,
       1'b0: begin
         dAddrSel = 1'b0; // Choose to use addr as dAddr
         dWE = 1'b1; // Write to memory
-        addr = {6'b0, instruction[13:10], instruction[7:1]}; // Zero fill addr to get full address
+        addr = {5'b0, instruction[13:10], instruction[7:1]}; // Zero fill addr to get full address
       end
 
       // Register
@@ -96,7 +96,7 @@ module decoder(input [15:0] instruction,
         // Relative
         1'b0: begin
           nextPCSel = 2'b01; // Select to add the addr field to PC
-          addr = {{6{instruction[11]}}, instruction[11:1]}; // sign extend the addr field of the instruction
+          addr = {{5{instruction[11]}}, instruction[11:1]}; // sign extend the addr field of the instruction
         end
 
         // Register
