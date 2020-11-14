@@ -1,5 +1,8 @@
-module processor(input clk,
-         input rst);
+module processor(
+	input clk,
+  input rst,
+	output [7:0] led
+);
 
   wire [15:0] dAddr;
   wire [15:0] dDataOut;
@@ -104,4 +107,5 @@ module processor(input clk,
   assign regIn = (regInSource) ? dDataOut : aluOut;
   assign dAddr = (dAddrSel) ? regOut1 : addr;
 
+	assign led = PC[7:0];
 endmodule
