@@ -4,12 +4,12 @@ BITFILE = $(PROJECT).bin
 
 default: $(BITFILE)
 
-$(PROJECT).blif: $(VSOURCE)
+$(PROJECT).json: $(VSOURCE)
 	@mkdir -p build
-	yosys -p 'synth_ice40 -top $(TOPLEVEL) -blif build/$(PROJECT).blif' $(VSOURCE)
+	yosys -p 'synth_ice40 -top $(TOPLEVEL) -json build/$(PROJECT).json' $(VSOURCE)
 
-$(PROJECT).asc: $(PROJECT).blif $(CONSTRAINTS)
-	arachne-pnr -d 8k -p $(CONSTRAINTS) -o build/$(PROJECT).asc build/$(PROJECT).blif
+$(PROJECT).asc: $(PROJECT).json $(CONSTRAINTS)
+	nextpnr-ice40 --hx8k --package ct256 --pcf $(CONSTRAINTS) --asc build/$(PROJECT).asc --json build/$(PROJECT).json
 
 $(PROJECT).bin: $(PROJECT).asc
 	icetime -d hx8k -c $(PIXCLK) build/$(PROJECT).asc
