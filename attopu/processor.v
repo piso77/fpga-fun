@@ -30,15 +30,22 @@ module processor(
 
   wire [15:0] instruction;
 
+	reg [15:0] ram[0:1023];
+	reg [15:0] rom[0:1023];
+	initial
+		$readmemh("program.hex", rom);
 
-  // Instatiate all of our components
-  memory mem(.clk(clk),
-         .iAddr(PC), // The instruction port uses the PC as its address and outputs the current instruction, so connect these directly
-         .iDataOut(instruction),
-         .dAddr(dAddr),
-         .dWE(dWE),
-         .dDataIn(regOut2), // In all instructions, only source register 2 is ever written to memory, so make this connection direct
-         .dDataOut(dDataOut));
+	// In all instructions, only source register 2 is ever written to memory, so
+	// make this connection direct
+	always @(posedge clk)
+		if (dWE) begin
+			ram[dAddr] <= regOut2;
+		end
+
+	// The instruction port uses the PC as its address and outputs the current
+	// instruction, so connect these directly
+	assign instruction = rom[PC];
+	assign dDataOut = ram[dAddr];
 
   registerFile regFile(.clk(clk),
                .rst(rst),
