@@ -5,7 +5,11 @@ module processor(
 	output [15:0] instruction,
 	output [15:0] PC,
 	output [15:0] regOut1,
-	output [15:0] regOut2
+	output [15:0] regOut2,
+	output [15:0] reg0,
+	output [15:0] reg1,
+	output [15:0] reg2,
+	output [15:0] reg3
 `else
 	output [7:0] led
 `endif
@@ -37,6 +41,12 @@ module processor(
 
   wire [15:0] instruction;
 
+`ifdef DEBUG
+	wire [15:0] reg0;
+	wire [15:0] reg1;
+	wire [15:0] reg2;
+	wire [15:0] reg3;
+`endif
 
   // Instatiate all of our components
   memory mem(.clk(clk),
@@ -47,7 +57,14 @@ module processor(
          .dDataIn(regOut2), // In all instructions, only source register 2 is ever written to memory, so make this connection direct
          .dDataOut(dDataOut));
 
-  registerFile regFile(.clk(clk),
+  registerFile regFile(
+`ifdef DEBUG
+							 .reg0(reg0),
+							 .reg1(reg1),
+							 .reg2(reg2),
+							 .reg3(reg3),
+`endif
+               .clk(clk),
                .rst(rst),
                .in(regIn),
                .inSel(regInSel),

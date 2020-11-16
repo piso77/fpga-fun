@@ -1,4 +1,11 @@
-module registerFile(input clk,
+module registerFile(
+`ifdef DEBUG
+										output [15:0] reg0,
+										output [15:0] reg1,
+										output [15:0] reg2,
+										output [15:0] reg3,
+`endif
+										input clk,
                     input rst,
                     input [15:0] in,     // Data for write back register
                     input [1:0] inSel,   // Register number to write back to
@@ -29,4 +36,15 @@ module registerFile(input clk,
   assign out1 = regs[outSel1];
   assign out2 = regs[outSel2];
 
+`ifdef DEBUG
+	wire [15:0] reg0;
+	wire [15:0] reg1;
+	wire [15:0] reg2;
+	wire [15:0] reg3;
+
+	assign reg0 = regs[0];
+	assign reg1 = regs[1];
+	assign reg2 = regs[2];
+	assign reg3 = regs[3];
+`endif
 endmodule
