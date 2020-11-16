@@ -1,5 +1,10 @@
 include project.cfg
 
+default: $(FW)
+	iverilog -DDEBUG -o dsn attopu_tb.v $(VSOURCE)
+	vvp dsn
+	#gtkwave test_cpu8.vcd
+
 ico: $(FW)
 ifdef $(PLL)
 	icepll -i 100 -o $(PLL) -mf ice40_pll.v

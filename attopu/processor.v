@@ -1,7 +1,14 @@
 module processor(
 	input clk,
   input rst,
+`ifdef DEBUG
+	output [15:0] instruction,
+	output [15:0] PC,
+	output [15:0] regOut1,
+	output [15:0] regOut2
+`else
 	output [7:0] led
+`endif
 );
 
   wire [15:0] dAddr;
