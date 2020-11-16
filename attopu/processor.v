@@ -1,12 +1,14 @@
 module processor(
 	input clk,
   input rst,
-	output [7:0] led
+  output dWE,
+  output [15:0] dAddr,
+  output [15:0] regOut2,
+  output reg [15:0] PC,
+  input [15:0] dDataOut,
+  input [15:0] instruction
 );
 
-  wire [15:0] dAddr;
-  wire [15:0] dDataOut;
-  wire dWE;
   wire dAddrSel;
 
   wire [15:0] addr;
@@ -18,34 +20,13 @@ module processor(
   wire [1:0] regOutSel1;
   wire [1:0] regOutSel2;
   wire [15:0] regOut1;
-  wire [15:0] regOut2;
 
   wire aluOp;
   wire zFlag;
   wire [15:0] aluOut;
 
   wire [1:0] nextPCSel;
-  reg [15:0] PC;
   reg [15:0] nextPC;
-
-  wire [15:0] instruction;
-
-	reg [15:0] ram[0:1023];
-	reg [15:0] rom[0:1023];
-	initial
-		$readmemh("program.hex", rom);
-
-	// In all instructions, only source register 2 is ever written to memory, so
-	// make this connection direct
-	always @(posedge clk)
-		if (dWE) begin
-			ram[dAddr] <= regOut2;
-		end
-
-	// The instruction port uses the PC as its address and outputs the current
-	// instruction, so connect these directly
-	assign instruction = rom[PC];
-	assign dDataOut = ram[dAddr];
 
   registerFile regFile(.clk(clk),
                .rst(rst),
@@ -113,6 +94,48 @@ module processor(
   // Extra logic
   assign regIn = (regInSource) ? dDataOut : aluOut;
   assign dAddr = (dAddrSel) ? regOut1 : addr;
+endmodule
+
+module processor_top(
+	input clk,
+  input rst,
+	output [7:0] led
+);
+
+  wire dWE;
+  wire [15:0] dAddr;
+  wire [15:0] regOut2;
+  wire [15:0] dDataOut;
+  wire [15:0] instruction;
+  wire [15:0] PC;
+
+processor attopu(
+	.clk(clk),
+  .rst(rst),
+  .dWE(dWE),
+  .dAddr(dAddr),
+  .regOut2(regOut2),
+  .PC(PC),
+  .dDataOut(DataOut),
+  .instruction(instruction)
+);
+
+	reg [15:0] ram[0:1023];
+	reg [15:0] rom[0:1023];
+	initial
+		$readmemh("program.hex", rom);
+
+	// In all instructions, only source register 2 is ever written to memory, so
+	// make this connection direct
+	always @(posedge clk)
+		if (dWE) begin
+			ram[dAddr] <= regOut2;
+		end
+
+	// The instruction port uses the PC as its address and outputs the current
+	// instruction, so connect these directly
+	assign instruction = rom[PC];
+	assign dDataOut = ram[dAddr];
 
 	assign led = PC[7:0];
 endmodule
