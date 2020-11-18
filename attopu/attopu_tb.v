@@ -30,7 +30,11 @@ module test_attopu;
 		.instruction(instruction),
 		.PC(PC),
 		.regOut1(regOut1),
-		.regOut2(regOut2)
+		.regOut2(regOut2),
+		.reg0(reg0),
+		.reg1(reg1),
+		.reg2(reg2),
+		.reg3(reg3)
 	);
 
 	initial
