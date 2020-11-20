@@ -76,7 +76,8 @@ module processor(
 		.out2(regOut2)
 	);
 
-	ALU alu(.clk(clk),
+	ALU alu(
+		.clk(clk),
 		.rst(rst),
 		.in1(regOut1),
 		.in2(regOut2),
