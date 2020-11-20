@@ -3,7 +3,7 @@ include project.cfg
 default: $(FW)
 	iverilog -DDEBUG -o dsn attopu_tb.v $(VSOURCE)
 	vvp dsn
-	#gtkwave test_cpu8.vcd
+	#gtkwave test_attopu.vcd
 
 ico: $(FW)
 ifdef $(PLL)
