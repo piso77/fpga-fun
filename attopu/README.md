@@ -22,7 +22,7 @@ ST: st rs, ra -- MEM[ra] = rs
   [15 2'b10 14] | [13 RESERVED 12] | [11 ra 10] | [9 rs 8] | [7 RESERVED 1] | [0 1'b1 0]
 
     st rs, $addr -- MEM[$addr] = rs
-  [15 2'b10 14] | [13 $addr[10:7] 10] | [9 rs 8 ] | [7 $addr[6:0] 1] | [0 1'b0 0]
+  [15 2'b10 14] | [13 rs 12] | [11 $addr 1] | [0 1'b0 0]
 
 BRZ: brz ra -- if (z): pc = ra
   [15 2'b11 14] | [13 RESERVED 12] | [11 ra 10] | [9 RESERVED 1] | [0 1'b1 0]

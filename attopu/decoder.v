@@ -6,7 +6,7 @@ module decoder(
 	output [1:0] regInSel,
 	output reg regInEn,
 	output [1:0] regOutSel1,
-	output [1:0] regOutSel2,
+	output reg [1:0] regOutSel2,
 	output reg aluOp,
 	output reg dWE,
 	output reg dAddrSel,
@@ -19,7 +19,6 @@ module decoder(
 	// wrong
 	assign regInSel = instruction[13:12];
 	assign regOutSel1 = instruction[11:10];
-	assign regOutSel2 = instruction[9:8];
 
 	always @(*) begin
 		// Defaults
@@ -35,6 +34,7 @@ module decoder(
 
 		addr = 16'd0;
 
+		regOutSel2 = instruction[9:8];
 		// Decode the instruction and assert the relevant control signals
 		case (instruction[15:14])
 		// ADD
@@ -77,7 +77,8 @@ module decoder(
 			1'b0: begin
 				dAddrSel = 1'b0; // Choose to use addr as dAddr
 				dWE = 1'b1; // Write to memory
-				addr = {5'b0, instruction[13:10], instruction[7:1]}; // Zero fill addr to get full address
+				regOutSel2 = regInSel;
+				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
 			end
 
 			// Register
