@@ -8,22 +8,46 @@ module test;
      $dumpvars(0,test);
 
 		btn = 0;
-		#32;
+		#10;
 		btn = 1;
-		#64000000;
+		#20;
 		btn = 0;
-		#32000;
+		#10;
 		btn = 1;
-		#32000;
-		btn = 0; 
-		#10 $finish;
+		#30;
+		btn = 0;
+		#10;
+		btn = 1;
+		#40;
+		btn = 0;
+		#10;
+		btn = 1;
+		#30;
+		btn = 0;
+		#10;
+		btn = 1;
+		#1000;
+		btn = 0;
+		#10;
+		btn = 1;
+		#20;
+		btn = 0;
+		#10;
+		btn = 1;
+		#30;
+		btn = 0;
+		#10;
+		btn = 1;
+		#40;
+		btn = 0;
+		$finish;
  end
 
   /* Make a regular pulsing clock. */
   reg clk = 0;
   always #2 clk = !clk;
 
-	debouncer db (.clk(clk), .btn(btn),.state(state));
+	debouncer #(.WIDTH(6)) db(.clk(clk), .btn(btn),.state(state));
   initial
      $monitor("At time %t, btn = %b, state = %b",
               $time, btn, state);
