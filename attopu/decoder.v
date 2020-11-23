@@ -4,7 +4,7 @@ module decoder(
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
 	output reg regInSource,
 	output [1:0] regInSel,
-	output reg regInEn,
+	output reg regFileWE,
 	output [1:0] regOutSel1,
 	output reg [1:0] regOutSel2,
 	output reg aluOp,								// ALU op
@@ -24,7 +24,7 @@ module decoder(
 		nextPCSel = 2'b0;
 
 		regInSource = 1'b0;
-		regInEn = 1'b0;
+		regFileWE = 1'b0;
 
 		aluOp = 1'b0;
 
@@ -39,7 +39,7 @@ module decoder(
 		// ADD
 		2'b00: begin
 			aluOp = 1'b1; // Make sure ALU is instructed to add
-			regInEn = 1'b1; // Assert write back enabled
+			regFileWE = 1'b1; // Assert write back enabled
 		end
 
 		// LD
@@ -50,7 +50,7 @@ module decoder(
 			// Absolute
 			1'b0: begin
 				regInSource = 1'b1; // Source the write back register data from memory
-				regInEn = 1'b1; // Assert write back enabled
+				regFileWE = 1'b1; // Assert write back enabled
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
 			end
 
@@ -58,7 +58,7 @@ module decoder(
 			1'b1: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regInSource = 1'b1; // Source the write back register data from memory
-				regInEn = 1'b1; // Assert write back enabled
+				regFileWE = 1'b1; // Assert write back enabled
 			end
 			endcase
 		end

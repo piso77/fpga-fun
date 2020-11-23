@@ -24,7 +24,7 @@ module processor(
 
 	wire [15:0] regIn;
 	wire [1:0] regInSel;
-	wire regInEn;
+	wire regFileWE;
 	wire regInSource;
 	wire [1:0] regOutSel1;
 	wire [1:0] regOutSel2;
@@ -67,7 +67,7 @@ module processor(
 `endif
 		.clk(clk),
 		.rst(rst),
-		.we(regInEn),
+		.we(regFileWE),
 		.inReg(regInSel),
 		.dataIn(regIn),
 		.outReg1(regOutSel1),
@@ -92,7 +92,7 @@ module processor(
 		.nextPCSel(nextPCSel),
 		.regInSource(regInSource),
 		.regInSel(regInSel),
-		.regInEn(regInEn),
+		.regFileWE(regFileWE),
 		.regOutSel1(regOutSel1),
 		.regOutSel2(regOutSel2),
 		.aluOp(aluOp),
