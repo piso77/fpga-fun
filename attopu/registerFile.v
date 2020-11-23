@@ -7,13 +7,13 @@ module registerFile(
 `endif
 	input clk,
 	input rst,
-	input [15:0] in,     // Data for write back register
-	input [1:0] inSel,   // Register number to write back to
-	input inEn,          // Dont actually write back unless asserted
-	input [1:0] outSel1, // Register number for out1
-	input [1:0] outSel2, // Register number for out2
-	output [15:0] out1,
-	output [15:0] out2
+	input we,								// Dont actually write back unless asserted
+	input [1:0] inReg,			// Register number to write back to
+	input [15:0] dataIn,		// Data for write back register
+	input [1:0] outReg1,		// Register number for out1
+	input [1:0] outReg2,		// Register number for out2
+	output [15:0] dataOut1,
+	output [15:0] dataOut2
 );
 
 	reg [15:0] regs[3:0];
@@ -26,15 +26,15 @@ module registerFile(
 			regs[1] <= 16'd0;
 			regs[0] <= 16'd0;
 		end else begin
-			if (inEn) begin // Only write back when inEn is asserted, not all instructions write to the register file!
-				regs[inSel] <= in;
+			if (we) begin // Only write back when asserted, not all instructions write to the register file!
+				regs[inReg] <= dataIn;
 			end
 		end
 	end
 
 	// Output registers
-	assign out1 = regs[outSel1];
-	assign out2 = regs[outSel2];
+	assign dataOut1 = regs[outReg1];
+	assign dataOut2 = regs[outReg2];
 
 `ifdef DEBUG
 	wire [15:0] reg0;

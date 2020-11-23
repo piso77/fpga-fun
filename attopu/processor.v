@@ -67,13 +67,13 @@ module processor(
 `endif
 		.clk(clk),
 		.rst(rst),
-		.in(regIn),
-		.inSel(regInSel),
-		.inEn(regInEn),
-		.outSel1(regOutSel1),
-		.outSel2(regOutSel2),
-		.out1(regOut1),
-		.out2(regOut2)
+		.we(regInEn),
+		.inReg(regInSel),
+		.dataIn(regIn),
+		.outReg1(regOutSel1),
+		.outReg2(regOutSel2),
+		.dataOut1(regOut1),
+		.dataOut2(regOut2)
 	);
 
 	ALU alu(
