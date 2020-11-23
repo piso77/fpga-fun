@@ -17,7 +17,7 @@ module processor(
 
 	wire [15:0] dAddr;
 	wire [15:0] dDataOut;
-	wire dWE;
+	wire memWE;
 	wire dAddrSel;
 
 	wire [15:0] addr;
@@ -53,7 +53,7 @@ module processor(
 		.iAddr(PC), // The instruction port uses the PC as its address and outputs the current instruction, so connect these directly
 		.iDataOut(instruction),
 		.dAddr(dAddr),
-		.dWE(dWE),
+		.dWE(memWE),
 		.dDataIn(regOut2), // In all instructions, only source register 2 is ever written to memory, so make this connection direct
 		.dDataOut(dDataOut)
 	);
@@ -96,7 +96,7 @@ module processor(
 		.regOutSel1(regOutSel1),
 		.regOutSel2(regOutSel2),
 		.aluOp(aluOp),
-		.dWE(dWE),
+		.memWE(memWE),
 		.dAddrSel(dAddrSel),
 		.addr(addr)
 	);

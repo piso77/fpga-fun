@@ -1,14 +1,18 @@
 module decoder(
 	input [15:0] instruction,
+
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
+
 	output reg regDataInSource,
 	output [1:0] regInSel,
 	output reg regFileWE,
 	output [1:0] regOutSel1,
 	output reg [1:0] regOutSel2,
+
 	output reg aluOp,								// ALU op
-	output reg dWE,
+
+	output reg memWE,
 	output reg dAddrSel,
 	output reg [15:0] addr					// address extracted from  instruction
 );
@@ -29,7 +33,7 @@ module decoder(
 		aluOp = 1'b0;
 
 		dAddrSel = 1'b0;
-		dWE = 1'b0;
+		memWE = 1'b0;
 
 		addr = 16'd0;
 
@@ -70,7 +74,7 @@ module decoder(
 			case (instruction[0])
 			// Absolute
 			1'b0: begin
-				dWE = 1'b1; // Write to memory
+				memWE = 1'b1; // Write to memory
 				regOutSel2 = regInSel;
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
 			end
@@ -78,7 +82,7 @@ module decoder(
 			// Register
 			1'b1: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
-				dWE = 1'b1; // Write to memory
+				memWE = 1'b1; // Write to memory
 			end
 			endcase
 		end
