@@ -21,7 +21,6 @@ module decoder(
 	assign regOutSel1 = instruction[11:10];
 
 	always @(*) begin
-		// Defaults
 		nextPCSel = 2'b0;
 
 		regInSource = 1'b0;
@@ -40,7 +39,6 @@ module decoder(
 		// ADD
 		2'b00: begin
 			aluOp = 1'b1; // Make sure ALU is instructed to add
-			regInSource = 1'b0; // Source the write back register data from the ALU
 			regInEn = 1'b1; // Assert write back enabled
 		end
 
@@ -51,8 +49,6 @@ module decoder(
 			case (instruction[0])
 			// Absolute
 			1'b0: begin
-				dAddrSel = 1'b0; // Choose to use addr as dAddr
-				dWE = 1'b0; // Read from memory
 				regInSource = 1'b1; // Source the write back register data from memory
 				regInEn = 1'b1; // Assert write back enabled
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
@@ -61,7 +57,6 @@ module decoder(
 			// Register
 			1'b1: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
-				dWE = 1'b0; // Read from memory
 				regInSource = 1'b1; // Source the write back register data from memory
 				regInEn = 1'b1; // Assert write back enabled
 			end
@@ -75,7 +70,6 @@ module decoder(
 			case (instruction[0])
 			// Absolute
 			1'b0: begin
-				dAddrSel = 1'b0; // Choose to use addr as dAddr
 				dWE = 1'b1; // Write to memory
 				regOutSel2 = regInSel;
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
