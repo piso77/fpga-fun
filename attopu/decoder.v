@@ -2,7 +2,7 @@ module decoder(
 	input [15:0] instruction,
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
-	output reg regInSource,
+	output reg regDataInSource,
 	output [1:0] regInSel,
 	output reg regFileWE,
 	output [1:0] regOutSel1,
@@ -23,7 +23,7 @@ module decoder(
 	always @(*) begin
 		nextPCSel = 2'b0;
 
-		regInSource = 1'b0;
+		regDataInSource = 1'b0;
 		regFileWE = 1'b0;
 
 		aluOp = 1'b0;
@@ -49,7 +49,7 @@ module decoder(
 			case (instruction[0])
 			// Absolute
 			1'b0: begin
-				regInSource = 1'b1; // Source the write back register data from memory
+				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
 			end
@@ -57,7 +57,7 @@ module decoder(
 			// Register
 			1'b1: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
-				regInSource = 1'b1; // Source the write back register data from memory
+				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 			endcase

@@ -25,7 +25,7 @@ module processor(
 	wire [15:0] regDataIn;
 	wire [1:0] regInSel;
 	wire regFileWE;
-	wire regInSource;
+	wire regDataInSource;
 	wire [1:0] regOutSel1;
 	wire [1:0] regOutSel2;
 	wire [15:0] regOut1;
@@ -90,7 +90,7 @@ module processor(
 		.instruction(instruction),
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
-		.regInSource(regInSource),
+		.regDataInSource(regDataInSource),
 		.regInSel(regInSel),
 		.regFileWE(regFileWE),
 		.regOutSel1(regOutSel1),
@@ -134,7 +134,7 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDataIn = (regInSource) ? dDataOut : aluOut;
+	assign regDataIn = (regDataInSource) ? dDataOut : aluOut;
 	assign dAddr = (dAddrSel) ? regOut1 : addr;
 
 	assign led = PC[7:0];
