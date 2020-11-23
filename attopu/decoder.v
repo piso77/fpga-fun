@@ -1,16 +1,16 @@
 module decoder(
 	input [15:0] instruction,
-	input zFlag,
-	output reg [1:0] nextPCSel,
+	input zFlag,										// used for branch op
+	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
 	output reg regInSource,
 	output [1:0] regInSel,
 	output reg regInEn,
 	output [1:0] regOutSel1,
 	output reg [1:0] regOutSel2,
-	output reg aluOp,
+	output reg aluOp,								// ALU op
 	output reg dWE,
 	output reg dAddrSel,
-	output reg [15:0] addr
+	output reg [15:0] addr					// address extracted from  instruction
 );
 
 	// Notice all instructions are designed in such a way that the instruction can
