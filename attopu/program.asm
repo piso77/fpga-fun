@@ -3,7 +3,7 @@
 .len	1024
 .width	16
 
-LD	r0, #$0a
+LD	r0, #$0a		; ld rd, $addr -- rd = MEM[$addr]
 LD	r1, #$0b
 ADD	r2, r0, r1
 ST	r2, #$0a		; st rs, $addr	-- MEM[$addr] = rs -- 1010|0000|0001|0100 => A014
