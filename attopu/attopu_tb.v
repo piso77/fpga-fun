@@ -1,3 +1,9 @@
+`define assert(signal, value) \
+		if (signal !== value) begin \
+			$display("ASSERTION FAILED in %m: signal != value"); \
+			$finish; \
+		end
+
 module test_attopu;
 
 	/* Make a reset that pulses once. */
@@ -6,9 +12,9 @@ module test_attopu;
 		$dumpfile("test_attopu.vcd");
 		$dumpvars(0, test_attopu);
 
-		# 4 reset = 1;
-		# 4 reset = 0;
-		# 92 $finish;
+		#0 reset = 1;
+		#1 reset = 0;
+		#28 $finish;
 	end
 
 	/* Make a regular pulsing clock. */
@@ -37,7 +43,16 @@ module test_attopu;
 		.reg3(reg3)
 	);
 
+	initial begin // assertions
+		#2 `assert(reg0,		16'h000a)
+		#2 `assert(reg1,		16'h0002)
+		#2 `assert(reg2,		16'h000c)
+		#2 `assert(regOut2,	16'h000a)
+		#2 `assert(reg3,		16'h000f)
+		#2 `assert(regOut2,	16'h000f)
+	end
+
 	initial
-		$monitor("At time %t: addr=0x%h instr=0x%h reg0=0x%h reg1=0x%h reg2=0x%h reg3=0x%h",
-				 $time, PC, instruction, reg0, reg1, reg2, reg3);
+		$monitor("At time %t: addr=0x%h instr=0x%h reg0=0x%h reg1=0x%h reg2=0x%h reg3=0x%h regOut1=0x%h regOut2=0x%h reset=%b",
+				 $time, PC, instruction, reg0, reg1, reg2, reg3, regOut1, regOut2, reset);
 endmodule
