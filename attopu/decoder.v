@@ -18,13 +18,18 @@ module decoder(
 	output reg [15:0] addr					// address extracted from  instruction
 );
 
+	wire [1:0] opcode;
+	wire extopcode;
+
 	// Notice all instructions are designed in such a way that the instruction can
 	// be parsed to get the registers out, even if a given instruction does not
 	// use that register. The rest of the control signals will ensure nothing goes
 	// wrong
+	assign opcode = instruction[15:14];
 	assign regInSel = instruction[13:12];
 	assign regOutSel1 = instruction[11:10];
 	assign regOutSel2 = instruction[9:8];
+	assign extopcode = instruction[0];
 
 	always @(*) begin
 		nextPCSel = 2'b0;
@@ -41,7 +46,7 @@ module decoder(
 		addr = 16'd0;
 
 		// Decode the instruction and assert the relevant control signals
-		case (instruction[15:14])
+		case (opcode)
 		// ADD
 		2'b00: begin
 			aluOp = 1'b1; // Make sure ALU is instructed to add
@@ -52,7 +57,7 @@ module decoder(
 		2'b01: begin
 			// LD has 2 versions, register addressing and absolute addressing, case on
 			// that here
-			case (instruction[0])
+			case (extopcode)
 			// Absolute
 			1'b0: begin
 				regDataInSource = 1'b1; // Source the write back register data from memory
@@ -73,7 +78,7 @@ module decoder(
 		2'b10: begin
 			// ST has 2 versions, register addressing and absolute addressing, case on
 			// that here
-			case (instruction[0])
+			case (extopcode)
 			// Absolute
 			1'b0: begin
 				memWE = 1'b1; // Write to memory
@@ -95,7 +100,7 @@ module decoder(
 			if (zFlag) begin
 				// BRZ has 2 versions, register addressing and relative addressing, case
 				// on that here
-				case (instruction[0])
+				case (extopcode)
 				// Relative
 				1'b0: begin
 					nextPCSel = 2'b01; // Select to add the addr field to PC

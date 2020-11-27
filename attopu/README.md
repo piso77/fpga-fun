@@ -7,7 +7,9 @@ https://stackoverflow.com/questions/51592244/implementation-of-simple-microproce
 ISA:
 
 ```
-[15 OPCODE 14] | [13 SPECIFIC 0] -- Opcode is always in the top two bits, the rest of the instruction depends on the type it is
+[15 OPCODE 14] | [13 SPECIFIC 1] [ 0 EXTOPCODE 0 ]
+Opcode is always in the top two bits, the rest of the instruction depends on the
+type, last bit is actually an opcode expansion
 
 ADD: add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
   [15 2'b00 14] | [13 rd 12] | [11 rs1 10] | [9 rs2 8] | [7 RESERVED 0]
