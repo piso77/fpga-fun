@@ -12,7 +12,7 @@ ISA:
 ADD: add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
   [15 2'b00 14] | [13 rd 12] | [11 rs1 10] | [9 rs2 8] | [7 RESERVED 0]
 
-LD: ld rd, rs -- rd = MEM[ra]
+LD: ld rd, ra -- rd = MEM[ra]
   [15 2'b01 14] | [13 rd 12] | [11 ra 10] | [9 RESERVED 1] | [0 1'b1 0]
 
     ld rd, $addr -- rd = MEM[$addr]
