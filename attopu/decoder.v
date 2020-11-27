@@ -8,12 +8,13 @@ module decoder(
 	output [1:0] regInSel,
 	output reg regFileWE,
 	output [1:0] regOutSel1,
-	output reg [1:0] regOutSel2,
+	output [1:0] regOutSel2,
 
 	output reg aluOp,								// ALU op
 
 	output reg memWE,
 	output reg dAddrSel,
+	output reg Muxer,
 	output reg [15:0] addr					// address extracted from  instruction
 );
 
@@ -23,6 +24,7 @@ module decoder(
 	// wrong
 	assign regInSel = instruction[13:12];
 	assign regOutSel1 = instruction[11:10];
+	assign regOutSel2 = instruction[9:8];
 
 	always @(*) begin
 		nextPCSel = 2'b0;
@@ -33,11 +35,11 @@ module decoder(
 		aluOp = 1'b0;
 
 		dAddrSel = 1'b0;
+		Muxer = 1'b0;
 		memWE = 1'b0;
 
 		addr = 16'd0;
 
-		regOutSel2 = instruction[9:8];
 		// Decode the instruction and assert the relevant control signals
 		case (instruction[15:14])
 		// ADD
@@ -75,7 +77,7 @@ module decoder(
 			// Absolute
 			1'b0: begin
 				memWE = 1'b1; // Write to memory
-				regOutSel2 = regInSel;
+				Muxer = 1'b1;
 				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
 			end
 
