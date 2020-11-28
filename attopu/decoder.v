@@ -18,8 +18,7 @@ module decoder(
 	output reg [15:0] addr					// address extracted from  instruction
 );
 
-	wire [1:0] opcode;
-	wire extopcode;
+	wire [2:0] opcode;
 	wire [10:0] absaddr;
 	wire signaddr;
 
@@ -27,8 +26,7 @@ module decoder(
 	// be parsed to get the registers out, even if a given instruction does not
 	// use that register. The rest of the control signals will ensure nothing goes
 	// wrong
-	assign opcode = instruction[15:14];
-	assign extopcode = instruction[13];
+	assign opcode = instruction[15:13];
 	assign regInSel = instruction[12:11];
 	assign regOutSel1 = instruction[10:9];
 	assign regOutSel2 = instruction[8:7];
@@ -51,73 +49,57 @@ module decoder(
 
 		// Decode the instruction and assert the relevant control signals
 		case (opcode)
-		// ADD
-		2'b00: begin
-			aluOp = 1'b1; // Make sure ALU is instructed to add
-			regFileWE = 1'b1; // Assert write back enabled
-		end
+			// ALU OP
+			3'b000: begin
+				// ADD
+				aluOp = 1'b1; // Make sure ALU is instructed to add
+				regFileWE = 1'b1; // Assert write back enabled
+			end
 
-		// LD
-		2'b01: begin
-			// LD has 2 versions, register addressing and absolute addressing, case on
-			// that here
-			case (extopcode)
-			// Absolute
-			1'b0: begin
+			// LD
+			3'b010: begin
+				// Absolute
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
-			// Register
-			1'b1: begin
+			3'b011: begin
+				// Register
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
-			endcase
-		end
 
-		// ST
-		2'b10: begin
-			// ST has 2 versions, register addressing and absolute addressing, case on
-			// that here
-			case (extopcode)
-			// Absolute
-			1'b0: begin
+			// ST
+			3'b100: begin
+				// Absolute
 				memWE = 1'b1; // Write to memory
 				Muxer = 1'b1;
 				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
-			// Register
-			1'b1: begin
+			3'b101: begin
+				// Register
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
-			endcase
-		end
 
-		// BRZ
-		2'b11: begin
-			// Instruction does nothing if zFlag isnt set
-			if (zFlag) begin
-				// BRZ has 2 versions, register addressing and relative addressing, case
-				// on that here
-				case (extopcode)
-				// Relative
-				1'b0: begin
+			// BRZ
+			3'b110: begin
+				if (zFlag) begin
+					// relative
 					nextPCSel = 2'b01; // Select to add the addr field to PC
 					addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 				end
+			end
 
-				// Register
-				1'b1: begin
+			3'b111: begin
+				if (zFlag) begin
+					// Register
 					nextPCSel = 2'b1x; // Select to use register value
 				end
-				endcase
 			end
-		end
 		endcase
 	end
 endmodule
