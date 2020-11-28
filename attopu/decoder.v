@@ -28,12 +28,12 @@ module decoder(
 	// use that register. The rest of the control signals will ensure nothing goes
 	// wrong
 	assign opcode = instruction[15:14];
-	assign regInSel = instruction[13:12];
-	assign regOutSel1 = instruction[11:10];
-	assign regOutSel2 = instruction[9:8];
-	assign absaddr = instruction[11:1];
-	assign signaddr = instruction[11];
-	assign extopcode = instruction[0];
+	assign extopcode = instruction[13];
+	assign regInSel = instruction[12:11];
+	assign regOutSel1 = instruction[10:9];
+	assign regOutSel2 = instruction[8:7];
+	assign absaddr = instruction[10:0];
+	assign signaddr = instruction[10];
 
 	always @(*) begin
 		nextPCSel = 2'b0;
