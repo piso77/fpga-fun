@@ -11,6 +11,7 @@
   "rules":[
     {"fmt":"add ~reg, ~reg, ~reg",	"bits":["000",0,1,2,"0000000"]},
     {"fmt":"ld ~reg, [~reg]",		"bits":["011",0,1,"000000000"]},
+    {"fmt":"mv ~reg, #~imm11",		"bits":["001",0,1]},
     {"fmt":"ld ~reg, #~imm11",		"bits":["010",0,1]},
     {"fmt":"st ~reg, ~reg",			"bits":["101","00",1,0,"0000000"]},
     {"fmt":"st ~reg, #~imm11",		"bits":["100",0,1]},

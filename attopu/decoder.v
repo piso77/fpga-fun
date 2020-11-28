@@ -5,6 +5,7 @@ module decoder(
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
 
 	output reg regDataInSource,
+	output reg immData,
 	output [1:0] regInSel,
 	output reg regFileWE,
 	output [1:0] regOutSel1,
@@ -38,6 +39,7 @@ module decoder(
 
 		regDataInSource = 1'b0;
 		regFileWE = 1'b0;
+		immData = 1'b0;
 
 		aluOp = 1'b0;
 
@@ -57,6 +59,13 @@ module decoder(
 			end
 
 			// LD
+			3'b001: begin
+				// Immediate
+				immData = 1'b1; // Source the write back register data from the the 'addr' field
+				regFileWE = 1'b1; // Assert write back enabled
+				addr = {5'b0, absaddr}; // Zero fill addr to get full address
+			end
+
 			3'b010: begin
 				// Absolute
 				regDataInSource = 1'b1; // Source the write back register data from memory

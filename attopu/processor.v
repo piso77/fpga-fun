@@ -27,6 +27,7 @@ module processor(
 	wire [1:0] regInSel;
 	wire regFileWE;
 	wire regDataInSource;
+	wire immData;
 	wire [1:0] regOutSel1;
 	wire [1:0] regOutSel2;
 	wire [1:0] regTokenSel;
@@ -93,6 +94,7 @@ module processor(
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
 		.regDataInSource(regDataInSource),
+		.immData(immData),
 		.regInSel(regInSel),
 		.regFileWE(regFileWE),
 		.regOutSel1(regOutSel1),
@@ -137,7 +139,7 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDataIn = (regDataInSource) ? dDataOut : aluOut;
+	assign regDataIn = (immData) ? addr : ((regDataInSource) ? dDataOut : aluOut);
 	assign dAddr = (dAddrSel) ? regOut1 : addr;
 	assign regTokenSel = (regMuxer) ? regInSel : regOutSel2;
 

@@ -13,12 +13,12 @@ the type:
 
 ALU OP:
     add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
-  [15 2'b00X 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 RESERVED 0]
-
-XXX:
-  [15 2'b001 13] | [12 RESERVED 0]
+  [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 RESERVED 0]
 
 LD:
+    mv rd, $data -- rd = $data
+  [15 2'b001 13] | [12 rd 11] | [10 $data 0]
+
     ld rd, $addr -- rd = MEM[$addr]
   [15 2'b010 13] | [12 rd 11] | [10 $addr 0]
 
