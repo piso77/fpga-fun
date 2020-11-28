@@ -19,16 +19,10 @@ LD:
     mv rd, $data -- rd = $data
   [15 2'b001 13] | [12 rd 11] | [10 $data 0]
 
-    ld rd, $addr -- rd = MEM[$addr] -- OBSOLETE TO BE RETIRED
-  [15 2'b010 13] | [12 rd 11] | [10 $addr 0]
-
     ld rd, [ra] -- rd = MEM[ra]
   [15 2'b011 13] | [12 rd 11] | [10 ra 9] | [8 RESERVED 0]
 
 ST:
-    st rs, $addr -- MEM[$addr] = rs -- OBSOLETE TO BE RETIRED
-  [15 2'b100 13] | [12 rs 11] | [10 $addr 0]
-
     st rs, ra -- MEM[ra] = rs
   [15 2'b101 13] | [12 RESERVED 11] | [10 ra 9] | [8 rs 7] | [6 RESERVED 0]
 

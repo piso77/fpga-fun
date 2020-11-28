@@ -66,13 +66,6 @@ module decoder(
 				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
-			3'b010: begin
-				// Absolute
-				regDataInSource = 1'b1; // Source the write back register data from memory
-				regFileWE = 1'b1; // Assert write back enabled
-				addr = {5'b0, absaddr}; // Zero fill addr to get full address
-			end
-
 			3'b011: begin
 				// Register
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
@@ -81,13 +74,6 @@ module decoder(
 			end
 
 			// ST
-			3'b100: begin
-				// Absolute
-				memWE = 1'b1; // Write to memory
-				Muxer = 1'b1;
-				addr = {5'b0, absaddr}; // Zero fill addr to get full address
-			end
-
 			3'b101: begin
 				// Register
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
