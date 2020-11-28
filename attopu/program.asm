@@ -3,14 +3,14 @@
 .len	1024
 .width	16
 
-LD	r0, #$0a		; ld rd, $addr -- rd = MEM[$addr]
-LD	r1, #$0b
+MV	r0, #$0a		; ld rd, $data	-- rd = $data
+MV	r1, #$02
 ADD	r2, r0, r1
-ST	r2, #$0a		; st rs, $addr	-- MEM[$addr] = rs -- 1010|0000|0001|0100 => A014
-LD	r3, #$0e
-ST	r2, r3			; st rs, ra		-- MEM[ra] = rs
-LD	r1, [r3]
-MV	r2, #$7ff
+ST	r2, r0			; st rs, ra		-- MEM[ra] = rs
+MV	r3, #$0e
+LD	r1, [r3]		; ld rd, [ra]	-- rd = MEM[ra]
+RESET
+RESET
 RESET
 RESET
 
