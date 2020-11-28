@@ -9,7 +9,7 @@ ADD	r2, r0, r1
 ST	r2, #$0a		; st rs, $addr	-- MEM[$addr] = rs -- 1010|0000|0001|0100 => A014
 LD	r3, #$0e
 ST	r2, r3			; st rs, ra		-- MEM[ra] = rs
-RESET
+LD	r1, [r3]
 RESET
 RESET
 RESET

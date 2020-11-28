@@ -49,7 +49,7 @@ module test_attopu;
 		#2 `assert(reg2,		16'h000c)
 		#2 `assert(regOut2,	16'h000a)
 		#2 `assert(reg3,		16'h000f)
-		#2 `assert(regOut2,	16'h000f)
+		#4 `assert(reg1,		16'h000c)
 	end
 
 	initial

@@ -22,7 +22,7 @@ LD:
     ld rd, $addr -- rd = MEM[$addr]
   [15 2'b010 13] | [12 rd 11] | [10 $addr 0]
 
-    ld rd, ra -- rd = MEM[ra]
+    ld rd, [ra] -- rd = MEM[ra]
   [15 2'b011 13] | [12 rd 11] | [10 ra 9] | [8 RESERVED 0]
 
 ST:
