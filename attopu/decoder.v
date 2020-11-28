@@ -20,6 +20,8 @@ module decoder(
 
 	wire [1:0] opcode;
 	wire extopcode;
+	wire [10:0] absaddr;
+	wire signaddr;
 
 	// Notice all instructions are designed in such a way that the instruction can
 	// be parsed to get the registers out, even if a given instruction does not
@@ -29,6 +31,8 @@ module decoder(
 	assign regInSel = instruction[13:12];
 	assign regOutSel1 = instruction[11:10];
 	assign regOutSel2 = instruction[9:8];
+	assign absaddr = instruction[11:1];
+	assign signaddr = instruction[11];
 	assign extopcode = instruction[0];
 
 	always @(*) begin
@@ -62,7 +66,7 @@ module decoder(
 			1'b0: begin
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
-				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
+				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
 			// Register
@@ -83,7 +87,7 @@ module decoder(
 			1'b0: begin
 				memWE = 1'b1; // Write to memory
 				Muxer = 1'b1;
-				addr = {5'b0, instruction[11:1]}; // Zero fill addr to get full address
+				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
 			// Register
@@ -104,7 +108,7 @@ module decoder(
 				// Relative
 				1'b0: begin
 					nextPCSel = 2'b01; // Select to add the addr field to PC
-					addr = {{5{instruction[11]}}, instruction[11:1]}; // sign extend the addr field of the instruction
+					addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 				end
 
 				// Register
