@@ -15,7 +15,6 @@ module decoder(
 
 	output reg memWE,
 	output reg dAddrSel,
-	output reg Muxer,
 	output reg [15:0] addr					// address extracted from  instruction
 );
 
@@ -44,7 +43,6 @@ module decoder(
 		aluOp = 1'b0;
 
 		dAddrSel = 1'b0;
-		Muxer = 1'b0;
 		memWE = 1'b0;
 
 		addr = 16'd0;

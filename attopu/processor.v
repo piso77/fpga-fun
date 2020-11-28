@@ -19,7 +19,6 @@ module processor(
 	wire [15:0] dDataOut;
 	wire memWE;
 	wire dAddrSel;
-	wire regMuxer;
 
 	wire [15:0] addr;
 
@@ -30,7 +29,6 @@ module processor(
 	wire immData;
 	wire [1:0] regOutSel1;
 	wire [1:0] regOutSel2;
-	wire [1:0] regTokenSel;
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 
@@ -74,7 +72,7 @@ module processor(
 		.inReg(regInSel),
 		.dataIn(regDataIn),
 		.outReg1(regOutSel1),
-		.outReg2(regTokenSel),
+		.outReg2(regOutSel2),
 		.dataOut1(regOut1),
 		.dataOut2(regOut2)
 	);
@@ -102,7 +100,6 @@ module processor(
 		.aluOp(aluOp),
 		.memWE(memWE),
 		.dAddrSel(dAddrSel),
-		.Muxer(regMuxer),
 		.addr(addr)
 	);
 
@@ -141,7 +138,6 @@ module processor(
 	// Extra logic
 	assign regDataIn = (immData) ? addr : ((regDataInSource) ? dDataOut : aluOut);
 	assign dAddr = (dAddrSel) ? regOut1 : addr;
-	assign regTokenSel = (regMuxer) ? regInSel : regOutSel2;
 
 	assign led = PC[7:0];
 endmodule
