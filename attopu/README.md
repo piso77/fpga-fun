@@ -20,21 +20,29 @@ ALU OP:
     add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
   [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 7'b0000001 0]
 
-LD:
+LD IMMEDIATE:
     ld rd, $data -- rd = $data
   [15 2'b001 13] | [12 rd 11] | [10 $data 0]
 
+UNUSED:
+  [15 2'b010 13] | [12 RESERVED 0]
+
+LD INDIRECT:
     ld rd, [ra] -- rd = MEM[ra]
   [15 2'b011 13] | [12 rd 11] | [10 ra 9] | [8 RESERVED 0]
 
-ST:
+UNUSED:
+  [15 2'b100 13] | [12 RESERVED 0]
+
+ST INDIRECT:
     st [ra], rs -- MEM[ra] = rs
   [15 2'b101 13] | [12 RESERVED 11] | [10 ra 9] | [8 rs 7] | [6 RESERVED 0]
 
-BRZ:
+BRZ RELATIVE: -- OBSOLETE?
     brz $addr -- if (z): pc = pc + $addr
   [15 2'b110 13] | [12 RESERVED 11] | [10 $addr 0]
 
+BRZ REGISTER:
     brz ra -- if (z): pc = ra
   [15 2'b111 13] | [12 RESERVED 11] | [10 ra 9] | [8 RESERVED 0]
 ```
