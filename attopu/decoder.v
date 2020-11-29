@@ -11,7 +11,7 @@ module decoder(
 	output [1:0] regOutSel1,
 	output [1:0] regOutSel2,
 
-	output reg aluOp,								// ALU op
+	output [6:0] aluOp,							// ALU op
 
 	output reg memWE,
 	output reg dAddrSel,
@@ -32,6 +32,7 @@ module decoder(
 	assign regOutSel2 = instruction[8:7];
 	assign absaddr = instruction[10:0];
 	assign signaddr = instruction[10];
+	assign aluOp = instruction[6:0];
 
 	always @(*) begin
 		nextPCSel = 2'b0;
@@ -39,8 +40,6 @@ module decoder(
 		regDataInSource = 1'b0;
 		regFileWE = 1'b0;
 		immData = 1'b0;
-
-		aluOp = 1'b0;
 
 		dAddrSel = 1'b0;
 		memWE = 1'b0;
@@ -51,8 +50,6 @@ module decoder(
 		case (opcode)
 			// ALU OP
 			3'b000: begin
-				// ADD
-				aluOp = 1'b1; // Make sure ALU is instructed to add
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 

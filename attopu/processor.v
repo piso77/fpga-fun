@@ -32,7 +32,7 @@ module processor(
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 
-	wire aluOp;
+	wire [6:0] aluOp;
 	wire zFlag;
 	wire [15:0] aluOut;
 
@@ -80,9 +80,9 @@ module processor(
 	ALU alu(
 		.clk(clk),
 		.rst(rst),
+		.op(aluOp),
 		.in1(regOut1),
 		.in2(regOut2),
-		.op(aluOp),
 		.out(aluOut),
 		.zFlag(zFlag)
 	);

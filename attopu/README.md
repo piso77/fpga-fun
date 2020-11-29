@@ -13,7 +13,7 @@ the type:
 
 ALU OP:
     add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
-  [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 RESERVED 0]
+  [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 aluop 0]
 
 LD:
     ld rd, $data -- rd = $data
