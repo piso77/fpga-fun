@@ -27,6 +27,10 @@ module ALU(
 		zFlagNext = zFlag; // Note, according to our ISA, the z flag only changes when an ADD is performed, otherwise it should retain its value
 
 		case (op)
+		// MV
+		0: begin
+			out = in1;
+		end
 		// ADD
 		1: begin
 			out = in1 + in2;

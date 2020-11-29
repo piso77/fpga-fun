@@ -9,6 +9,7 @@ ADD	r2, r0, r1
 ST	[r0], r2		; st [ra], rs	-- MEM[ra] = rs
 LD	r3, #$0a
 LD	r1, [r3]		; ld rd, [ra]	-- rd = MEM[ra]
+MV	r2, r3
 RESET
 RESET
 RESET
