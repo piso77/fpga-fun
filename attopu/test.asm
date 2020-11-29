@@ -11,9 +11,3 @@ LD	r3, #$0a
 LD	r1, [r3]		; ld rd, [ra]	-- rd = MEM[ra]
 MV	r2, r3
 RESET
-RESET
-RESET
-RESET
-
-; every data item is .width padded and decimal
-.data 0010 0002 0003 0004 0015 0006

@@ -11,7 +11,7 @@ module memory(
 	reg [15:0] memArray [1023:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
-		$readmemh("program.hex", memArray);
+		$readmemh("test.hex", memArray);
 	end
 
 	always @(posedge clk) begin
