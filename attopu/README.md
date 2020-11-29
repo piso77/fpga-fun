@@ -16,7 +16,7 @@ ALU OP:
   [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 RESERVED 0]
 
 LD:
-    mv rd, $data -- rd = $data
+    ld rd, $data -- rd = $data
   [15 2'b001 13] | [12 rd 11] | [10 $data 0]
 
     ld rd, [ra] -- rd = MEM[ra]
