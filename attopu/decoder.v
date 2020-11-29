@@ -65,7 +65,7 @@ module decoder(
 			end
 
 			3'b011: begin
-				// Register
+				// Indirect
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
@@ -73,7 +73,7 @@ module decoder(
 
 			// ST
 			3'b101: begin
-				// Register
+				// Indirect
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
