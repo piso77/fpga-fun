@@ -23,7 +23,7 @@ LD:
   [15 2'b011 13] | [12 rd 11] | [10 ra 9] | [8 RESERVED 0]
 
 ST:
-    st rs, ra -- MEM[ra] = rs
+    st [ra], rs -- MEM[ra] = rs
   [15 2'b101 13] | [12 RESERVED 11] | [10 ra 9] | [8 rs 7] | [6 RESERVED 0]
 
 BRZ:
