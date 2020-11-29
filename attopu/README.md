@@ -12,8 +12,13 @@ Opcode is always in the top three bits, the rest of the instruction depends on
 the type:
 
 ALU OP:
-    add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
   [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 aluop 0]
+
+    mv rd, rs1 -- rd = rs1 -- moving data between register is an ALU op
+  [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 RESERVED 7] | [6 7'b0000000  0]
+
+    add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
+  [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 7'b0000001 0]
 
 LD:
     ld rd, $data -- rd = $data
