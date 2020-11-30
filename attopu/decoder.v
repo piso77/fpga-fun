@@ -67,11 +67,21 @@ module decoder(
 				addr = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
+			// UNUSED
+			3'b010: begin
+				halt = 1'b1;
+			end
+
 			3'b011: begin
 				// Indirect
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
+			end
+
+			// UNUSED
+			3'b100: begin
+				halt = 1'b1;
 			end
 
 			// ST
@@ -81,8 +91,7 @@ module decoder(
 				memWE = 1'b1; // Write to memory
 			end
 
-			// BRANCH -- XXX actually the "not carry | not zero" cases are redundant,
-			// and we could embed more flags here
+			// BRANCH
 			3'b110: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
@@ -97,10 +106,9 @@ module decoder(
 				end
 			end
 
-			// XXX if we move the BRANCH to use this opcode, we can make the HALT
-			// instruction a special case of it
+			// HALT
 			3'b111: begin
-				halt = 1'b1;
+					halt = 1'b1;
 			end
 		endcase
 	end
