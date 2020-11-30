@@ -42,7 +42,7 @@ module ALU(
 		// ADD
 		1: begin
 			tmpout = in1 + in2;
-			zFlagNext = (tmpout == 17'd0);
+			zFlagNext = (tmpout == 17'b0);
 			cFlagNext = (tmpout[16] == 1'b1);
 		end
 		endcase
