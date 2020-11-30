@@ -40,7 +40,7 @@ ST INDIRECT:
 
 BRZ RELATIVE: -- OBSOLETE?
     brz $addr -- if (z): pc = pc + $addr
-  [15 2'b110 13] | [12 RESERVED 11] | [10 $addr 0]
+  [15 2'b110 13] | [12 flags 11] | [10 $addr 0]
 
 BRZ REGISTER:
     brz ra -- if (z): pc = ra

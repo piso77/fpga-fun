@@ -9,7 +9,9 @@ module processor(
 	output [15:0] reg0,
 	output [15:0] reg1,
 	output [15:0] reg2,
-	output [15:0] reg3
+	output [15:0] reg3,
+	output cFlag,
+	output zFlag
 `else
 	output [7:0] led
 `endif
@@ -33,6 +35,7 @@ module processor(
 	wire [15:0] regOut2;
 
 	wire [6:0] aluOp;
+	wire cFlag;
 	wire zFlag;
 	wire [15:0] aluOut;
 
@@ -84,11 +87,13 @@ module processor(
 		.in1(regOut1),
 		.in2(regOut2),
 		.out(aluOut),
+		.cFlag(cFlag),
 		.zFlag(zFlag)
 	);
 
 	decoder decode(
 		.instruction(instruction),
+		.cFlag(cFlag),
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
 		.regDataInSource(regDataInSource),

@@ -1,6 +1,7 @@
 module decoder(
 	input [15:0] instruction,
 
+	input cFlag,										// used for branch op
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
 
@@ -21,6 +22,7 @@ module decoder(
 	wire [2:0] opcode;
 	wire [10:0] absaddr;
 	wire signaddr;
+	wire brFlagSel, brFlag;
 
 	// Notice all instructions are designed in such a way that the instruction can
 	// be parsed to get the registers out, even if a given instruction does not
@@ -28,6 +30,8 @@ module decoder(
 	// wrong
 	assign opcode = instruction[15:13];
 	assign regInSel = instruction[12:11];
+	assign brFlagSel = instruction[12];
+	assign brFlag = instruction[11];
 	assign regOutSel1 = instruction[10:9];
 	assign regOutSel2 = instruction[8:7];
 	assign absaddr = instruction[10:0];
@@ -75,12 +79,19 @@ module decoder(
 				memWE = 1'b1; // Write to memory
 			end
 
-			// BRZ
+			// BRANCH -- XXX actually the "not carry | not zero" cases are redundant,
+			// and we could embed more flags here
 			3'b110: begin
-				if (zFlag) begin
-					// relative
-					nextPCSel = 2'b01; // Select to add the addr field to PC
-					addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+				if (brFlagSel == 1'b0) begin // carry
+					if (brFlag == cFlag) begin
+						nextPCSel = 2'b01; // Select to add the addr field to PC
+						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+					end
+				end else begin // zero
+					if (brFlag == zFlag) begin
+						nextPCSel = 2'b01; // Select to add the addr field to PC
+						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+					end
 				end
 			end
 

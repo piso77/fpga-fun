@@ -29,6 +29,13 @@ module test_attopu;
 	wire [15:0] reg1;
 	wire [15:0] reg2;
 	wire [15:0] reg3;
+	wire cFlag;
+	wire zFlag;
+	wire brFlagSel;
+	wire brFlag;
+
+	assign brFlagSel = instruction[12];
+	assign brFlag = instruction[11];
 
 	processor cpu(
 		.clk(clk),
@@ -40,7 +47,9 @@ module test_attopu;
 		.reg0(reg0),
 		.reg1(reg1),
 		.reg2(reg2),
-		.reg3(reg3)
+		.reg3(reg3),
+		.cFlag(cFlag),
+		.zFlag(zFlag)
 	);
 
 	initial begin // assertions
@@ -54,6 +63,6 @@ module test_attopu;
 	end
 
 	initial
-		$monitor("At time %t: addr=0x%h instr=0x%h reg0=0x%h reg1=0x%h reg2=0x%h reg3=0x%h regOut1=0x%h regOut2=0x%h reset=%b",
-				 $time, PC, instruction, reg0, reg1, reg2, reg3, regOut1, regOut2, reset);
+		$monitor("At time %t: addr=0x%h instr=0x%h reg0=0x%h reg1=0x%h reg2=0x%h reg3=0x%h regOut1=0x%h regOut2=0x%h brFlagSel=%b brFlag=%b cFlag=%b zFlag=%b reset=%b",
+				 $time, PC, instruction, reg0, reg1, reg2, reg3, regOut1, regOut2, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule

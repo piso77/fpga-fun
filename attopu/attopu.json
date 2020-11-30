@@ -4,6 +4,7 @@
     "reg":{"bits":2, "toks":["r0", "r1", "r2", "r3"]},
     "unop":{"bits":3, "toks":["zero","loada","inc","dec","asl","lsr","rol","ror"]},
     "binop":{"bits":3, "toks":["or","and","xor","mov","sub","adc","sbb"]},
+    "flag":{"bits":2, "toks":["nc", "c", "nz", "z"]},
     "const4":{"bits":4},
     "imm8":{"bits":8},
     "imm11":{"bits":11}
@@ -14,6 +15,7 @@
     {"fmt":"ld ~reg, #~imm11",		"bits":["001",0,1]},
     {"fmt":"ld ~reg, [~reg]",		"bits":["011",0,1,"000000000"]},
     {"fmt":"st [~reg], ~reg",		"bits":["101","00",0,1,"0000000"]},
+    {"fmt":"br ~flag, #~imm11",		"bits":["110",0,1]},
     {"fmt":"reset",					"bits":["1111111111111111"]}
   ]
 }
