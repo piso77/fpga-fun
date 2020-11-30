@@ -11,4 +11,5 @@ Loop:
 		ADD	r2, r0, r1	; newA <= A + B
 		MV	r0, r1		; A <= B
 		MV	r1, r2		; B <= newA
-		BR	NZ, Loop
+		BR	NC, Loop
+		HALT

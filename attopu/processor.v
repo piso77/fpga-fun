@@ -42,6 +42,7 @@ module processor(
 	wire [1:0] nextPCSel;
 	reg [15:0] PC;
 	reg [15:0] nextPC;
+	wire halt;
 
 	wire [15:0] instruction;
 
@@ -96,6 +97,7 @@ module processor(
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
+		.halt(halt),
 		.regDataInSource(regDataInSource),
 		.immData(immData),
 		.regInSel(regInSel),
@@ -131,12 +133,14 @@ module processor(
 	end
 
 	// PC Register
-	always @(posedge clk, posedge rst) begin
+	always @(posedge clk, posedge rst, posedge halt) begin
 		if (rst) begin
 			PC <= 16'd0;
 		end
 		else begin
-			PC <= nextPC;
+			if (halt == 1'b0) begin
+				PC <= nextPC;
+			end
 		end
 	end
 

@@ -4,6 +4,7 @@ module decoder(
 	input cFlag,										// used for branch op
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
+	output reg halt,
 
 	output reg regDataInSource,
 	output reg immData,
@@ -40,6 +41,7 @@ module decoder(
 
 	always @(*) begin
 		nextPCSel = 2'b0;
+		halt = 1'b0;
 
 		regDataInSource = 1'b0;
 		regFileWE = 1'b0;
@@ -95,11 +97,10 @@ module decoder(
 				end
 			end
 
+			// XXX if we move the BRANCH to use this opcode, we can make the HALT
+			// instruction a special case of it
 			3'b111: begin
-				if (zFlag) begin
-					// Register
-					nextPCSel = 2'b10; // Select to use register value
-				end
+				halt = 1'b1;
 			end
 		endcase
 	end
