@@ -53,15 +53,20 @@ module processor(
 	wire [15:0] reg3;
 `endif
 
-	memory mem(
-		.clk(clk),
-		.iAddr(PC), // The instruction port uses the PC as its address and outputs the current instruction, so connect these directly
-		.iDataOut(instruction),
-		.dAddr(dAddr),
-		.dWE(memWE),
-		.dDataIn(regOut2), // In all instructions, only source register 2 is ever written to memory, so make this connection direct
-		.dDataOut(dDataOut)
-	);
+	reg [15:0] memArray [1023:0];
+	initial begin
+		// Load in the program/initial memory state into the memory module
+		$readmemh("test.hex", memArray);
+	end
+
+	always @(posedge clk) begin
+		if (memWE) begin // When the WE line is asserted, write into memory at the given address
+			memArray[dAddr[9:0]] <= regOut2; // Limit the range of the addresses
+		end
+	end
+
+	assign dDataOut = memArray[dAddr[9:0]];
+	assign instruction = memArray[PC[9:0]];
 
 	registerFile regFile(
 `ifdef DEBUG
