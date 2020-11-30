@@ -84,12 +84,12 @@ module decoder(
 			3'b110: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
-						nextPCSel = 2'b01; // Select to add the addr field to PC
+						nextPCSel = 2'b01; // Select to use the addr field as next PC
 						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 					end
 				end else begin // zero
 					if (brFlag == zFlag) begin
-						nextPCSel = 2'b01; // Select to add the addr field to PC
+						nextPCSel = 2'b01; // Select to use the addr field as next PC
 						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 					end
 				end

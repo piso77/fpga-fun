@@ -118,9 +118,9 @@ module processor(
 			nextPC = regOut1;
 		end
 
-		// From instruction relative
+		// From instruction absolute
 		2'b01: begin
-			nextPC = PC + addr;
+			nextPC = addr;
 		end
 
 		// Regular operation, increment

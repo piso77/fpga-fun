@@ -38,8 +38,8 @@ ST INDIRECT:
     st [ra], rs -- MEM[ra] = rs
   [15 2'b101 13] | [12 RESERVED 11] | [10 ra 9] | [8 rs 7] | [6 RESERVED 0]
 
-BRZ RELATIVE: -- OBSOLETE?
-    brz $addr -- if (z): pc = pc + $addr
+BR C|NC|Z|NZ ABSOLUTE:
+    brz $addr -- if (z): pc = $addr
   [15 2'b110 13] | [12 flags 11] | [10 $addr 0]
 
 BRZ REGISTER:
