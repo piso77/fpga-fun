@@ -98,7 +98,7 @@ module decoder(
 			3'b111: begin
 				if (zFlag) begin
 					// Register
-					nextPCSel = 2'b1x; // Select to use register value
+					nextPCSel = 2'b10; // Select to use register value
 				end
 			end
 		endcase

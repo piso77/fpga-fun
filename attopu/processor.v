@@ -112,15 +112,15 @@ module processor(
 	always @(*) begin
 		nextPC = 16'd0;
 
-    casez (nextPCSel)
-    // From register file
-		2'b1?: begin
-			nextPC = regOut1;
-		end
-
+    case (nextPCSel)
 		// From instruction absolute
 		2'b01: begin
 			nextPC = addr;
+		end
+
+		// From register file
+		2'b10: begin
+			nextPC = regOut1;
 		end
 
 		// Regular operation, increment
