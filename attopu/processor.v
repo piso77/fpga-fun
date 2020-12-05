@@ -53,20 +53,21 @@ module processor(
 	wire [15:0] reg3;
 `endif
 
-	reg [15:0] memArray [1023:0];
+	reg [15:0] dataMem [511:0];
+	reg [15:0] instMem [511:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
-		$readmemh("test.hex", memArray);
+		$readmemh("test.hex", instMem);
 	end
 
 	always @(posedge clk) begin
 		if (memWE) begin // When the WE line is asserted, write into memory at the given address
-			memArray[dAddr[9:0]] <= regOut2; // Limit the range of the addresses
+			dataMem[dAddr[9:0]] <= regOut2; // Limit the range of the addresses
 		end
 	end
 
-	assign dDataOut = memArray[dAddr[9:0]];
-	assign instruction = memArray[PC[9:0]];
+	assign dDataOut = dataMem[dAddr[9:0]];
+	assign instruction = instMem[PC[9:0]];
 
 	registerFile regFile(
 `ifdef DEBUG
