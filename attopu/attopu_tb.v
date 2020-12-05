@@ -14,7 +14,11 @@ module test_attopu;
 
 		#0 reset = 1;
 		#1 reset = 0;
+`ifdef FIBO
+		#200 $finish;
+`else
 		#28 $finish;
+`endif
 	end
 
 	/* Make a regular pulsing clock. */
@@ -52,6 +56,7 @@ module test_attopu;
 		.zFlag(zFlag)
 	);
 
+`ifndef FIBO
 	initial begin // assertions
 		#2 `assert(reg0,		16'h000a)
 		#2 `assert(reg1,		16'h0002)
@@ -61,6 +66,7 @@ module test_attopu;
 		#2 `assert(reg1,		16'h000c)
 		#2 `assert(reg2,		16'h000a)
 	end
+`endif
 
 	initial
 		$monitor("At time %t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h regOut=0x%h|0x%h brFlagSel=%b brFlag=%b c/z=%b/%b rst=%b",

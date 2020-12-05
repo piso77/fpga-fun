@@ -1,7 +1,7 @@
 include project.cfg
 
 default: $(FW)
-	iverilog -DDEBUG -o dsn attopu_tb.v $(VSOURCE)
+	iverilog -DDEBUG -DFIBO -o dsn attopu_tb.v $(VSOURCE)
 	vvp dsn
 	#gtkwave test_attopu.vcd
 

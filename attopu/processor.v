@@ -57,7 +57,11 @@ module processor(
 	reg [15:0] instMem [511:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
+`ifdef FIBO
+		$readmemh("fibo.hex", instMem);
+`else
 		$readmemh("test.hex", instMem);
+`endif
 	end
 
 	always @(posedge clk) begin

@@ -1,7 +1,7 @@
 ; Fibonacci sequence calculation
 .arch	attopu
 .org	0
-.len	1024
+.len	512
 .width	16
 
 Start:
