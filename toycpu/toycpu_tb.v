@@ -4,13 +4,13 @@
 			$finish; \
 		end
 
-module test_attopu;
+module test_toycpu;
 
 	/* Make a reset that pulses once. */
 	reg reset = 0;
 	initial begin
-		$dumpfile("test_attopu.vcd");
-		$dumpvars(0, test_attopu);
+		$dumpfile("test_toycpu.vcd");
+		$dumpvars(0, test_toycpu);
 
 		#0 reset = 1;
 		#1 reset = 0;

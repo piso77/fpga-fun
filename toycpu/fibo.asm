@@ -1,5 +1,5 @@
 ; Fibonacci sequence calculation
-.arch	attopu
+.arch	toycpu
 .org	0
 .len	512
 .width	16

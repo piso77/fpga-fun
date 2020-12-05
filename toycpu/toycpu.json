@@ -1,5 +1,5 @@
 {
-  "name":"attopu",
+  "name":"toycpu",
   "vars":{
     "reg":{"bits":2, "toks":["r0", "r1", "r2", "r3"]},
     "unop":{"bits":3, "toks":["zero","loada","inc","dec","asl","lsr","rol","ror"]},

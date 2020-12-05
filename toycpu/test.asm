@@ -1,4 +1,4 @@
-.arch	attopu
+.arch	toycpu
 .org	0
 .len	1024
 .width	16
