@@ -1,6 +1,6 @@
-# ATTOPU - a 4 inst cpu from StackOverflow
+# ToyCPU - an FPGA/Verilog learning ground in the form of a simple cpu
 
-Original post and src:
+Original post and src that inspired this work:
 
 https://stackoverflow.com/questions/51592244/implementation-of-simple-microprocessor-using-verilog/51621153#51621153
 
@@ -14,7 +14,7 @@ the type:
 ALU OP:
   [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 aluop 0]
 
-    mv rd, rs1 -- rd = rs1 -- moving data between register is an ALU op
+    mv rd, rs1 -- rd = rs1 -- yes, moving data between register is an ALU op
   [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 RESERVED 7] | [6 7'b0000000  0]
 
     add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
