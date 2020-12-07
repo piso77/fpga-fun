@@ -8,10 +8,10 @@ module decoder(
 
 	output reg regDataInSource,
 	output reg immData,
-	output [1:0] regInSel,
+	output [1:0] regDst,
 	output reg regFileWE,
-	output [1:0] regOutSel1,
-	output [1:0] regOutSel2,
+	output [1:0] regSrc1,
+	output [1:0] regSrc2,
 
 	output [6:0] aluOp,							// ALU op
 
@@ -30,13 +30,17 @@ module decoder(
 	// use that register. The rest of the control signals will ensure nothing goes
 	// wrong
 	assign opcode = instruction[15:13];
-	assign regInSel = instruction[12:11];
+
+	assign regDst = instruction[12:11];
+	assign regSrc1 = instruction[10:9];
+	assign regSrc2 = instruction[8:7];
+
 	assign brFlagSel = instruction[12];
 	assign brFlag = instruction[11];
-	assign regOutSel1 = instruction[10:9];
-	assign regOutSel2 = instruction[8:7];
+
 	assign absaddr = instruction[10:0];
 	assign signaddr = instruction[10];
+
 	assign aluOp = instruction[6:0];
 
 	always @(*) begin

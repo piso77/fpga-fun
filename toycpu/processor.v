@@ -25,12 +25,12 @@ module processor(
 	wire [15:0] addr;
 
 	wire [15:0] regDataIn;
-	wire [1:0] regInSel;
+	wire [1:0] regDst;
 	wire regFileWE;
 	wire regDataInSource;
 	wire immData;
-	wire [1:0] regOutSel1;
-	wire [1:0] regOutSel2;
+	wire [1:0] regSrc1;
+	wire [1:0] regSrc2;
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 
@@ -83,10 +83,10 @@ module processor(
 		.clk(clk),
 		.rst(rst),
 		.we(regFileWE),
-		.inReg(regInSel),
+		.inReg(regDst),
 		.dataIn(regDataIn),
-		.outReg1(regOutSel1),
-		.outReg2(regOutSel2),
+		.outReg1(regSrc1),
+		.outReg2(regSrc2),
 		.dataOut1(regOut1),
 		.dataOut2(regOut2)
 	);
@@ -110,10 +110,10 @@ module processor(
 		.halt(halt),
 		.regDataInSource(regDataInSource),
 		.immData(immData),
-		.regInSel(regInSel),
+		.regDst(regDst),
 		.regFileWE(regFileWE),
-		.regOutSel1(regOutSel1),
-		.regOutSel2(regOutSel2),
+		.regSrc1(regSrc1),
+		.regSrc2(regSrc2),
 		.aluOp(aluOp),
 		.memWE(memWE),
 		.dAddrSel(dAddrSel),
