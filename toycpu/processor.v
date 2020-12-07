@@ -22,7 +22,7 @@ module processor(
 	wire memWE;
 	wire dAddrSel;
 
-	wire [15:0] addr;
+	wire [15:0] instrData;
 
 	wire [15:0] regDataIn;
 	wire [1:0] regDst;
@@ -115,7 +115,7 @@ module processor(
 		.aluOp(aluOp),
 		.memWE(memWE),
 		.dAddrSel(dAddrSel),
-		.addr(addr)
+		.instrData(instrData)
 	);
 
 	// PC Logic
@@ -125,7 +125,7 @@ module processor(
     case (nextPCSel)
 		// From instruction absolute
 		2'b01: begin
-			nextPC = addr;
+			nextPC = instrData;
 		end
 
 		// From register file
@@ -151,8 +151,8 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDataIn = (immData) ? addr : ((regDataInSource) ? dDataOut : aluOut);
-	assign dAddr = (dAddrSel) ? regOut1 : addr;
+	assign regDataIn = (immData) ? instrData : ((regDataInSource) ? dDataOut : aluOut);
+	assign dAddr = (dAddrSel) ? regOut1 : instrData;
 
 	assign led = PC[7:0];
 endmodule

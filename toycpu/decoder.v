@@ -16,7 +16,7 @@ module decoder(
 
 	output reg memWE,
 	output reg dAddrSel,
-	output reg [15:0] addr					// address extracted from  instruction
+	output reg [15:0] instrData			// data extracted from  instruction
 );
 
 	wire [2:0] opcode;
@@ -52,7 +52,7 @@ module decoder(
 		dAddrSel = 1'b0;
 		memWE = 1'b0;
 
-		addr = 16'd0;
+		instrData = 16'd0;
 
 		// Decode the instruction and assert the relevant control signals
 		case (opcode)
@@ -66,7 +66,7 @@ module decoder(
 				// Immediate
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
-				addr = {5'b0, absaddr}; // Zero fill addr to get full address
+				instrData = {5'b0, absaddr}; // Zero fill addr to get full address
 			end
 
 			// UNUSED
@@ -96,12 +96,12 @@ module decoder(
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+						instrData = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 					end
 				end else begin // zero
 					if (brFlag == zFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						addr = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+						instrData = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
 					end
 				end
 			end
