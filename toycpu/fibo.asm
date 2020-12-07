@@ -1,7 +1,7 @@
 ; Fibonacci sequence calculation
 .arch	toycpu
 .org	0
-.len	512
+.len	128
 .width	16
 
 Start:

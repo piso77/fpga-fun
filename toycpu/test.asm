@@ -1,6 +1,6 @@
 .arch	toycpu
 .org	0
-.len	512
+.len	128
 .width	16
 
 LD	r0, $0a		; ld rd, $data	-- rd = $data

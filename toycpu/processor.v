@@ -52,8 +52,8 @@ module processor(
 	wire [15:0] reg3;
 `endif
 
-	reg [15:0] dataMem [511:0];
-	reg [15:0] instMem [511:0];
+	reg [15:0] dataMem [127:0];
+	reg [15:0] instMem [127:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
 `ifdef FIBO
