@@ -20,8 +20,8 @@ module decoder(
 );
 
 	wire [2:0] opcode;
-	wire [10:0] absaddr;
-	wire signaddr;
+	wire [10:0] payload;
+	wire msbpload;
 	wire brFlagSel, brFlag;
 
 	// Notice all instructions are designed in such a way that the instruction can
@@ -37,8 +37,8 @@ module decoder(
 	assign brFlagSel = instruction[12];
 	assign brFlag = instruction[11];
 
-	assign absaddr = instruction[10:0];
-	assign signaddr = instruction[10];
+	assign payload = instruction[10:0];
+	assign msbpload = instruction[10];
 
 	assign aluOp = instruction[6:0];
 
@@ -66,7 +66,7 @@ module decoder(
 				// Immediate
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
-				instrData = {5'b0, absaddr}; // Zero fill addr to get full address
+				instrData = {5'b0, payload}; // Zero fill addr to get full address
 			end
 
 			// UNUSED
@@ -96,12 +96,12 @@ module decoder(
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+						instrData = {{5{msbpload}}, payload}; // sign extend the addr field of the instruction
 					end
 				end else begin // zero
 					if (brFlag == zFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {{5{signaddr}}, absaddr}; // sign extend the addr field of the instruction
+						instrData = {{5{msbpload}}, payload}; // sign extend the addr field of the instruction
 					end
 				end
 			end
