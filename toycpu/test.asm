@@ -11,4 +11,3 @@ LD	r3, $0a
 LD	r1, [r3]		; ld rd, [ra]	-- rd = MEM[ra]
 MV	r2, r3
 BR	NZ, $3
-HALT

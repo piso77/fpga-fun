@@ -12,4 +12,3 @@ Loop:
 		MV	r0, r1		; A <= B
 		MV	r1, r2		; B <= newA
 		BR	NC, Loop
-		HALT

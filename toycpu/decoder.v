@@ -4,7 +4,6 @@ module decoder(
 	input cFlag,										// used for branch op
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
-	output reg halt,
 
 	output reg regDataInSource,
 	output reg immData,
@@ -45,7 +44,6 @@ module decoder(
 
 	always @(*) begin
 		nextPCSel = 2'b0;
-		halt = 1'b0;
 
 		regDataInSource = 1'b0;
 		regFileWE = 1'b0;
@@ -73,7 +71,6 @@ module decoder(
 
 			// UNUSED
 			3'b010: begin
-				halt = 1'b1;
 			end
 
 			3'b011: begin
@@ -85,7 +82,6 @@ module decoder(
 
 			// UNUSED
 			3'b100: begin
-				halt = 1'b1;
 			end
 
 			// ST
@@ -110,9 +106,8 @@ module decoder(
 				end
 			end
 
-			// HALT
+			// UNUSED
 			3'b111: begin
-					halt = 1'b1;
 			end
 		endcase
 	end
