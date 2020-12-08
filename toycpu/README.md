@@ -9,7 +9,7 @@ https://stackoverflow.com/questions/51592244/implementation-of-simple-microproce
 The ISA has 3 distincts instruction format (0, 1 and 2):
 
 [15 OPCODE 13 | 12 RD 11 | 10 RS1 9|8 RS2 7|6 ALUOP 0]
-[15 OPCODE 13 | 12 RD 11 | 10          DATA         0]
+[15 OPCODE 13 | 12 RD 11 | 10 UNU 8|7   DATA        0]
 [15 OPCODE 13 | 12 FL 11 | 10          ADDR         0]
 
 OPCODE, FORMAT: DESCRIPTION
@@ -27,7 +27,7 @@ add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
 
 LD IMM:
 ld rd, $data -- rd = data
-[15 2'b001 13] | [12 rd 11] | [10 data 0]
+[15 2'b001 13] | [12 rd 11] | [10 UNU 8] | [7 data 0]
 
 
 UNUSED:
