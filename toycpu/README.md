@@ -6,6 +6,15 @@ https://stackoverflow.com/questions/51592244/implementation-of-simple-microproce
 
 
 ```
+Improved ISA format - brain dump:
+
+MV, LDI, LDR, STR, ADD, SUB, MUL, DIV, SHL, SHR, OR, AND, XOR, TST, BRI, BRR
+
+[15 OPCODE 12|11 RD 8|7 RS 4|5 UNUSED 0]
+[15 OPCODE 12|11 FL 8|7 RS 4|5 UNUSED 0]
+[15 OPCODE 12|11 RD 8|7    DATA       0]
+[15 OPCODE 12|11 FL 8|7    ADDR       0]
+
 The ISA has 3 distincts instruction format (0, 1 and 2):
 
 [15 OPCODE 13 | 12 RD 11 | 10 RS1 9|8 RS2 7|6 ALUOP 0]
