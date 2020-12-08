@@ -59,9 +59,8 @@ module decoder(
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
-			// LD
+			// LD IMM
 			3'b001: begin
-				// Immediate
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
 				instrData = {8'b0, payload}; // Zero fill addr to get full address
@@ -71,8 +70,8 @@ module decoder(
 			3'b010: begin
 			end
 
+			// LD IND
 			3'b011: begin
-				// Indirect
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
@@ -82,14 +81,13 @@ module decoder(
 			3'b100: begin
 			end
 
-			// ST
+			// ST IND
 			3'b101: begin
-				// Indirect
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
 
-			// BRANCH
+			// BRANCH IMM
 			3'b110: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
@@ -104,8 +102,17 @@ module decoder(
 				end
 			end
 
-			// UNUSED
+			// BRANCH IND
 			3'b111: begin
+				if (brFlagSel == 1'b0) begin // carry
+					if (brFlag == cFlag) begin
+						nextPCSel = 2'b10; // Source nextPC from rs1
+					end
+				end else begin // zero
+					if (brFlag == zFlag) begin
+						nextPCSel = 2'b10; // Source nextPC from rs1
+					end
+				end
 			end
 		endcase
 	end
