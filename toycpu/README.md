@@ -10,7 +10,7 @@ The ISA has 3 distincts instruction format (0, 1 and 2):
 
 [15 OPCODE 13 | 12 RD 11 | 10 RS1 9|8 RS2 7|6 ALUOP 0]
 [15 OPCODE 13 | 12 RD 11 | 10 UNU 8|7   DATA        0]
-[15 OPCODE 13 | 12 FL 11 | 10          ADDR         0]
+[15 OPCODE 13 | 12 FL 11 | 10 UNU 8|7   ADDR        0]
 
 OPCODE, FORMAT: DESCRIPTION
 
@@ -52,7 +52,7 @@ st [rs1], rs2 -- MEM[rs1] = rs2
 
 BR C|NC|Z|NZ ABS:
 brz $addr -- if ($flag): pc = addr
-[15 2'b110 13] | [12 flags 11] | [10 addr 0]
+[15 2'b110 13] | [12 flags 11] | [10 UNU 8] | [7 addr 0]
 
 
 BRZ REG:

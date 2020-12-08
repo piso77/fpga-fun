@@ -6,8 +6,7 @@
     "binop":{"bits":3, "toks":["or","and","xor","mov","sub","adc","sbb"]},
     "flag":{"bits":2, "toks":["nc", "c", "nz", "z"]},
     "const4":{"bits":4},
-    "imm8":{"bits":8},
-    "imm11":{"bits":11}
+    "imm8":{"bits":8}
   },
   "rules":[
     {"fmt":"mv ~reg, ~reg",			"bits":["000",0,1,"00", "0000000"]},
@@ -15,7 +14,7 @@
     {"fmt":"ld ~reg, ~imm8",		"bits":["001",0,"000",1]},
     {"fmt":"ld ~reg, [~reg]",		"bits":["011",0,1,"000000000"]},
     {"fmt":"st [~reg], ~reg",		"bits":["101","00",0,1,"0000000"]},
-    {"fmt":"br ~flag, ~imm11",		"bits":["110",0,1]},
+    {"fmt":"br ~flag, ~imm8",		"bits":["110",0,"000",1]},
     {"fmt":"halt",					"bits":["1111111111111111"]}
   ]
 }
