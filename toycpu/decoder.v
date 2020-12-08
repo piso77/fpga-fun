@@ -59,15 +59,15 @@ module decoder(
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
-			// LD IMM
+			// UNUSED
 			3'b001: begin
+			end
+
+			// LD IMM
+			3'b010: begin
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
 				instrData = {8'b0, payload}; // Zero fill addr to get full address
-			end
-
-			// UNUSED
-			3'b010: begin
 			end
 
 			// LD IND

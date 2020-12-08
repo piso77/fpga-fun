@@ -25,14 +25,14 @@ add rd, rs1, rs2 -- rd = rs1 + rs2; z = (rd == 0)
 [15 2'b000 13] | [12 rd 11] | [10 rs1 9] | [8 rs2 7] | [6 7'b0000001 0]
 
 
-LD IMM:
-ld rd, $data -- rd = data
-[15 2'b001 13] | [12 rd 11] | [10 UNU 8] | [7 data 0]
-
-
 UNUSED:
 ...
-[15 2'b010 13] | [12 RESERVED 0]
+[15 2'b001 13] | [12 RESERVED 0]
+
+
+LD IMM:
+ld rd, $data -- rd = data
+[15 2'b010 13] | [12 rd 11] | [10 UNU 8] | [7 data 0]
 
 
 LD IND:
