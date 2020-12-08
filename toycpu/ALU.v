@@ -35,15 +35,15 @@ module ALU(
 		zFlagNext = zFlag;
 
 		case (op)
-		// MV
-		0: begin
-			tmpout = {1'b0, in1};
-		end
 		// ADD
-		1: begin
+		0: begin
 			tmpout = in1 + in2;
 			zFlagNext = (tmpout == 17'b0);
 			cFlagNext = (tmpout[16] == 1'b1);
+		end
+		// MV
+		127: begin
+			tmpout = {1'b0, in1};
 		end
 		endcase
 	end
