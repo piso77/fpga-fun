@@ -21,7 +21,6 @@ module decoder(
 
 	wire [2:0] opcode;
 	wire [7:0] payload;
-	wire msbpload;
 	wire brFlagSel, brFlag;
 
 	// Notice all instructions are designed in such a way that the instruction can
@@ -38,7 +37,6 @@ module decoder(
 	assign brFlag = instruction[11];
 
 	assign payload = instruction[7:0];
-	assign msbpload = instruction[7];
 
 	assign aluOp = instruction[6:0];
 
@@ -96,12 +94,12 @@ module decoder(
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {{8{msbpload}}, payload}; // sign extend the addr field of the instruction
+						instrData = {8'b0, payload};
 					end
 				end else begin // zero
 					if (brFlag == zFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {{8{msbpload}}, payload}; // sign extend the addr field of the instruction
+						instrData = {8'b0, payload};
 					end
 				end
 			end
