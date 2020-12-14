@@ -25,7 +25,7 @@ ico_prog:
 papi_prog:
 	papilio-prog -vf build/$(PROJECT).bit
 
-%.hex: %.asm
+%.hex: %.asm toycpu.json
 	node ../../nanoasm/src/asmmain.js toycpu.json $< > $@
 
 clean:
