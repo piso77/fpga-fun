@@ -12,14 +12,14 @@ module decoder(
 	output [1:0] regSrc1,
 	output [1:0] regSrc2,
 
-	output [6:0] aluOp,							// ALU op
+	output [5:0] aluOp,							// ALU op
 
 	output reg memWE,
 	output reg dAddrSel,
 	output reg [15:0] instrData			// data extracted from  instruction
 );
 
-	wire [2:0] opcode;
+	wire [3:0] opcode;
 	wire [7:0] payload;
 	wire brFlagSel, brFlag;
 
@@ -27,18 +27,18 @@ module decoder(
 	// be parsed to get the registers out, even if a given instruction does not
 	// use that register. The rest of the control signals will ensure nothing goes
 	// wrong
-	assign opcode = instruction[15:13];
+	assign opcode = instruction[15:12];
 
-	assign regDst = instruction[12:11];
-	assign regSrc1 = instruction[10:9];
-	assign regSrc2 = instruction[8:7];
+	assign regDst = instruction[11:10];
+	assign regSrc1 = instruction[9:8];
+	assign regSrc2 = instruction[7:6];
 
-	assign brFlagSel = instruction[12];
-	assign brFlag = instruction[11];
+	assign brFlagSel = instruction[11];
+	assign brFlag = instruction[10];
 
 	assign payload = instruction[7:0];
 
-	assign aluOp = instruction[6:0];
+	assign aluOp = instruction[5:0];
 
 	always @(*) begin
 		nextPCSel = 2'b0;

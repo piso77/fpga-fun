@@ -34,7 +34,7 @@ module processor(
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 
-	wire [6:0] aluOp;
+	wire [5:0] aluOp;
 	wire cFlag;
 	wire zFlag;
 	wire [15:0] aluOut;
