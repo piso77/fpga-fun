@@ -64,31 +64,31 @@ module decoder(
 			end
 
 			// LD IMM
-			4'b0010: begin
+			4'b1010: begin
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
 				instrData = {8'b0, payload}; // Zero fill addr to get full address
 			end
 
 			// LD IND
-			4'b0011: begin
+			4'b1011: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
 			// UNUSED
-			4'b0100: begin
+			4'b1100: begin
 			end
 
 			// ST IND
-			4'b0101: begin
+			4'b1101: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
 
 			// BRANCH IMM
-			4'b0110: begin
+			4'b1110: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
@@ -103,7 +103,7 @@ module decoder(
 			end
 
 			// BRANCH IND
-			4'b0111: begin
+			4'b1111: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b10; // Source nextPC from rs1
