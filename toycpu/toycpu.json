@@ -2,16 +2,23 @@
   "name":"toycpu",
   "vars":{
     "reg":{"bits":2, "toks":["r0", "r1", "r2", "r3"]},
-    "triop":{"bits":6, "toks":["add","sub","mul","div","shl","shr","rol","ror","or","and","xor"]},
     "flag":{"bits":2, "toks":["nc", "c", "nz", "z"]},
-    "const4":{"bits":4},
     "imm8":{"bits":8}
   },
   "rules":[
     {"fmt":"add ~reg, ~reg, ~reg",		"bits":["0000",0,1,2,"000000"]},
-    {"fmt":"mv ~reg, ~reg",				"bits":["0001",0,1,"00","000000"]},
+    {"fmt":"sub ~reg, ~reg, ~reg",		"bits":["0001",0,1,2,"000000"]},
+    {"fmt":"mul ~reg, ~reg, ~reg",		"bits":["0010",0,1,2,"000000"]},
+    {"fmt":"shl ~reg, ~reg, ~reg",		"bits":["0011",0,1,2,"000000"]},
+    {"fmt":"shr ~reg, ~reg, ~reg",		"bits":["0100",0,1,2,"000000"]},
+    {"fmt":"rol ~reg, ~reg, ~reg",		"bits":["0101",0,1,2,"000000"]},
+    {"fmt":"ror ~reg, ~reg, ~reg",		"bits":["0110",0,1,2,"000000"]},
+    {"fmt":"or ~reg, ~reg, ~reg",		"bits":["0111",0,1,2,"000000"]},
+    {"fmt":"and ~reg, ~reg, ~reg",		"bits":["1000",0,1,2,"000000"]},
+    {"fmt":"xor ~reg, ~reg, ~reg",		"bits":["1001",0,1,2,"000000"]},
     {"fmt":"ld ~reg, ~imm8",			"bits":["1010",0,"00",1]},
     {"fmt":"ld ~reg, [~reg]",			"bits":["1011",0,1,"00000000"]},
+    {"fmt":"mv ~reg, ~reg",				"bits":["1100",0,1,"00","000000"]},
     {"fmt":"st [~reg], ~reg",			"bits":["1101","00",0,1,"000000"]},
     {"fmt":"br ~flag, ~imm8",			"bits":["1110",0,"00",1]},
     {"fmt":"br ~flag, [~reg]",			"bits":["1111",0,1,"00000000"]}

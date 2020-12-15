@@ -60,12 +60,6 @@ module decoder(
 				aluOp = 4'b0;
 			end
 
-			// MV
-			4'b0001: begin
-				regFileWE = 1'b1; // Assert write back enabled
-				aluOp = 4'b1111;
-			end
-
 			// LD IMM
 			4'b1010: begin
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
@@ -80,8 +74,10 @@ module decoder(
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
-			// UNUSED
+			// MV
 			4'b1100: begin
+				regFileWE = 1'b1; // Assert write back enabled
+				aluOp = 4'b1111;
 			end
 
 			// ST IND
