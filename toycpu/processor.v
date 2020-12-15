@@ -25,12 +25,12 @@ module processor(
 	wire [15:0] instrData;
 
 	wire [15:0] regDataIn;
-	wire [1:0] regDst;
+	wire [3:0] regDst;
 	wire regFileWE;
 	wire regDataInSource;
 	wire immData;
-	wire [1:0] regSrc1;
-	wire [1:0] regSrc2;
+	wire [3:0] regSrc1;
+	wire [3:0] regSrc2;
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 

@@ -8,15 +8,15 @@ module registerFile(
 	input clk,
 	input rst,
 	input we,								// Dont actually write back unless asserted
-	input [1:0] inReg,			// Register number to write back to
+	input [3:0] inReg,			// Register number to write back to
 	input [15:0] dataIn,		// Data for write back register
-	input [1:0] outReg1,		// Register number for out1
-	input [1:0] outReg2,		// Register number for out2
+	input [3:0] outReg1,		// Register number for out1
+	input [3:0] outReg2,		// Register number for out2
 	output [15:0] dataOut1,
 	output [15:0] dataOut2
 );
 
-	reg [15:0] regs[3:0];
+	reg [15:0] regs[15:0];
 	integer i;
 
 	// Actual register file storage
