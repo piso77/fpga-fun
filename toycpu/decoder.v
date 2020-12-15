@@ -10,10 +10,10 @@ module decoder(
 
 	output reg regDataInSource,
 	output reg immData,
-	output [3:0] regDst,
+	output [1:0] regDst,
 	output reg regFileWE,
-	output [3:0] regSrc1,
-	output [3:0] regSrc2,
+	output [1:0] regSrc1,
+	output [1:0] regSrc2,
 
 	output reg memWE,
 	output reg dAddrSel,
@@ -29,12 +29,12 @@ module decoder(
 	// wrong
 	assign opcode = instruction[15:12];
 
-	assign regDst = instruction[11:8];
-	assign regSrc1 = instruction[11:8];
-	assign regSrc2 = instruction[7:4];
+	assign regDst = instruction[11:10];
+	assign regSrc1 = instruction[9:8];
+	assign regSrc2 = instruction[7:6];
 
-	assign brFlagSel = instruction[9];
-	assign brFlag = instruction[8];
+	assign brFlagSel = instruction[11];
+	assign brFlag = instruction[10];
 
 	assign payload = instruction[7:0];
 
