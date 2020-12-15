@@ -2,6 +2,7 @@
 
 module decoder(
 	input [15:0] instruction,
+	output [3:0] opcode,						// used by ALU
 
 	input cFlag,										// used for branch op
 	input zFlag,										// used for branch op
@@ -14,14 +15,11 @@ module decoder(
 	output [1:0] regSrc1,
 	output [1:0] regSrc2,
 
-	output reg [3:0] aluOp,							// ALU op
-
 	output reg memWE,
 	output reg dAddrSel,
 	output reg [15:0] instrData			// data extracted from  instruction
 );
 
-	wire [3:0] opcode;
 	wire [7:0] payload;
 	wire brFlagSel, brFlag;
 
@@ -52,14 +50,11 @@ module decoder(
 
 		instrData = 16'd0;
 
-		aluOp = 4'b0;
-
 		// Decode the instruction and assert the relevant control signals
 		case (opcode)
 			// ADD OP
 			`ADD_OP: begin
 				regFileWE = 1'b1; // Assert write back enabled
-				aluOp = 4'b0;
 			end
 
 			// LD IMM
@@ -79,7 +74,6 @@ module decoder(
 			// MV
 			`MV_OP: begin
 				regFileWE = 1'b1; // Assert write back enabled
-				aluOp = 4'b1100;
 			end
 
 			// ST IND

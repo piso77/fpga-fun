@@ -34,7 +34,7 @@ module processor(
 	wire [15:0] regOut1;
 	wire [15:0] regOut2;
 
-	wire [3:0] aluOp;
+	wire [3:0] opcode;
 	wire cFlag;
 	wire zFlag;
 	wire [15:0] aluOut;
@@ -93,7 +93,7 @@ module processor(
 	ALU alu(
 		.clk(clk),
 		.rst(rst),
-		.op(aluOp),
+		.op(opcode),
 		.in1(regOut1),
 		.in2(regOut2),
 		.out(aluOut),
@@ -103,7 +103,7 @@ module processor(
 
 	decoder decode(
 		.instruction(instruction),
-		.aluOp(aluOp),
+		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
