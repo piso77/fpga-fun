@@ -17,14 +17,14 @@ module registerFile(
 );
 
 	reg [15:0] regs[3:0];
+	integer i;
 
 	// Actual register file storage
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			regs[3] <= 16'd0;
-			regs[2] <= 16'd0;
-			regs[1] <= 16'd0;
-			regs[0] <= 16'd0;
+			for (i=0; i <16; i++) begin
+				regs[i] <= 16'd0;
+			end
 		end else begin
 			if (we) begin // Only write back when asserted, not all instructions write to the register file!
 				regs[inReg] <= dataIn;
