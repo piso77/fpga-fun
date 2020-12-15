@@ -77,7 +77,7 @@ module decoder(
 			// MV
 			4'b1100: begin
 				regFileWE = 1'b1; // Assert write back enabled
-				aluOp = 4'b1111;
+				aluOp = 4'b1100;
 			end
 
 			// ST IND

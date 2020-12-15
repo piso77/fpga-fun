@@ -42,7 +42,7 @@ module ALU(
 			cFlagNext = (tmpout[16] == 1'b1);
 		end
 		// MV
-		15: begin
+		12: begin
 			tmpout = {1'b0, in1};
 		end
 		endcase
