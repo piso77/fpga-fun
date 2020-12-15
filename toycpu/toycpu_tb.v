@@ -1,6 +1,6 @@
 `define assert(signal, value) \
 		if (signal !== value) begin \
-			$display("ASSERTION FAILED in %m: signal != value"); \
+			$display("line %d: ASSERTION FAILED in %m: signal != value", `__LINE__); \
 			$fatal; \
 		end
 
