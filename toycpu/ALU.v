@@ -46,7 +46,7 @@ module ALU(
 
 		// MV
 		`MV_OP: begin
-			tmpout = {1'b0, in1};
+			tmpout = {1'b0, in2};
 		end
 		endcase
 	end

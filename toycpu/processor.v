@@ -4,8 +4,11 @@ module processor(
 `ifdef DEBUG
 	output [15:0] instruction,
 	output [15:0] PC,
-	output [15:0] regOut1,
-	output [15:0] regOut2,
+	output memWE,
+	output regFileWE,
+	output [15:0] memAddr,
+	output [15:0] regDstData,
+	output [15:0] regSrcData,
 	output [15:0] reg0,
 	output [15:0] reg1,
 	output [15:0] reg2,
@@ -17,22 +20,22 @@ module processor(
 `endif
 );
 
-	wire [15:0] dAddr;
+	wire [15:0] memAddr;
 	wire [15:0] dDataOut;
 	wire memWE;
-	wire dAddrSel;
+	wire memAddrSelDst;
+	wire memAddrSelSrc;
 
 	wire [15:0] instrData;
 
 	wire [15:0] regDataIn;
-	wire [1:0] regDst;
+	wire [3:0] regDst;
 	wire regFileWE;
 	wire regDataInSource;
 	wire immData;
-	wire [1:0] regSrc1;
-	wire [1:0] regSrc2;
-	wire [15:0] regOut1;
-	wire [15:0] regOut2;
+	wire [3:0] regSrc;
+	wire [15:0] regDstData;
+	wire [15:0] regSrcData;
 
 	wire [3:0] opcode;
 	wire cFlag;
@@ -65,11 +68,11 @@ module processor(
 
 	always @(posedge clk) begin
 		if (memWE) begin // When the WE line is asserted, write into memory at the given address
-			dataMem[dAddr[9:0]] <= regOut2; // Limit the range of the addresses
+			dataMem[memAddr[9:0]] <= regSrcData; // Limit the range of the addresses
 		end
 	end
 
-	assign dDataOut = dataMem[dAddr[9:0]];
+	assign dDataOut = dataMem[memAddr[9:0]];
 	assign instruction = instMem[PC[9:0]];
 
 	registerFile regFile(
@@ -84,18 +87,18 @@ module processor(
 		.we(regFileWE),
 		.inReg(regDst),
 		.dataIn(regDataIn),
-		.outReg1(regSrc1),
-		.outReg2(regSrc2),
-		.dataOut1(regOut1),
-		.dataOut2(regOut2)
+		.outReg1(regDst),
+		.outReg2(regSrc),
+		.dataOut1(regDstData),
+		.dataOut2(regSrcData)
 	);
 
 	ALU alu(
 		.clk(clk),
 		.rst(rst),
 		.op(opcode),
-		.in1(regOut1),
-		.in2(regOut2),
+		.in1(regDstData),
+		.in2(regSrcData),
 		.out(aluOut),
 		.cFlag(cFlag),
 		.zFlag(zFlag)
@@ -111,10 +114,10 @@ module processor(
 		.immData(immData),
 		.regDst(regDst),
 		.regFileWE(regFileWE),
-		.regSrc1(regSrc1),
-		.regSrc2(regSrc2),
+		.regSrc(regSrc),
 		.memWE(memWE),
-		.dAddrSel(dAddrSel),
+		.memAddrSelDst(memAddrSelDst),
+		.memAddrSelSrc(memAddrSelSrc),
 		.instrData(instrData)
 	);
 
@@ -130,7 +133,7 @@ module processor(
 
 		// From register file
 		2'b10: begin
-			nextPC = regOut1;
+			nextPC = regSrcData;
 		end
 
 		// Regular operation, increment
@@ -152,7 +155,7 @@ module processor(
 
 	// Extra logic
 	assign regDataIn = (immData) ? instrData : ((regDataInSource) ? dDataOut : aluOut);
-	assign dAddr = (dAddrSel) ? regOut1 : instrData;
+	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 
 	assign led = PC[7:0];
 endmodule

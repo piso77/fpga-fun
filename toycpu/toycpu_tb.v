@@ -27,8 +27,9 @@ module test_toycpu;
 
 	wire [15:0] instruction;
 	wire [15:0] PC;
-	wire [15:0] regOut1;
-	wire [15:0] regOut2;
+	wire [15:0] memAddr;
+	wire [15:0] regDstData;
+	wire [15:0] regSrcData;
 	wire [15:0] reg0;
 	wire [15:0] reg1;
 	wire [15:0] reg2;
@@ -37,6 +38,8 @@ module test_toycpu;
 	wire zFlag;
 	wire brFlagSel;
 	wire brFlag;
+	wire memWE;
+	wire regFileWE;
 
 	assign brFlagSel = instruction[12];
 	assign brFlag = instruction[11];
@@ -46,8 +49,11 @@ module test_toycpu;
 		.rst(reset),
 		.instruction(instruction),
 		.PC(PC),
-		.regOut1(regOut1),
-		.regOut2(regOut2),
+		.memWE(memWE),
+		.regFileWE(regFileWE),
+		.memAddr(memAddr),
+		.regDstData(regDstData),
+		.regSrcData(regSrcData),
 		.reg0(reg0),
 		.reg1(reg1),
 		.reg2(reg2),
@@ -73,18 +79,18 @@ module test_toycpu;
 	end
 `else
 	initial begin // assertions
-		#2 `assert(reg0,		16'h000a)
-		#2 `assert(reg2,		16'h000a)
-		#2 `assert(reg1,		16'h0002)
-		#2 `assert(reg2,		16'h000c)
-		#2 `assert(regOut2,	16'h000a)
-		#2 `assert(reg3,		16'h000a)
-		#2 `assert(reg1,		16'h000c)
-		#2 `assert(reg2,		16'h000a)
+		#2 `assert(reg0,			16'h000a)
+		#2 `assert(reg2,			16'h000a)
+		#2 `assert(reg1,			16'h0002)
+		#2 `assert(reg2,			16'h000c)
+		#2 `assert(regSrcData,16'h000a)
+		#2 `assert(reg3,			16'h000a)
+		#2 `assert(reg1,			16'h000c)
+		#2 `assert(reg2,			16'h000a)
 	end
 `endif
 
 	initial
-		$monitor("At time %t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h regOut=0x%h|0x%h brFlagSel=%b brFlag=%b c/z=%b/%b rst=%b",
-				 $time, PC, instruction, reg0, reg1, reg2, reg3, regOut1, regOut2, brFlagSel, brFlag, cFlag, zFlag, reset);
+		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h memAddr:0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
+				 $time, PC, instruction, reg0, reg1, reg2, reg3, memAddr, regDstData, regSrcData, memWE, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule

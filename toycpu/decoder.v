@@ -10,13 +10,13 @@ module decoder(
 
 	output reg regDataInSource,
 	output reg immData,
-	output [1:0] regDst,
+	output [3:0] regDst,
 	output reg regFileWE,
-	output [1:0] regSrc1,
-	output [1:0] regSrc2,
+	output [3:0] regSrc,
 
 	output reg memWE,
-	output reg dAddrSel,
+	output reg memAddrSelDst,
+	output reg memAddrSelSrc,
 	output reg [15:0] instrData			// data extracted from  instruction
 );
 
@@ -29,12 +29,11 @@ module decoder(
 	// wrong
 	assign opcode = instruction[15:12];
 
-	assign regDst = instruction[11:10];
-	assign regSrc1 = instruction[9:8];
-	assign regSrc2 = instruction[7:6];
+	assign regDst = instruction[11:8];
+	assign regSrc = instruction[7:4];
 
-	assign brFlagSel = instruction[11];
-	assign brFlag = instruction[10];
+	assign brFlagSel = instruction[9];
+	assign brFlag = instruction[8];
 
 	assign payload = instruction[7:0];
 
@@ -45,7 +44,8 @@ module decoder(
 		regFileWE = 1'b0;
 		immData = 1'b0;
 
-		dAddrSel = 1'b0;
+		memAddrSelDst = 1'b0;
+		memAddrSelSrc = 1'b0;
 		memWE = 1'b0;
 
 		instrData = 16'd0;
@@ -66,7 +66,7 @@ module decoder(
 
 			// LD IND
 			`LDR_OP: begin
-				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
+				memAddrSelSrc = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
@@ -78,7 +78,7 @@ module decoder(
 
 			// ST IND
 			`ST_OP: begin
-				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
+				memAddrSelDst = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
 
