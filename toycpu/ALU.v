@@ -1,3 +1,5 @@
+`include "header.vh"
+
 module ALU(
 	input clk, // Note we need a clock and reset for the Z register
 	input rst,
@@ -36,13 +38,14 @@ module ALU(
 
 		case (op)
 		// ADD
-		0: begin
+		`ADD_OP: begin
 			tmpout = in1 + in2;
 			zFlagNext = (tmpout == 17'b0);
 			cFlagNext = (tmpout[16] == 1'b1);
 		end
+
 		// MV
-		12: begin
+		`MV_OP: begin
 			tmpout = {1'b0, in1};
 		end
 		endcase

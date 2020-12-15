@@ -1,3 +1,5 @@
+`include "header.vh"
+
 module decoder(
 	input [15:0] instruction,
 
@@ -55,39 +57,39 @@ module decoder(
 		// Decode the instruction and assert the relevant control signals
 		case (opcode)
 			// ADD OP
-			4'b0000: begin
+			`ADD_OP: begin
 				regFileWE = 1'b1; // Assert write back enabled
 				aluOp = 4'b0;
 			end
 
 			// LD IMM
-			4'b1010: begin
+			`LDI_OP: begin
 				immData = 1'b1; // Source the write back register data from the the 'addr' field
 				regFileWE = 1'b1; // Assert write back enabled
 				instrData = {8'b0, payload}; // Zero fill addr to get full address
 			end
 
 			// LD IND
-			4'b1011: begin
+			`LDR_OP: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				regDataInSource = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
 			// MV
-			4'b1100: begin
+			`MV_OP: begin
 				regFileWE = 1'b1; // Assert write back enabled
 				aluOp = 4'b1100;
 			end
 
 			// ST IND
-			4'b1101: begin
+			`ST_OP: begin
 				dAddrSel = 1'b1; // Choose to use value from register file as dAddr
 				memWE = 1'b1; // Write to memory
 			end
 
 			// BRANCH IMM
-			4'b1110: begin
+			`BRI_OP: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b01; // Select to use the addr field as next PC
@@ -102,7 +104,7 @@ module decoder(
 			end
 
 			// BRANCH IND
-			4'b1111: begin
+			`BRR_OP: begin
 				if (brFlagSel == 1'b0) begin // carry
 					if (brFlag == cFlag) begin
 						nextPCSel = 2'b10; // Source nextPC from rs1
