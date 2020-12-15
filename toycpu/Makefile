@@ -7,6 +7,9 @@ default: $(FW)
 	vvp dsn
 	#gtkwave test_toycpu.vcd
 
+lint:
+	verilator --lint-only -Wall $(VSOURCE)
+
 ico: $(FW)
 ifdef $(PLL)
 	icepll -i 100 -o $(PLL) -mf ice40_pll.v
