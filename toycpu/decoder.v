@@ -12,7 +12,7 @@ module decoder(
 	output [1:0] regSrc1,
 	output [1:0] regSrc2,
 
-	output [5:0] aluOp,							// ALU op
+	output reg [3:0] aluOp,							// ALU op
 
 	output reg memWE,
 	output reg dAddrSel,
@@ -38,8 +38,6 @@ module decoder(
 
 	assign payload = instruction[7:0];
 
-	assign aluOp = instruction[5:0];
-
 	always @(*) begin
 		nextPCSel = 2'b0;
 
@@ -52,15 +50,20 @@ module decoder(
 
 		instrData = 16'd0;
 
+		aluOp = 4'b0;
+
 		// Decode the instruction and assert the relevant control signals
 		case (opcode)
-			// ALU OP
+			// ADD OP
 			4'b0000: begin
 				regFileWE = 1'b1; // Assert write back enabled
+				aluOp = 4'b0;
 			end
 
-			// UNUSED
+			// MV
 			4'b0001: begin
+				regFileWE = 1'b1; // Assert write back enabled
+				aluOp = 4'b1111;
 			end
 
 			// LD IMM

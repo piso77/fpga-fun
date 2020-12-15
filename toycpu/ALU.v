@@ -1,7 +1,7 @@
 module ALU(
 	input clk, // Note we need a clock and reset for the Z register
 	input rst,
-	input [5:0] op,
+	input [3:0] op,
 	input [15:0] in1,
 	input [15:0] in2,
 	output [15:0] out,
@@ -42,7 +42,7 @@ module ALU(
 			cFlagNext = (tmpout[16] == 1'b1);
 		end
 		// MV
-		63: begin
+		15: begin
 			tmpout = {1'b0, in1};
 		end
 		endcase
