@@ -15,7 +15,7 @@ module test_toycpu;
 		#0 reset = 1;
 		#1 reset = 0;
 `ifdef FIBO
-		#195 $finish;
+		#234 $finish;
 `else
 		#28 $finish;
 `endif
@@ -58,27 +58,18 @@ module test_toycpu;
 
 `ifdef FIBO
 	initial begin // assertions
-		#2	 `assert(reg0,		16'h0000)
-		#2	 `assert(reg1,		16'h0001)
-		#2	 `assert(reg2,		16'h0001)
-		#2	 `assert(reg0,		16'h0001)
-		#2	 `assert(reg1,		16'h0001)
-		#2	 `assert(reg2,		16'h0001)
-		#2	 `assert(reg0,		16'h0001)
-		#2	 `assert(reg1,		16'h0001)
-		#2	 `assert(reg2,		16'h0002)
-		#2	 `assert(reg0,		16'h0001)
-		#2	 `assert(reg1,		16'h0002)
-		#2	 `assert(reg2,		16'h0003)
-		#2	 `assert(reg0,		16'h0002)
-		#2	 `assert(reg1,		16'h0003)
-		#2	 `assert(reg2,		16'h0005)
-		#2	 `assert(reg0,		16'h0003)
-		#2	 `assert(reg1,		16'h0005)
-		#2	 `assert(reg2,		16'h0005)
-		#158 `assert(reg0,		16'hb520)
-		#1	 `assert(reg1,		16'h2511)
-		#1	 `assert(reg2,		16'h2511)
+		#2	 `assert(reg0,		16'h0000)		//  LD      r0, $0
+		#4	 `assert(reg0,		16'h0001)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0002)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0003)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0005)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0008)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h000d)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0015)		//	ADD     r0, r0, r1
+		#10	 `assert(reg0,		16'h0022)		//	ADD     r0, r0, r1
+		#150 `assert(reg0,		16'hb520)		//	ADD     r0, r0, r1
+		#2	 `assert(reg1,		16'h6ff1)
+		#8	 `assert(reg0,		16'h2511)
 	end
 `else
 	initial begin // assertions
