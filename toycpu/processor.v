@@ -28,7 +28,7 @@ module processor(
 
 	wire regFileWE;
 	wire [3:0] regDst;
-	wire [15:0] regDataIn;
+	wire [15:0] regDstDataIn;
 	wire [15:0] regDstData;
 	wire [3:0] regSrc;
 	wire [15:0] regSrcData;
@@ -87,7 +87,7 @@ module processor(
 		.we(regFileWE),
 		.regDst(regDst),
 		.regDstDataOut(regDstData),
-		.regDstDataIn(regDataIn),
+		.regDstDataIn(regDstDataIn),
 		.regSrc(regSrc),
 		.regSrcDataOut(regSrcData)
 	);
@@ -153,7 +153,7 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDataIn = (immData) ? instrData : ((regDataInSource) ? memData : aluOut);
+	assign regDstDataIn = (immData) ? instrData : ((regDataInSource) ? memData : aluOut);
 	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 
 	assign led = PC[7:0];
