@@ -40,8 +40,8 @@ module processor(
 	wire [3:0] opcode;
 	wire memAddrSelDst;
 	wire memAddrSelSrc;
-	wire regDataInSource;
-	wire immData;
+	wire immMode;
+	wire indMode;
 	wire [15:0] instrData;
 
 	wire [1:0] nextPCSel;
@@ -109,8 +109,8 @@ module processor(
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 		.nextPCSel(nextPCSel),
-		.regDataInSource(regDataInSource),
-		.immData(immData),
+		.immMode(immMode),
+		.indMode(indMode),
 		.regDst(regDst),
 		.regFileWE(regFileWE),
 		.regSrc(regSrc),
@@ -153,8 +153,8 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDstDataIn = (immData) ? instrData : ((regDataInSource) ? memData : aluOut);
 	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
+	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? memData : aluOut);
 
 	assign led = PC[7:0];
 endmodule

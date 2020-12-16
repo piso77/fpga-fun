@@ -8,8 +8,9 @@ module decoder(
 	input zFlag,										// used for branch op
 	output reg [1:0] nextPCSel,			// select addr / reg PC increment for branch op
 
-	output reg regDataInSource,
-	output reg immData,
+	output reg immMode,
+	output reg indMode,
+
 	output [3:0] regDst,
 	output reg regFileWE,
 	output [3:0] regSrc,
@@ -40,13 +41,14 @@ module decoder(
 	always @(*) begin
 		nextPCSel = 2'b0;
 
-		regDataInSource = 1'b0;
-		regFileWE = 1'b0;
-		immData = 1'b0;
+		immMode = 1'b0;
+		indMode = 1'b0;
 
+		regFileWE = 1'b0;
+
+		memWE = 1'b0;
 		memAddrSelDst = 1'b0;
 		memAddrSelSrc = 1'b0;
-		memWE = 1'b0;
 
 		instrData = 16'd0;
 
@@ -59,7 +61,7 @@ module decoder(
 
 			// LD IMM
 			`LDI_OP: begin
-				immData = 1'b1; // Source the write back register data from the the 'addr' field
+				immMode = 1'b1;
 				regFileWE = 1'b1; // Assert write back enabled
 				instrData = {8'b0, payload}; // Zero fill addr to get full address
 			end
@@ -67,7 +69,7 @@ module decoder(
 			// LD IND
 			`LDR_OP: begin
 				memAddrSelSrc = 1'b1; // Choose to use value from register file as dAddr
-				regDataInSource = 1'b1; // Source the write back register data from memory
+				indMode = 1'b1; // Source the write back register data from memory
 				regFileWE = 1'b1; // Assert write back enabled
 			end
 
