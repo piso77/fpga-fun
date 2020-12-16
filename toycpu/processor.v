@@ -21,7 +21,7 @@ module processor(
 );
 
 	wire [15:0] memAddr;
-	wire [15:0] dDataOut;
+	wire [15:0] memData;
 	wire memWE;
 	wire memAddrSelDst;
 	wire memAddrSelSrc;
@@ -72,7 +72,7 @@ module processor(
 		end
 	end
 
-	assign dDataOut = dataMem[memAddr[9:0]];
+	assign memData = dataMem[memAddr[9:0]];
 	assign instruction = instMem[PC[9:0]];
 
 	registerFile regFile(
@@ -153,7 +153,7 @@ module processor(
 	end
 
 	// Extra logic
-	assign regDataIn = (immData) ? instrData : ((regDataInSource) ? dDataOut : aluOut);
+	assign regDataIn = (immData) ? instrData : ((regDataInSource) ? memData : aluOut);
 	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 
 	assign led = PC[7:0];
