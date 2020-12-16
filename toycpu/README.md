@@ -36,5 +36,10 @@ FL: branch flag (carry/!carry/zero/!zero)       | c/nc/z/nz
 DATA: const data value                          | 8bit data (e.g. $ff)
 ADDR: const addr value                          | 8bit addr (e.g. $ff or text label)
 
-
 Original *StackOverflow* [post](https://stackoverflow.com/questions/51592244/implementation-of-simple-microprocessor-using-verilog/51621153#51621153) that inspired this work.
+
+TODO:
+* implements all ALU ops
+* move memory outside of toycpu body
+* unify data and instructions memory
+* 16-bit immediate mode
