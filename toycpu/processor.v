@@ -85,12 +85,11 @@ module processor(
 		.clk(clk),
 		.rst(rst),
 		.we(regFileWE),
-		.inReg(regDst),
-		.dataIn(regDataIn),
-		.outReg1(regDst),
-		.outReg2(regSrc),
-		.dataOut1(regDstData),
-		.dataOut2(regSrcData)
+		.regDst(regDst),
+		.regDstDataOut(regDstData),
+		.regDstDataIn(regDataIn),
+		.regSrc(regSrc),
+		.regSrcDataOut(regSrcData)
 	);
 
 	ALU alu(
