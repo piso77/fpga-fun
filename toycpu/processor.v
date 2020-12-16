@@ -20,33 +20,33 @@ module processor(
 `endif
 );
 
+	wire [15:0] instruction;
+
+	wire memWE;
 	wire [15:0] memAddr;
 	wire [15:0] memData;
-	wire memWE;
-	wire memAddrSelDst;
-	wire memAddrSelSrc;
 
-	wire [15:0] instrData;
-
-	wire [15:0] regDataIn;
-	wire [3:0] regDst;
 	wire regFileWE;
-	wire regDataInSource;
-	wire immData;
-	wire [3:0] regSrc;
+	wire [3:0] regDst;
+	wire [15:0] regDataIn;
 	wire [15:0] regDstData;
+	wire [3:0] regSrc;
 	wire [15:0] regSrcData;
 
-	wire [3:0] opcode;
+	wire [15:0] aluOut;
 	wire cFlag;
 	wire zFlag;
-	wire [15:0] aluOut;
+
+	wire [3:0] opcode;
+	wire memAddrSelDst;
+	wire memAddrSelSrc;
+	wire regDataInSource;
+	wire immData;
+	wire [15:0] instrData;
 
 	wire [1:0] nextPCSel;
 	reg [15:0] PC;
 	reg [15:0] nextPC;
-
-	wire [15:0] instruction;
 
 `ifdef DEBUG
 	wire [15:0] reg0;
