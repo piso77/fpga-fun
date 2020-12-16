@@ -2,6 +2,7 @@
 
 
 * 16 general purpose 16bit wide registers: r0-r15
+* 16bit fixed size word/instruction
 * 4 instruction formats with 2 addressing modes (immediate and indirect):
 ```
 4 ISA formats / 2 addressing modes (immediate / indirect):
@@ -13,7 +14,7 @@
 
 * 16 instructions:
 ```
-MV (reg to reg), LD (indirect), ST (indirect) and every ALU (ADD, SUB, MUL, SHL, SHR, OR, AND, XOR, TST) operations:
+MV (reg to reg), LD (indirect), ST (indirect) and every ALU (ADD, SUB, MUL, SHL, SHR, OR, AND, XOR, TST) operation:
 [15 OPCODE 12|11 RD 8|7 RS 4|5 UNUSED 0]
 
 LD immediate:
