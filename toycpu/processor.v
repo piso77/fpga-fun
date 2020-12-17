@@ -1,6 +1,4 @@
 module processor(
-	input clk,
-	input rst,
 `ifdef DEBUG
 	output [15:0] instruction,
 	output [15:0] PC,
@@ -14,10 +12,10 @@ module processor(
 	output [15:0] reg2,
 	output [15:0] reg3,
 	output cFlag,
-	output zFlag
-`else
-	output [7:0] led
+	output zFlag,
 `endif
+	input clk,
+	input rst
 );
 
 	wire [15:0] instruction;
@@ -155,6 +153,45 @@ module processor(
 	// Extra logic
 	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? memData : aluOut);
+endmodule
 
-	assign led = PC[7:0];
+module processor_top(
+`ifdef DEBUG
+	output [15:0] instruction,
+	output [15:0] PC,
+	output memWE,
+	output regFileWE,
+	output [15:0] memAddr,
+	output [15:0] regDstData,
+	output [15:0] regSrcData,
+	output [15:0] reg0,
+	output [15:0] reg1,
+	output [15:0] reg2,
+	output [15:0] reg3,
+	output cFlag,
+	output zFlag,
+`endif
+	input clk,
+	input rst
+);
+
+	processor cpu(
+`ifdef DEBUG
+		.instruction(instruction),
+		.PC(PC),
+		.memWE(memWE),
+		.regFileWE(regFileWE),
+		.memAddr(memAddr),
+		.regDstData(regDstData),
+		.regSrcData(regSrcData),
+		.reg0(reg0),
+		.reg1(reg1),
+		.reg2(reg2),
+		.reg3(reg3),
+		.cFlag(cFlag),
+		.zFlag(zFlag),
+`endif
+		.clk(clk),
+		.rst(rst)
+	);
 endmodule

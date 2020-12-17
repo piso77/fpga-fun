@@ -44,7 +44,7 @@ module test_toycpu;
 	assign brFlagSel = instruction[12];
 	assign brFlag = instruction[11];
 
-	processor cpu(
+	processor_top cpu(
 		.clk(clk),
 		.rst(reset),
 		.instruction(instruction),
