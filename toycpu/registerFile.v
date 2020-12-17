@@ -21,7 +21,7 @@ module registerFile(
 	// Actual register file storage
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			for (i=0; i <16; i++) begin
+			for (i=0; i <16; i=i+1) begin
 				regs[i] <= 16'd0;
 			end
 		end else begin
