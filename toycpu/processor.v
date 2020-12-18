@@ -144,8 +144,8 @@ endmodule
 
 module processor_top(
 `ifdef DEBUG
-	output [15:0] instruction,
-	output [15:0] PC,
+	output [15:0] instr_addr,
+	output [15:0] instr_data,
 	output memWE,
 	output regFileWE,
 	output [15:0] memAddr,
@@ -162,19 +162,21 @@ module processor_top(
 	input rst
 );
 
-	reg [15:0] instMem [127:0];
+	reg [15:0] instr_mem [127:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
 `ifdef FIBO
-		$readmemh("fibo.hex", instMem);
+		$readmemh("fibo.hex", instr_mem);
 `else
-		$readmemh("test.hex", instMem);
+		$readmemh("test.hex", instr_mem);
 `endif
 	end
 
-	wire [15:0] PC;
-	wire [15:0] instruction;
-	assign instruction = instMem[PC[9:0]];
+`ifndef DEBUG
+	wire [15:0] instr_addr;
+	wire [15:0] instr_data;
+`endif
+	assign instr_data = instr_mem[instr_addr[9:0]];
 
 	processor cpu(
 `ifdef DEBUG
@@ -190,8 +192,8 @@ module processor_top(
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 `endif
-		.instr_addr(PC),
-		.instr_data(instruction),
+		.instr_addr(instr_addr),
+		.instr_data(instr_data),
 		.clk(clk),
 		.rst(rst)
 	);

@@ -25,8 +25,8 @@ module test_toycpu;
 	reg clk = 0;
 	always #1 clk = !clk;
 
-	wire [15:0] instruction;
-	wire [15:0] PC;
+	wire [15:0] instr_addr;
+	wire [15:0] instr_data;
 	wire [15:0] memAddr;
 	wire [15:0] regDstData;
 	wire [15:0] regSrcData;
@@ -41,14 +41,14 @@ module test_toycpu;
 	wire memWE;
 	wire regFileWE;
 
-	assign brFlagSel = instruction[12];
-	assign brFlag = instruction[11];
+	assign brFlagSel = instr_data[12];
+	assign brFlag = instr_data[11];
 
 	processor_top cpu(
 		.clk(clk),
 		.rst(reset),
-		.instruction(instruction),
-		.PC(PC),
+		.instr_addr(instr_addr),
+		.instr_data(instr_data),
 		.memWE(memWE),
 		.regFileWE(regFileWE),
 		.memAddr(memAddr),
@@ -92,5 +92,5 @@ module test_toycpu;
 
 	initial
 		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h memAddr:0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, PC, instruction, reg0, reg1, reg2, reg3, memAddr, regDstData, regSrcData, memWE, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
+				 $time, instr_addr, instr_data, reg0, reg1, reg2, reg3, memAddr, regDstData, regSrcData, memWE, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule
