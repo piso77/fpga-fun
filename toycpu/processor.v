@@ -13,7 +13,7 @@ module processor(
 	input rst,
 	output reg [15:0] instr_addr,
 	input [15:0] instr_data,
-	output memWE,
+	output mem_we,
 	output [15:0] mem_addr,
 	input [15:0] mem_data_in,
 	output [15:0] regSrcData
@@ -85,7 +85,7 @@ module processor(
 		.regDst(regDst),
 		.regFileWE(regFileWE),
 		.regSrc(regSrc),
-		.memWE(memWE),
+		.memWE(mem_we),
 		.memAddrSelDst(memAddrSelDst),
 		.memAddrSelSrc(memAddrSelSrc),
 		.instrData(instrData)
@@ -132,9 +132,9 @@ module processor_top(
 `ifdef DEBUG
 	output [15:0] instr_addr,
 	output [15:0] instr_data,
-	output memWE,
+	output mem_we,
 	output regFileWE,
-	output [15:0] memAddr,
+	output [15:0] mem_addr,
 	output [15:0] regDstData,
 	output [15:0] regSrcData,
 	output [15:0] reg0,
@@ -161,21 +161,21 @@ module processor_top(
 `ifndef DEBUG
 	wire [15:0] instr_addr;
 	wire [15:0] instr_data;
-	wire memWE;
-	wire [15:0] memAddr;
+	wire mem_we;
+	wire [15:0] mem_addr;
 	wire [15:0] regSrcData;
 `endif
 	assign instr_data = instr_mem[instr_addr[9:0]];
 
-	wire [15:0] memData;
-	reg [15:0] dataMem [127:0];
+	wire [15:0] mem_data;
+	reg [15:0] data_mem [127:0];
 	always @(posedge clk) begin
-		if (memWE) begin // When the WE line is asserted, write into memory at the given address
-			dataMem[memAddr[9:0]] <= regSrcData; // Limit the range of the addresses
+		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
+			data_mem[mem_addr[9:0]] <= regSrcData; // Limit the range of the addresses
 		end
 	end
 
-	assign memData = dataMem[memAddr[9:0]];
+	assign mem_data = data_mem[mem_addr[9:0]];
 
 	processor cpu(
 `ifdef DEBUG
@@ -192,9 +192,9 @@ module processor_top(
 		.instr_data(instr_data),
 		.clk(clk),
 		.rst(rst),
-		.memWE(memWE),
-		.mem_addr(memAddr),
-		.mem_data_in(memData),
+		.mem_we(mem_we),
+		.mem_addr(mem_addr),
+		.mem_data_in(mem_data),
 		.regSrcData(regSrcData)
 	);
 endmodule

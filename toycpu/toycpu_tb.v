@@ -27,7 +27,7 @@ module test_toycpu;
 
 	wire [15:0] instr_addr;
 	wire [15:0] instr_data;
-	wire [15:0] memAddr;
+	wire [15:0] mem_addr;
 	wire [15:0] regDstData;
 	wire [15:0] regSrcData;
 	wire [15:0] reg0;
@@ -38,7 +38,7 @@ module test_toycpu;
 	wire zFlag;
 	wire brFlagSel;
 	wire brFlag;
-	wire memWE;
+	wire mem_we;
 	wire regFileWE;
 
 	assign brFlagSel = instr_data[12];
@@ -49,9 +49,9 @@ module test_toycpu;
 		.rst(reset),
 		.instr_addr(instr_addr),
 		.instr_data(instr_data),
-		.memWE(memWE),
+		.mem_we(mem_we),
 		.regFileWE(regFileWE),
-		.memAddr(memAddr),
+		.mem_addr(mem_addr),
 		.regDstData(regDstData),
 		.regSrcData(regSrcData),
 		.reg0(reg0),
@@ -91,6 +91,6 @@ module test_toycpu;
 `endif
 
 	initial
-		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h memAddr:0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, instr_addr, instr_data, reg0, reg1, reg2, reg3, memAddr, regDstData, regSrcData, memWE, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
+		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h mem_addr:0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
+				 $time, instr_addr, instr_data, reg0, reg1, reg2, reg3, mem_addr, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule
