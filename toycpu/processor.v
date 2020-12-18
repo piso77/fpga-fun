@@ -1,7 +1,5 @@
 module processor(
 `ifdef DEBUG
-	output [15:0] instruction,
-	output [15:0] PC,
 	output memWE,
 	output regFileWE,
 	output [15:0] memAddr,
@@ -15,10 +13,11 @@ module processor(
 	output zFlag,
 `endif
 	input clk,
-	input rst
+	input rst,
+	output reg [15:0] instr_addr,
+	input [15:0] instr_data
 );
 
-	wire [15:0] instruction;
 
 	wire memWE;
 	wire [15:0] memAddr;
@@ -43,7 +42,6 @@ module processor(
 	wire [15:0] instrData;
 
 	wire [1:0] nextPCSel;
-	reg [15:0] PC;
 	reg [15:0] nextPC;
 
 `ifdef DEBUG
@@ -54,16 +52,6 @@ module processor(
 `endif
 
 	reg [15:0] dataMem [127:0];
-	reg [15:0] instMem [127:0];
-	initial begin
-		// Load in the program/initial memory state into the memory module
-`ifdef FIBO
-		$readmemh("fibo.hex", instMem);
-`else
-		$readmemh("test.hex", instMem);
-`endif
-	end
-
 	always @(posedge clk) begin
 		if (memWE) begin // When the WE line is asserted, write into memory at the given address
 			dataMem[memAddr[9:0]] <= regSrcData; // Limit the range of the addresses
@@ -71,7 +59,6 @@ module processor(
 	end
 
 	assign memData = dataMem[memAddr[9:0]];
-	assign instruction = instMem[PC[9:0]];
 
 	registerFile regFile(
 `ifdef DEBUG
@@ -102,7 +89,7 @@ module processor(
 	);
 
 	decoder decode(
-		.instruction(instruction),
+		.instruction(instr_data),
 		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
@@ -135,7 +122,7 @@ module processor(
 
 		// Regular operation, increment
 		default: begin
-			nextPC = PC + 16'd1;
+			nextPC = instr_addr + 16'd1;
 		end
 		endcase
 	end
@@ -143,10 +130,10 @@ module processor(
 	// PC Register
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			PC <= 16'b0;
+			instr_addr <= 16'b0;
 		end
 		else begin
-			PC <= nextPC;
+			instr_addr <= nextPC;
 		end
 	end
 
@@ -175,10 +162,22 @@ module processor_top(
 	input rst
 );
 
+	reg [15:0] instMem [127:0];
+	initial begin
+		// Load in the program/initial memory state into the memory module
+`ifdef FIBO
+		$readmemh("fibo.hex", instMem);
+`else
+		$readmemh("test.hex", instMem);
+`endif
+	end
+
+	wire [15:0] PC;
+	wire [15:0] instruction;
+	assign instruction = instMem[PC[9:0]];
+
 	processor cpu(
 `ifdef DEBUG
-		.instruction(instruction),
-		.PC(PC),
 		.memWE(memWE),
 		.regFileWE(regFileWE),
 		.memAddr(memAddr),
@@ -191,6 +190,8 @@ module processor_top(
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 `endif
+		.instr_addr(PC),
+		.instr_data(instruction),
 		.clk(clk),
 		.rst(rst)
 	);
