@@ -113,6 +113,48 @@ module processor(
 		endcase
 	end
 
+	localparam [1:0]
+    S_RESET = 2'b00,
+    S_FETCH = 2'b01,
+		S_EXEC  = 2'b10,
+    S_WBACK = 2'b11;
+	reg [1:0] state;
+	reg [15:0] addr_bus;
+	reg [15:0] data_in;
+	reg [15:0] data_out;
+
+	always @(posedge clk, posedge rst) begin
+		if (rst) begin
+			state <= S_RESET;
+		end
+		else begin
+			case (state)
+				S_RESET: begin
+					addr_bus <= 16'b0;
+					state <= S_FETCH;
+				end
+				S_FETCH: begin
+					data_in <= instr_data;
+					state <= S_EXEC;
+				end
+				S_EXEC: begin
+					if (mem_we) begin
+						addr_bus <= mem_addr;
+						data_out <= regSrcData;
+						state <= S_WBACK;
+					end else begin
+						addr_bus <= nextPC;
+						state <= S_FETCH;
+					end
+				end
+				S_WBACK: begin
+					addr_bus <= instr_addr + 1;
+					state <= S_FETCH;
+				end
+			endcase
+		end
+	end
+
 	// PC Register
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
