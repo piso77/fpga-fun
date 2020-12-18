@@ -1,10 +1,7 @@
 module processor(
 `ifdef DEBUG
-	output memWE,
 	output regFileWE,
-	output [15:0] memAddr,
 	output [15:0] regDstData,
-	output [15:0] regSrcData,
 	output [15:0] reg0,
 	output [15:0] reg1,
 	output [15:0] reg2,
@@ -15,20 +12,18 @@ module processor(
 	input clk,
 	input rst,
 	output reg [15:0] instr_addr,
-	input [15:0] instr_data
+	input [15:0] instr_data,
+	output memWE,
+	output [15:0] mem_addr,
+	input [15:0] mem_data_in,
+	output [15:0] regSrcData
 );
-
-
-	wire memWE;
-	wire [15:0] memAddr;
-	wire [15:0] memData;
 
 	wire regFileWE;
 	wire [3:0] regDst;
 	wire [15:0] regDstDataIn;
 	wire [15:0] regDstData;
 	wire [3:0] regSrc;
-	wire [15:0] regSrcData;
 
 	wire [15:0] aluOut;
 	wire cFlag;
@@ -50,15 +45,6 @@ module processor(
 	wire [15:0] reg2;
 	wire [15:0] reg3;
 `endif
-
-	reg [15:0] dataMem [127:0];
-	always @(posedge clk) begin
-		if (memWE) begin // When the WE line is asserted, write into memory at the given address
-			dataMem[memAddr[9:0]] <= regSrcData; // Limit the range of the addresses
-		end
-	end
-
-	assign memData = dataMem[memAddr[9:0]];
 
 	registerFile regFile(
 `ifdef DEBUG
@@ -138,8 +124,8 @@ module processor(
 	end
 
 	// Extra logic
-	assign memAddr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
-	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? memData : aluOut);
+	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
+	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);
 endmodule
 
 module processor_top(
@@ -175,16 +161,26 @@ module processor_top(
 `ifndef DEBUG
 	wire [15:0] instr_addr;
 	wire [15:0] instr_data;
+	wire memWE;
+	wire [15:0] memAddr;
+	wire [15:0] regSrcData;
 `endif
 	assign instr_data = instr_mem[instr_addr[9:0]];
 
+	wire [15:0] memData;
+	reg [15:0] dataMem [127:0];
+	always @(posedge clk) begin
+		if (memWE) begin // When the WE line is asserted, write into memory at the given address
+			dataMem[memAddr[9:0]] <= regSrcData; // Limit the range of the addresses
+		end
+	end
+
+	assign memData = dataMem[memAddr[9:0]];
+
 	processor cpu(
 `ifdef DEBUG
-		.memWE(memWE),
 		.regFileWE(regFileWE),
-		.memAddr(memAddr),
 		.regDstData(regDstData),
-		.regSrcData(regSrcData),
 		.reg0(reg0),
 		.reg1(reg1),
 		.reg2(reg2),
@@ -195,6 +191,10 @@ module processor_top(
 		.instr_addr(instr_addr),
 		.instr_data(instr_data),
 		.clk(clk),
-		.rst(rst)
+		.rst(rst),
+		.memWE(memWE),
+		.mem_addr(memAddr),
+		.mem_data_in(memData),
+		.regSrcData(regSrcData)
 	);
 endmodule
