@@ -114,7 +114,6 @@ module processor(
 	end
 
 	localparam [1:0]
-    S_RESET = 2'b00,
     S_FETCH = 2'b01,
 		S_EXEC  = 2'b10,
     S_WBACK = 2'b11;
@@ -125,14 +124,10 @@ module processor(
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			state <= S_RESET;
-		end
-		else begin
+			addr_bus <= 16'b0;
+			state <= S_FETCH;
+		end else begin
 			case (state)
-				S_RESET: begin
-					addr_bus <= 16'b0;
-					state <= S_FETCH;
-				end
 				S_FETCH: begin
 					data_in <= instr_data;
 					state <= S_EXEC;
