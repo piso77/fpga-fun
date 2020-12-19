@@ -143,7 +143,7 @@ module processor(
 					end
 				end
 				S_WBACK: begin
-					addr_bus <= instr_addr + 1;
+					addr_bus <= nextPC;
 					state <= S_FETCH;
 				end
 			endcase
