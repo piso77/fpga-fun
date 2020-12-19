@@ -75,6 +75,9 @@ module processor(
 	);
 
 	decoder decode(
+`ifdef FSM
+		.instruction(data_in),
+`else
 		.instruction(instr_data),
 		.opcode(opcode),
 		.cFlag(cFlag),
@@ -113,6 +116,7 @@ module processor(
 		endcase
 	end
 
+`ifdef FSM
 	localparam [1:0]
     S_FETCH = 2'b01,
 		S_EXEC  = 2'b10,
@@ -124,7 +128,7 @@ module processor(
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			addr_bus <= 16'b0;
+			instr_addr <= 16'b0;
 			state <= S_FETCH;
 		end else begin
 			case (state)
@@ -138,18 +142,19 @@ module processor(
 						data_out <= regSrcData;
 						state <= S_WBACK;
 					end else begin
-						addr_bus <= nextPC;
+						instr_addr <= nextPC;
 						state <= S_FETCH;
 					end
 				end
 				S_WBACK: begin
-					addr_bus <= nextPC;
+					instr_addr <= nextPC;
 					state <= S_FETCH;
 				end
 			endcase
 		end
 	end
 
+`else
 	// PC Register
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
@@ -159,6 +164,7 @@ module processor(
 			instr_addr <= nextPC;
 		end
 	end
+`endif
 
 	// Extra logic
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
