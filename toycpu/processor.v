@@ -160,7 +160,6 @@ module processor_top(
 	output [15:0] data_in,
 	output mem_we,
 	output regFileWE,
-	output [15:0] mem_addr,
 	output [15:0] regDstData,
 	output [15:0] regSrcData,
 	output [15:0] reg0,
@@ -188,7 +187,6 @@ module processor_top(
 	wire [15:0] addr_bus;
 	wire [15:0] data_in;
 	wire mem_we;
-	wire [15:0] mem_addr;
 	wire [15:0] regSrcData;
 `endif
 	assign data_in = memory[addr_bus[7:0]];
