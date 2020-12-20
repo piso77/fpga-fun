@@ -74,11 +74,7 @@ module processor(
 	);
 
 	decoder decode(
-`ifdef FSM
-		.instruction(data_in),
-`else
-		.instruction(instr_data),
-`endif
+		.instruction(instruction),
 		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
@@ -121,7 +117,7 @@ module processor(
 		S_EXEC  = 2'b10,
     S_WBACK = 2'b11;
 	reg [1:0] state;
-	reg [15:0] data_in;
+	reg [15:0] instruction;
 	reg [15:0] data_out;
 
 	always @(posedge clk, posedge rst) begin
@@ -131,7 +127,7 @@ module processor(
 		end else begin
 			case (state)
 				S_FETCH: begin
-					data_in <= instr_data;
+					instruction <= instr_data;
 					state <= S_EXEC;
 				end
 				S_EXEC: begin
