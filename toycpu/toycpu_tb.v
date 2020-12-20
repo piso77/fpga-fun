@@ -17,7 +17,7 @@ module test_toycpu;
 `ifdef FIBO
 		#234 $finish;
 `else
-		#14 $finish;
+		#32 $finish;
 `endif
 	end
 
