@@ -192,13 +192,13 @@ module processor_top(
 	input rst
 );
 
-	reg [15:0] instr_mem [127:0];
+	reg [15:0] memory [255:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
 `ifdef FIBO
-		$readmemh("fibo.hex", instr_mem);
+		$readmemh("fibo.hex", memory);
 `else
-		$readmemh("test.hex", instr_mem);
+		$readmemh("test.hex", memory);
 `endif
 	end
 
@@ -209,17 +209,16 @@ module processor_top(
 	wire [15:0] mem_addr;
 	wire [15:0] regSrcData;
 `endif
-	assign instr_data = instr_mem[instr_addr[9:0]];
+	assign instr_data = memory[instr_addr[7:0]];
 
 	wire [15:0] mem_data;
-	reg [15:0] data_mem [127:0];
 	always @(posedge clk) begin
 		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
-			data_mem[mem_addr[9:0]] <= regSrcData; // Limit the range of the addresses
+			memory[mem_addr[7:0]] <= regSrcData; // Limit the range of the addresses
 		end
 	end
 
-	assign mem_data = data_mem[mem_addr[9:0]];
+	assign mem_data = memory[mem_addr[7:0]];
 
 	processor cpu(
 `ifdef DEBUG
