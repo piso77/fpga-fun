@@ -149,7 +149,7 @@ module processor(
 	end
 
 	// Extra logic
-	wire [0:15] mem_addr;
+	wire [15:0] mem_addr;
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);
 endmodule
