@@ -83,8 +83,7 @@ module test_toycpu;
 		#2 `assert(reg2,			16'h000a)		// MV  r2, r0
 		#2 `assert(reg1,			16'h0002)		// LD  r1, $02
 		#2 `assert(reg2,			16'h000c)		// ADD r2, r1
-		#2 `assert(regSrcData,16'h000a)		// ST  [r0], r2
-		#2 `assert(reg3,			16'h000a)		// LD  r3, $0a
+		#4 `assert(reg3,			16'h000a)		// LD  r3, $0a
 		#2 `assert(reg1,			16'h000c)		// LD  r1, [r3]
 		#2 `assert(reg2,			16'h000a)		// MV  r2, r3
 	end
