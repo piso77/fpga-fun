@@ -11,7 +11,7 @@ module processor(
 `endif
 	input clk,
 	input rst,
-	output reg [15:0] instr_addr,
+	output reg [15:0] addr_bus,
 	input [15:0] instr_data,
 	output mem_we,
 	output [15:0] mem_addr,
@@ -112,24 +112,22 @@ module processor(
 
 		// Regular operation, increment
 		default: begin
-			nextPC = instr_addr + 16'd1;
+			nextPC = addr_bus + 16'd1;
 		end
 		endcase
 	end
 
-`ifdef FSM
 	localparam [1:0]
     S_FETCH = 2'b01,
 		S_EXEC  = 2'b10,
     S_WBACK = 2'b11;
 	reg [1:0] state;
-	reg [15:0] addr_bus;
 	reg [15:0] data_in;
 	reg [15:0] data_out;
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			instr_addr <= 16'b0;
+			addr_bus <= 16'b0;
 			state <= S_FETCH;
 		end else begin
 			case (state)
@@ -143,29 +141,17 @@ module processor(
 						data_out <= regSrcData;
 						state <= S_WBACK;
 					end else begin
-						instr_addr <= nextPC;
+						addr_bus <= nextPC;
 						state <= S_FETCH;
 					end
 				end
 				S_WBACK: begin
-					instr_addr <= nextPC;
+					addr_bus <= nextPC;
 					state <= S_FETCH;
 				end
 			endcase
 		end
 	end
-
-`else
-	// PC Register
-	always @(posedge clk, posedge rst) begin
-		if (rst) begin
-			instr_addr <= 16'b0;
-		end
-		else begin
-			instr_addr <= nextPC;
-		end
-	end
-`endif
 
 	// Extra logic
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
@@ -174,7 +160,7 @@ endmodule
 
 module processor_top(
 `ifdef DEBUG
-	output [15:0] instr_addr,
+	output [15:0] addr_bus,
 	output [15:0] instr_data,
 	output mem_we,
 	output regFileWE,
@@ -203,13 +189,13 @@ module processor_top(
 	end
 
 `ifndef DEBUG
-	wire [15:0] instr_addr;
+	wire [15:0] addr_bus;
 	wire [15:0] instr_data;
 	wire mem_we;
 	wire [15:0] mem_addr;
 	wire [15:0] regSrcData;
 `endif
-	assign instr_data = memory[instr_addr[7:0]];
+	assign instr_data = memory[addr_bus[7:0]];
 
 	wire [15:0] mem_data;
 	always @(posedge clk) begin
@@ -231,7 +217,7 @@ module processor_top(
 		.cFlag(cFlag),
 		.zFlag(zFlag),
 `endif
-		.instr_addr(instr_addr),
+		.addr_bus(addr_bus),
 		.instr_data(instr_data),
 		.clk(clk),
 		.rst(rst),

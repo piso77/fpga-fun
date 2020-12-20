@@ -25,7 +25,7 @@ module test_toycpu;
 	reg clk = 0;
 	always #1 clk = !clk;
 
-	wire [15:0] instr_addr;
+	wire [15:0] addr_bus;
 	wire [15:0] instr_data;
 	wire [15:0] mem_addr;
 	wire [15:0] regDstData;
@@ -47,7 +47,7 @@ module test_toycpu;
 	processor_top cpu(
 		.clk(clk),
 		.rst(reset),
-		.instr_addr(instr_addr),
+		.addr_bus(addr_bus),
 		.instr_data(instr_data),
 		.mem_we(mem_we),
 		.regFileWE(regFileWE),
@@ -85,11 +85,11 @@ module test_toycpu;
 		#2 `assert(reg2,			16'h0081)		// ADD r2, r1
 		#4 `assert(reg3,			16'h0080)		// LD  r3, $80
 		#2 `assert(reg0,			16'h0081)		// LD  r0, [r3]
-		#4 `assert(instr_addr,16'h0003)		// BR  nz, Loop
+		#4 `assert(addr_bus,16'h0003)		// BR  nz, Loop
 	end
 `endif
 
 	initial
 		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h mem_addr:0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, instr_addr, instr_data, reg0, reg1, reg2, reg3, mem_addr, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
+				 $time, addr_bus, instr_data, reg0, reg1, reg2, reg3, mem_addr, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule
