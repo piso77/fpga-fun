@@ -1,7 +1,7 @@
 include project.cfg
 
 default: $(FW)
-	#iverilog -DDEBUG -DFIBO -o dsn toycpu_tb.v $(VSOURCE)
+	#iverilog -DDEBUG -DFIBOASSERT -o dsn toycpu_tb.v $(VSOURCE)
 	#vvp dsn
 	iverilog -DFSM -DDEBUG -o dsn toycpu_tb.v $(VSOURCE)
 	vvp dsn

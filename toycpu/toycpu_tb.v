@@ -13,11 +13,11 @@ module test_toycpu;
 		$dumpvars(0, test_toycpu);
 
 		#0 reset = 1;
-		#1 reset = 0;
+		#2 reset = 0;
 `ifdef FIBO
 		#234 $finish;
 `else
-		#128 $finish;
+		#14 $finish;
 `endif
 	end
 
@@ -62,7 +62,7 @@ module test_toycpu;
 		.zFlag(zFlag)
 	);
 
-`ifdef FIBO
+`ifdef FIBOASSERT
 	initial begin // assertions
 		#2	 `assert(reg0,		16'h0000)		//  LD      r0, $0
 		#4	 `assert(reg0,		16'h0001)		//	ADD     r0, r0, r1
@@ -77,7 +77,7 @@ module test_toycpu;
 		#2	 `assert(reg1,		16'h6ff1)
 		#8	 `assert(reg0,		16'h2511)
 	end
-`else
+`elsif TESTASSERT
 	initial begin // assertions
 		#2 `assert(reg0,			16'h0080)		// LD  r0, $80
 		#2 `assert(reg2,			16'h0080)		// MV  r2, r0
