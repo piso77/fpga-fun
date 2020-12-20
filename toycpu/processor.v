@@ -79,6 +79,7 @@ module processor(
 		.instruction(data_in),
 `else
 		.instruction(instr_data),
+`endif
 		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
