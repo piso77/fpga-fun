@@ -3,7 +3,7 @@ include project.cfg
 default: $(FW)
 	#iverilog -DDEBUG -DFIBO -o dsn toycpu_tb.v $(VSOURCE)
 	#vvp dsn
-	iverilog -DDEBUG -o dsn toycpu_tb.v $(VSOURCE)
+	iverilog -DFSM -DDEBUG -o dsn toycpu_tb.v $(VSOURCE)
 	vvp dsn
 	#gtkwave test_toycpu.vcd
 
