@@ -26,7 +26,7 @@ module test_toycpu;
 	always #1 clk = !clk;
 
 	wire [15:0] addr_bus;
-	wire [15:0] instr_data;
+	wire [15:0] data_in;
 	wire [15:0] regDstData;
 	wire [15:0] regSrcData;
 	wire [15:0] reg0;
@@ -40,14 +40,14 @@ module test_toycpu;
 	wire mem_we;
 	wire regFileWE;
 
-	assign brFlagSel = instr_data[12];
-	assign brFlag = instr_data[11];
+	assign brFlagSel = data_in[12];
+	assign brFlag = data_in[11];
 
 	processor_top cpu(
 		.clk(clk),
 		.rst(reset),
 		.addr_bus(addr_bus),
-		.instr_data(instr_data),
+		.data_in(data_in),
 		.mem_we(mem_we),
 		.regFileWE(regFileWE),
 		.regDstData(regDstData),
@@ -89,5 +89,5 @@ module test_toycpu;
 
 	initial
 		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, addr_bus, instr_data, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
+				 $time, addr_bus, data_in, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule

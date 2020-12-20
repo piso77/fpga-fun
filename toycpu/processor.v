@@ -12,7 +12,7 @@ module processor(
 	input clk,
 	input rst,
 	output reg [15:0] addr_bus,
-	input [15:0] instr_data,
+	input [15:0] data_in,
 	output mem_we,
 	input [15:0] mem_data_in,
 	output [15:0] regSrcData
@@ -127,7 +127,7 @@ module processor(
 		end else begin
 			case (state)
 				S_FETCH: begin
-					instruction <= instr_data;
+					instruction <= data_in;
 					state <= S_EXEC;
 				end
 				S_EXEC: begin
@@ -157,7 +157,7 @@ endmodule
 module processor_top(
 `ifdef DEBUG
 	output [15:0] addr_bus,
-	output [15:0] instr_data,
+	output [15:0] data_in,
 	output mem_we,
 	output regFileWE,
 	output [15:0] mem_addr,
@@ -186,12 +186,12 @@ module processor_top(
 
 `ifndef DEBUG
 	wire [15:0] addr_bus;
-	wire [15:0] instr_data;
+	wire [15:0] data_in;
 	wire mem_we;
 	wire [15:0] mem_addr;
 	wire [15:0] regSrcData;
 `endif
-	assign instr_data = memory[addr_bus[7:0]];
+	assign data_in = memory[addr_bus[7:0]];
 
 	wire [15:0] mem_data;
 	always @(posedge clk) begin
@@ -214,7 +214,7 @@ module processor_top(
 		.zFlag(zFlag),
 `endif
 		.addr_bus(addr_bus),
-		.instr_data(instr_data),
+		.data_in(data_in),
 		.clk(clk),
 		.rst(rst),
 		.mem_we(mem_we),
