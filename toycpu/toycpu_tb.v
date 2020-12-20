@@ -17,7 +17,7 @@ module test_toycpu;
 `ifdef FIBO
 		#234 $finish;
 `else
-		#28 $finish;
+		#128 $finish;
 `endif
 	end
 
@@ -79,13 +79,13 @@ module test_toycpu;
 	end
 `else
 	initial begin // assertions
-		#2 `assert(reg0,			16'h008a)		// LD  r0, $0a
-		#2 `assert(reg2,			16'h008a)		// MV  r2, r0
-		#2 `assert(reg1,			16'h0002)		// LD  r1, $02
-		#2 `assert(reg2,			16'h008c)		// ADD r2, r1
-		#4 `assert(reg3,			16'h008a)		// LD  r3, $0a
-		#2 `assert(reg1,			16'h008c)		// LD  r1, [r3]
-		#2 `assert(reg2,			16'h008a)		// MV  r2, r3
+		#2 `assert(reg0,			16'h0080)		// LD  r0, $80
+		#2 `assert(reg2,			16'h0080)		// MV  r2, r0
+		#2 `assert(reg1,			16'h0001)		// LD  r1, $01
+		#2 `assert(reg2,			16'h0081)		// ADD r2, r1
+		#4 `assert(reg3,			16'h0080)		// LD  r3, $80
+		#2 `assert(reg0,			16'h0081)		// LD  r0, [r3]
+		#4 `assert(instr_addr,16'h0003)		// BR  nz, Loop
 	end
 `endif
 
