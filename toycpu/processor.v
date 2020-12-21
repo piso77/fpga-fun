@@ -1,6 +1,6 @@
 module processor(
 `ifdef DEBUG
-	output regFileWE,
+	output reg_we,
 	output [15:0] regDstData,
 	output [15:0] reg0,
 	output [15:0] reg1,
@@ -18,7 +18,7 @@ module processor(
 	output [15:0] regSrcData
 );
 
-	wire regFileWE;
+	wire reg_we;
 	wire [3:0] regDst;
 	wire [15:0] regDstDataIn;
 	wire [15:0] regDstData;
@@ -54,7 +54,7 @@ module processor(
 `endif
 		.clk(clk),
 		.rst(rst),
-		.we(regFileWE),
+		.we(reg_we),
 		.regDst(regDst),
 		.regDstDataOut(regDstData),
 		.regDstDataIn(regDstDataIn),
@@ -82,7 +82,7 @@ module processor(
 		.immMode(immMode),
 		.indMode(indMode),
 		.regDst(regDst),
-		.regFileWE(regFileWE),
+		.regFileWE(reg_we),
 		.regSrc(regSrc),
 		.memWE(mem_we),
 		.memAddrSelDst(memAddrSelDst),
@@ -159,7 +159,7 @@ module processor_top(
 	output [15:0] addr_bus,
 	output [15:0] data_in,
 	output mem_we,
-	output regFileWE,
+	output reg_we,
 	output [15:0] regDstData,
 	output [15:0] regSrcData,
 	output [15:0] reg0,
@@ -202,7 +202,7 @@ module processor_top(
 
 	processor cpu(
 `ifdef DEBUG
-		.regFileWE(regFileWE),
+		.reg_we(reg_we),
 		.regDstData(regDstData),
 		.reg0(reg0),
 		.reg1(reg1),

@@ -38,7 +38,7 @@ module test_toycpu;
 	wire brFlagSel;
 	wire brFlag;
 	wire mem_we;
-	wire regFileWE;
+	wire reg_we;
 
 	assign brFlagSel = data_in[12];
 	assign brFlag = data_in[11];
@@ -49,7 +49,7 @@ module test_toycpu;
 		.addr_bus(addr_bus),
 		.data_in(data_in),
 		.mem_we(mem_we),
-		.regFileWE(regFileWE),
+		.reg_we(reg_we),
 		.regDstData(regDstData),
 		.regSrcData(regSrcData),
 		.reg0(reg0),
@@ -89,5 +89,5 @@ module test_toycpu;
 
 	initial
 		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, addr_bus, data_in, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, regFileWE, brFlagSel, brFlag, cFlag, zFlag, reset);
+				 $time, addr_bus, data_in, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, reg_we, brFlagSel, brFlag, cFlag, zFlag, reset);
 endmodule
