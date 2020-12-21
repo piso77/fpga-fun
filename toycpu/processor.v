@@ -75,6 +75,7 @@ module processor(
 
 	decoder decode(
 		.instruction(instruction),
+		.ce(de_ce),
 		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
@@ -119,15 +120,19 @@ module processor(
 	reg [1:0] state;
 	reg [15:0] instruction;
 	reg [15:0] data_out;
+	reg de_ce;
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
 			addr_bus <= 16'b0;
+			de_ce <= 1'b0;
 			state <= S_FETCH;
 		end else begin
+			de_ce <= 1'b0;
 			case (state)
 				S_FETCH: begin
 					instruction <= data_in;
+					de_ce <= 1'b1;
 					state <= S_EXEC;
 				end
 				S_EXEC: begin

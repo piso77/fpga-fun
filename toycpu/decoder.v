@@ -2,6 +2,8 @@
 
 module decoder(
 	input [15:0] instruction,
+	input ce,												// chip-enabe control path decoding
+
 	output [3:0] opcode,						// used by ALU
 
 	input cFlag,										// used for branch op
@@ -52,65 +54,67 @@ module decoder(
 
 		instrData = 16'd0;
 
-		// Decode the instruction and assert the relevant control signals
-		case (opcode)
-			// ADD OP
-			`ADD_OP: begin
-				regFileWE = 1'b1; // Assert write back enabled
-			end
+		if (ce) begin
+			// Decode the instruction and assert the relevant control signals
+			case (opcode)
+				// ADD OP
+				`ADD_OP: begin
+					regFileWE = 1'b1; // Assert write back enabled
+				end
 
-			// LD IMM
-			`LDI_OP: begin
-				immMode = 1'b1;
-				regFileWE = 1'b1; // Assert write back enabled
-				instrData = {8'b0, payload}; // Zero fill addr to get full address
-			end
+				// LD IMM
+				`LDI_OP: begin
+					immMode = 1'b1;
+					regFileWE = 1'b1; // Assert write back enabled
+					instrData = {8'b0, payload}; // Zero fill addr to get full address
+				end
 
-			// LD IND
-			`LDR_OP: begin
-				memAddrSelSrc = 1'b1; // Choose to use value from register file as dAddr
-				indMode = 1'b1; // Source the write back register data from memory
-				regFileWE = 1'b1; // Assert write back enabled
-			end
+				// LD IND
+				`LDR_OP: begin
+					memAddrSelSrc = 1'b1; // Choose to use value from register file as dAddr
+					indMode = 1'b1; // Source the write back register data from memory
+					regFileWE = 1'b1; // Assert write back enabled
+				end
 
-			// MV
-			`MV_OP: begin
-				regFileWE = 1'b1; // Assert write back enabled
-			end
+				// MV
+				`MV_OP: begin
+					regFileWE = 1'b1; // Assert write back enabled
+				end
 
-			// ST IND
-			`ST_OP: begin
-				memAddrSelDst = 1'b1; // Choose to use value from register file as dAddr
-				memWE = 1'b1; // Write to memory
-			end
+				// ST IND
+				`ST_OP: begin
+					memAddrSelDst = 1'b1; // Choose to use value from register file as dAddr
+					memWE = 1'b1; // Write to memory
+				end
 
-			// BRANCH IMM
-			`BRI_OP: begin
-				if (brFlagSel == 1'b0) begin // carry
-					if (brFlag == cFlag) begin
-						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {8'b0, payload};
-					end
-				end else begin // zero
-					if (brFlag == zFlag) begin
-						nextPCSel = 2'b01; // Select to use the addr field as next PC
-						instrData = {8'b0, payload};
+				// BRANCH IMM
+				`BRI_OP: begin
+					if (brFlagSel == 1'b0) begin // carry
+						if (brFlag == cFlag) begin
+							nextPCSel = 2'b01; // Select to use the addr field as next PC
+							instrData = {8'b0, payload};
+						end
+					end else begin // zero
+						if (brFlag == zFlag) begin
+							nextPCSel = 2'b01; // Select to use the addr field as next PC
+							instrData = {8'b0, payload};
+						end
 					end
 				end
-			end
 
-			// BRANCH IND
-			`BRR_OP: begin
-				if (brFlagSel == 1'b0) begin // carry
-					if (brFlag == cFlag) begin
-						nextPCSel = 2'b10; // Source nextPC from rs1
-					end
-				end else begin // zero
-					if (brFlag == zFlag) begin
-						nextPCSel = 2'b10; // Source nextPC from rs1
+				// BRANCH IND
+				`BRR_OP: begin
+					if (brFlagSel == 1'b0) begin // carry
+						if (brFlag == cFlag) begin
+							nextPCSel = 2'b10; // Source nextPC from rs1
+						end
+					end else begin // zero
+						if (brFlag == zFlag) begin
+							nextPCSel = 2'b10; // Source nextPC from rs1
+						end
 					end
 				end
-			end
-		endcase
+			endcase
+		end
 	end
 endmodule
