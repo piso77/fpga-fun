@@ -11,7 +11,7 @@ module processor(
 `endif
 	input clk,
 	input rst,
-	output reg [15:0] addr_bus,
+	output [15:0] addr_bus,
 	input [15:0] data_in,
 	output mem_we,
 	input [15:0] mem_data_in,
@@ -37,6 +37,7 @@ module processor(
 
 	wire [1:0] nextPCSel;
 	reg [15:0] nextPC;
+	reg [15:0] pc_addr;
 
 `ifdef DEBUG
 	wire [15:0] reg0;
@@ -108,7 +109,7 @@ module processor(
 
 		// Regular operation, increment
 		default: begin
-			nextPC = addr_bus + 16'd1;
+			nextPC = pc_addr + 16'd1;
 		end
 		endcase
 	end
@@ -124,7 +125,7 @@ module processor(
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
-			addr_bus <= 16'b0;
+			pc_addr <= 16'b0;
 			de_ce <= 1'b0;
 			state <= S_FETCH;
 		end else begin
@@ -137,16 +138,16 @@ module processor(
 				end
 				S_EXEC: begin
 					if (mem_we) begin
-						addr_bus <= mem_addr;
+						pc_addr <= mem_addr;
 						data_out <= regSrcData;
 						state <= S_WBACK;
 					end else begin
-						addr_bus <= nextPC;
+						pc_addr <= nextPC;
 						state <= S_FETCH;
 					end
 				end
 				S_WBACK: begin
-					addr_bus <= nextPC;
+					pc_addr <= nextPC;
 					state <= S_FETCH;
 				end
 			endcase
@@ -155,6 +156,7 @@ module processor(
 
 	// Extra logic
 	wire [15:0] mem_addr;
+	assign addr_bus = pc_addr;
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);
 endmodule
