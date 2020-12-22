@@ -24,6 +24,7 @@ module processor(
 	wire [15:0] regDstDataIn;
 	wire [15:0] regDstData;
 	wire [3:0] regSrc;
+	wire [15:0] regSrcData;
 
 	wire [15:0] aluOut;
 	wire cFlag;
