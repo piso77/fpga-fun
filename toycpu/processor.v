@@ -15,8 +15,7 @@ module processor(
 	output [15:0] addr_bus,
 	input [15:0] data_in,
 	output [15:0] data_out,
-	output mem_we,
-	input [15:0] mem_data_in
+	output mem_we
 );
 
 	wire reg_we;
@@ -151,7 +150,7 @@ module processor(
 	assign addr_bus = (mem_bus_sel) ? mem_addr : pc_addr;
 	assign data_out = regSrcData;
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
-	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);
+	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? data_in : aluOut);
 endmodule
 
 module processor_top(
@@ -191,14 +190,11 @@ module processor_top(
 	assign data_in = memory[addr_bus[7:0]];
 
 	wire [15:0] data_out;
-	wire [15:0] mem_data;
 	always @(posedge clk) begin
 		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
 			memory[addr_bus[7:0]] <= data_out; // Limit the range of the addresses
 		end
 	end
-
-	assign mem_data = memory[addr_bus[7:0]];
 
 	processor cpu(
 `ifdef DEBUG
@@ -217,7 +213,6 @@ module processor_top(
 		.data_out(data_out),
 		.clk(clk),
 		.rst(rst),
-		.mem_we(mem_we),
-		.mem_data_in(mem_data)
+		.mem_we(mem_we)
 	);
 endmodule
