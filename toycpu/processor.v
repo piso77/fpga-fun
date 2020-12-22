@@ -118,11 +118,10 @@ module processor(
 		endcase
 	end
 
-	localparam [1:0]
-    S_FETCH = 2'b01,
-		S_EXEC  = 2'b10,
-    S_WBACK = 2'b11;
-	reg [1:0] state;
+	localparam
+    S_FEXEC = 1'b0,
+		S_WBACK  = 1'b1;
+	reg state;
 	reg [15:0] instruction;
 	reg de_ce;
 
@@ -130,22 +129,18 @@ module processor(
 		if (rst) begin
 			pc_addr <= 16'b0;
 			de_ce <= 1'b0;
-			state <= S_FETCH;
+			state <= S_FEXEC;
 		end else begin
 			de_ce <= 1'b0;
 			case (state)
-				S_FETCH: begin
+				S_FEXEC: begin
 					instruction <= data_in;
 					de_ce <= 1'b1;
-					state <= S_EXEC;
-				end
-				S_EXEC: begin
-					pc_addr <= nextPC;
-					state <= S_FETCH;
+					state <= S_WBACK;
 				end
 				S_WBACK: begin
 					pc_addr <= nextPC;
-					state <= S_FETCH;
+					state <= S_FEXEC;
 				end
 			endcase
 		end
