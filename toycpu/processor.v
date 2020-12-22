@@ -32,6 +32,7 @@ module processor(
 	wire [3:0] opcode;
 	wire memAddrSelDst;
 	wire memAddrSelSrc;
+	wire mem_bus_sel;
 	wire immMode;
 	wire indMode;
 	wire [15:0] instrData;
@@ -90,6 +91,7 @@ module processor(
 		.memWE(mem_we),
 		.memAddrSelDst(memAddrSelDst),
 		.memAddrSelSrc(memAddrSelSrc),
+		.mem_bus_sel(mem_bus_sel),
 		.instrData(instrData)
 	);
 
@@ -150,7 +152,7 @@ module processor(
 
 	// Extra logic
 	wire [15:0] mem_addr;
-	assign addr_bus = (mem_we) ? mem_addr : pc_addr;
+	assign addr_bus = (mem_bus_sel) ? mem_addr : pc_addr;
 	assign data_out = regSrcData;
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);

@@ -17,6 +17,7 @@ module decoder(
 	output reg regFileWE,
 	output [3:0] regSrc,
 
+	output reg mem_bus_sel,
 	output reg memWE,
 	output reg memAddrSelDst,
 	output reg memAddrSelSrc,
@@ -52,6 +53,8 @@ module decoder(
 		memAddrSelDst = 1'b0;
 		memAddrSelSrc = 1'b0;
 
+		mem_bus_sel = 1'b0;
+
 		instrData = 16'd0;
 
 		if (ce) begin
@@ -71,6 +74,7 @@ module decoder(
 
 				// LD IND
 				`LDR_OP: begin
+					mem_bus_sel = 1'b1;
 					memAddrSelSrc = 1'b1; // Choose to use value from register file as dAddr
 					indMode = 1'b1; // Source the write back register data from memory
 					regFileWE = 1'b1; // Assert write back enabled
@@ -83,6 +87,7 @@ module decoder(
 
 				// ST IND
 				`ST_OP: begin
+					mem_bus_sel = 1'b1;
 					memAddrSelDst = 1'b1; // Choose to use value from register file as dAddr
 					memWE = 1'b1; // Write to memory
 				end
