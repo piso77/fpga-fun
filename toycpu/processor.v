@@ -119,7 +119,7 @@ module processor(
 
 	localparam
     S_FEXEC = 1'b0,
-		S_WBACK  = 1'b1;
+		S_WBACK = 1'b1;
 	reg state;
 	reg [15:0] instruction;
 	reg de_ce;
