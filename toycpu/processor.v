@@ -2,6 +2,7 @@ module processor(
 `ifdef DEBUG
 	output reg_we,
 	output [15:0] regDstData,
+	output [15:0] regSrcData,
 	output [15:0] reg0,
 	output [15:0] reg1,
 	output [15:0] reg2,
@@ -13,9 +14,9 @@ module processor(
 	input rst,
 	output [15:0] addr_bus,
 	input [15:0] data_in,
+	output [15:0] data_out,
 	output mem_we,
-	input [15:0] mem_data_in,
-	output [15:0] regSrcData
+	input [15:0] mem_data_in
 );
 
 	wire reg_we;
@@ -120,7 +121,6 @@ module processor(
     S_WBACK = 2'b11;
 	reg [1:0] state;
 	reg [15:0] instruction;
-	reg [15:0] data_out;
 	reg de_ce;
 
 	always @(posedge clk, posedge rst) begin
@@ -137,14 +137,8 @@ module processor(
 					state <= S_EXEC;
 				end
 				S_EXEC: begin
-					if (mem_we) begin
-						pc_addr <= mem_addr;
-						data_out <= regSrcData;
-						state <= S_WBACK;
-					end else begin
-						pc_addr <= nextPC;
-						state <= S_FETCH;
-					end
+					pc_addr <= nextPC;
+					state <= S_FETCH;
 				end
 				S_WBACK: begin
 					pc_addr <= nextPC;
@@ -156,7 +150,8 @@ module processor(
 
 	// Extra logic
 	wire [15:0] mem_addr;
-	assign addr_bus = pc_addr;
+	assign addr_bus = (mem_we) ? mem_addr : pc_addr;
+	assign data_out = regSrcData;
 	assign mem_addr = (memAddrSelDst) ? regDstData : ((memAddrSelSrc) ? regSrcData : instrData);
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? mem_data_in : aluOut);
 endmodule
@@ -194,14 +189,14 @@ module processor_top(
 	wire [15:0] addr_bus;
 	wire [15:0] data_in;
 	wire mem_we;
-	wire [15:0] regSrcData;
 `endif
 	assign data_in = memory[addr_bus[7:0]];
 
+	wire [15:0] data_out;
 	wire [15:0] mem_data;
 	always @(posedge clk) begin
 		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
-			memory[addr_bus[7:0]] <= regSrcData; // Limit the range of the addresses
+			memory[addr_bus[7:0]] <= data_out; // Limit the range of the addresses
 		end
 	end
 
@@ -211,6 +206,7 @@ module processor_top(
 `ifdef DEBUG
 		.reg_we(reg_we),
 		.regDstData(regDstData),
+		.regSrcData(regSrcData),
 		.reg0(reg0),
 		.reg1(reg1),
 		.reg2(reg2),
@@ -220,10 +216,10 @@ module processor_top(
 `endif
 		.addr_bus(addr_bus),
 		.data_in(data_in),
+		.data_out(data_out),
 		.clk(clk),
 		.rst(rst),
 		.mem_we(mem_we),
-		.mem_data_in(mem_data),
-		.regSrcData(regSrcData)
+		.mem_data_in(mem_data)
 	);
 endmodule
