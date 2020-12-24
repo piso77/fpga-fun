@@ -7,13 +7,13 @@
 module test_toycpu;
 
 	/* Make a reset that pulses once. */
-	reg reset = 0;
+	reg rst = 0;
 	initial begin
 		$dumpfile("test_toycpu.vcd");
 		$dumpvars(0, test_toycpu);
 
-		#0 reset = 1;
-		#2 reset = 0;
+		#0 rst = 1;
+		#2 rst = 0;
 `ifdef FIBO
 		#234 $finish;
 `else
@@ -43,12 +43,32 @@ module test_toycpu;
 	assign brFlagSel = data_in[12];
 	assign brFlag = data_in[11];
 
-	processor_top cpu(
+	reg [15:0] memory [255:0];
+	initial begin
+		// Load in the program/initial memory state into the memory module
+`ifdef FIBO
+		$readmemh("fibo.hex", memory);
+`else
+		$readmemh("test.hex", memory);
+`endif
+	end
+
+	assign data_in = memory[addr_bus[7:0]];
+
+	wire [15:0] data_out;
+	always @(posedge clk) begin
+		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
+			memory[addr_bus[7:0]] <= data_out; // Limit the range of the addresses
+		end
+	end
+
+	processor cpu(
 		.clk(clk),
-		.rst(reset),
+		.rst(rst),
 		.addr_bus(addr_bus),
 		.data_in(data_in),
 		.mem_we(mem_we),
+		.data_out(data_out),
 		.reg_we(reg_we),
 		.regDstData(regDstData),
 		.regSrcData(regSrcData),
@@ -89,5 +109,5 @@ module test_toycpu;
 
 	initial
 		$monitor("%t: addr=0x%h instr=0x%h regs=0x%h|0x%h|0x%h|0x%h [D/S]Data=0x%h|0x%h [M/R]WE=%b|%b Fl=%b|%b C/Z=%b/%b rst=%b",
-				 $time, addr_bus, data_in, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, reg_we, brFlagSel, brFlag, cFlag, zFlag, reset);
+				 $time, addr_bus, data_in, reg0, reg1, reg2, reg3, regDstData, regSrcData, mem_we, reg_we, brFlagSel, brFlag, cFlag, zFlag, rst);
 endmodule
