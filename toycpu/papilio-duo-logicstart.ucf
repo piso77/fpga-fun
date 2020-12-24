@@ -11,18 +11,19 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 #NET RX             LOC="P46"  | IOSTANDARD=LVTTL;                                # RX
 #NET TX             LOC="P141" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # TX
 #NET ARDUINO_RESET  LOC="P139" | IOSTANDARD=LVTTL;                                # ARDUINO_RESET
-#NET SW0            LOC="P116" | IOSTANDARD=LVTTL;                                # A0
-#NET SW1            LOC="P117" | IOSTANDARD=LVTTL;                                # A1
-#NET SW2            LOC="P118" | IOSTANDARD=LVTTL;                                # A2
-#NET SW3            LOC="P119" | IOSTANDARD=LVTTL;                                # A3
-#NET SW4            LOC="P120" | IOSTANDARD=LVTTL;                                # A4
-#NET LED3           LOC="P121" | IOSTANDARD=LVTTL;                                # A5
-#NET LED4           LOC="P123" | IOSTANDARD=LVTTL;                                # A6
-#NET LED5           LOC="P124" | IOSTANDARD=LVTTL;                                # A7
-#NET LED6           LOC="P126" | IOSTANDARD=LVTTL;                                # A8
-#NET LED7           LOC="P127" | IOSTANDARD=LVTTL;                                # A9
+NET SW(0)            LOC="P116" | IOSTANDARD=LVTTL;                                # A0
+NET SW(1)            LOC="P117" | IOSTANDARD=LVTTL;                                # A1
+NET SW(2)            LOC="P118" | IOSTANDARD=LVTTL;                                # A2
+NET SW(3)            LOC="P119" | IOSTANDARD=LVTTL;                                # A3
+NET SW(4)            LOC="P120" | IOSTANDARD=LVTTL;                                # A4
+NET LED(3)           LOC="P121" | IOSTANDARD=LVTTL;                                # A5
+NET LED(4)           LOC="P123" | IOSTANDARD=LVTTL;                                # A6
+NET LED(5)           LOC="P124" | IOSTANDARD=LVTTL;                                # A7
+NET LED(6)           LOC="P126" | IOSTANDARD=LVTTL;                                # A8
+NET LED(7)           LOC="P127" | IOSTANDARD=LVTTL;                                # A9
 #NET DIR_RIGHT      LOC="P131" | IOSTANDARD=LVTTL;                                # A10
 #NET DIR_UP         LOC="P132" | IOSTANDARD=LVTTL;                                # A11
+NET RST       LOC="P133" | IOSTANDARD=LVTTL;                                # A12
 #NET DIR_DOWN       LOC="P133" | IOSTANDARD=LVTTL;                                # A12
 #NET DIR_LEFT       LOC="P134" | IOSTANDARD=LVTTL;                                # A13
 #NET SEVENSEG_SEG_B LOC="P115" | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # B0
@@ -43,13 +44,13 @@ NET CLK            LOC="P94"  | IOSTANDARD=LVTTL | PERIOD=31.25ns;              
 #NET SEVENSEG_AN4   LOC="P79"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C7
 #NET SEVENSEG_AN1   LOC="P75"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C8
 #NET SEVENSEG_AN0   LOC="P67"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C9
-#NET SW5            LOC="P62"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C10
-#NET SW6            LOC="P59"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C11
-#NET SW7            LOC="P57"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C12
-NET RST            LOC="P57"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C12
-#NET LED0           LOC="P55"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C13
-#NET LED1           LOC="P50"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C14
-#NET LED2           LOC="P47"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C15
+NET SW(5)            LOC="P62"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C10
+NET SW(6)            LOC="P59"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C11
+NET SW(7)            LOC="P57"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C12
+#NET RST            LOC="P57"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C12
+NET LED(0)           LOC="P55"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C13
+NET LED(1)           LOC="P50"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C14
+NET LED(2)           LOC="P47"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # C15
 #NET RGB(0)     LOC="P98"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # D0
 #NET RGB(1)     LOC="P78"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # D4
 #NET RGB(2)     LOC="P51"  | IOSTANDARD=LVTTL | DRIVE=8 | SLEW=FAST;          # D13

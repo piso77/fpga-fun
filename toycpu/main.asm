@@ -1,15 +1,14 @@
 .arch	toycpu
 .org	0
-.len	128
+.len	32
 .width	16
 
-	LD	r0, $80
-	MV	r2, r0
-	LD	r1, $01
+	LD	r0, $80		; switches
+	LD	r1, $81		; leds
+	LD	r2, $01
 Loop:
-	ADD	r2, r1
-	ST	[r0], r2
-	LD	r3, $80
-	LD	r0, [r3]
+	LD	r3, [r0]	; read switches status
+	ADD	r3, r2
+	ST	[r1], r3	; write to led switches+1
 	LD	r3, Loop
 	BR	nz, [r3]

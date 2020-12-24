@@ -158,7 +158,8 @@ endmodule
 module processor_top(
 	input clk,
 	input rst,
-	output [7:0] led
+	input [7:0] sw,
+	output reg [7:0] led
 );
 
 	reg [15:0] memory [127:0];
@@ -168,14 +169,25 @@ module processor_top(
 	end
 
 	wire [15:0] addr_bus;
-	wire [15:0] data_in;
-	wire mem_we;
-	assign data_in = memory[addr_bus[7:0]];
+	reg [15:0] data_in;
+	always @(*)
+		casez (addr_bus)
+			// switches
+			8'b1???????: data_in <= {8'b0, sw};
+			// RAM
+			default: data_in <= memory[addr_bus[7:0]];
+		endcase
 
+	wire mem_we;
 	wire [15:0] data_out;
 	always @(posedge clk) begin
-		if (mem_we) begin // When the WE line is asserted, write into memory at the given address
-			memory[addr_bus[7:0]] <= data_out; // Limit the range of the addresses
+		if (mem_we) begin
+			casez (addr_bus)
+				// leds
+				8'b1???????: led <= data_out[7:0];
+				// RAM
+				default: memory[addr_bus[7:0]] <= data_out; // Limit the range of the addresses
+			endcase
 		end
 	end
 
@@ -187,7 +199,5 @@ module processor_top(
 		.mem_we(mem_we),
 		.data_out(data_out)
 	);
-
-	assign led = addr_bus[7:0];
 endmodule
 `endif
