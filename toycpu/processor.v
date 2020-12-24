@@ -157,10 +157,11 @@ endmodule
 `ifndef DEBUG
 module processor_top(
 	input clk,
-	input rst
+	input rst,
+	output [7:0] led
 );
 
-	reg [15:0] memory [255:0];
+	reg [15:0] memory [127:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
 		$readmemh("main.hex", memory);
@@ -186,5 +187,7 @@ module processor_top(
 		.mem_we(mem_we),
 		.data_out(data_out)
 	);
+
+	assign led = addr_bus[7:0];
 endmodule
 `endif
