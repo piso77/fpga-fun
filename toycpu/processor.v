@@ -76,9 +76,12 @@ module processor(
 		.zFlag(zFlag)
 	);
 
+	reg [15:0] instruction;
+	reg decoder_ce;
+
 	decoder decode(
 		.instruction(instruction),
-		.ce(de_ce),
+		.ce(decoder_ce),
 		.opcode(opcode),
 		.cFlag(cFlag),
 		.zFlag(zFlag),
@@ -121,20 +124,18 @@ module processor(
     S_FEXEC = 1'b0,
 		S_WBACK = 1'b1;
 	reg state;
-	reg [15:0] instruction;
-	reg de_ce;
 
 	always @(posedge clk, posedge rst) begin
 		if (rst) begin
 			pc_addr <= 16'b0;
-			de_ce <= 1'b0;
+			decoder_ce <= 1'b0;
 			state <= S_FEXEC;
 		end else begin
-			de_ce <= 1'b0;
+			decoder_ce <= 1'b0;
 			case (state)
 				S_FEXEC: begin
 					instruction <= data_in;
-					de_ce <= 1'b1;
+					decoder_ce <= 1'b1;
 					state <= S_WBACK;
 				end
 				S_WBACK: begin
@@ -153,21 +154,8 @@ module processor(
 	assign regDstDataIn = (immMode) ? instrData : ((indMode) ? data_in : aluOut);
 endmodule
 
+`ifndef DEBUG
 module processor_top(
-`ifdef DEBUG
-	output [15:0] addr_bus,
-	output [15:0] data_in,
-	output mem_we,
-	output reg_we,
-	output [15:0] regDstData,
-	output [15:0] regSrcData,
-	output [15:0] reg0,
-	output [15:0] reg1,
-	output [15:0] reg2,
-	output [15:0] reg3,
-	output cFlag,
-	output zFlag,
-`endif
 	input clk,
 	input rst
 );
@@ -175,18 +163,12 @@ module processor_top(
 	reg [15:0] memory [255:0];
 	initial begin
 		// Load in the program/initial memory state into the memory module
-`ifdef FIBO
-		$readmemh("fibo.hex", memory);
-`else
-		$readmemh("test.hex", memory);
-`endif
+		$readmemh("main.hex", memory);
 	end
 
-`ifndef DEBUG
 	wire [15:0] addr_bus;
 	wire [15:0] data_in;
 	wire mem_we;
-`endif
 	assign data_in = memory[addr_bus[7:0]];
 
 	wire [15:0] data_out;
@@ -197,22 +179,12 @@ module processor_top(
 	end
 
 	processor cpu(
-`ifdef DEBUG
-		.reg_we(reg_we),
-		.regDstData(regDstData),
-		.regSrcData(regSrcData),
-		.reg0(reg0),
-		.reg1(reg1),
-		.reg2(reg2),
-		.reg3(reg3),
-		.cFlag(cFlag),
-		.zFlag(zFlag),
-`endif
-		.addr_bus(addr_bus),
-		.data_in(data_in),
-		.data_out(data_out),
 		.clk(clk),
 		.rst(rst),
-		.mem_we(mem_we)
+		.addr_bus(addr_bus),
+		.data_in(data_in),
+		.mem_we(mem_we),
+		.data_out(data_out)
 	);
 endmodule
+`endif
