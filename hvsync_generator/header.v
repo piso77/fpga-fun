@@ -1,4 +1,4 @@
-`define VGA640X480
+`define VGA320X240
 
 `ifndef HEADER_H
 `define HEADER_H
@@ -31,19 +31,20 @@ parameter V_BOTTOM		=  10;
 parameter V_SYNC			=   2;
 parameter V_TOP				=  33;
 
-`else
+`elsif VGA320X240
 // declarations for TV-simulator sync parameters
-// Pixel freq.	???
-parameter PIXELCLK		=  XX;
-parameter H_DISPLAY		= 256;
-parameter H_BACK			=  23;
-parameter H_FRONT			=   7;
-parameter H_SYNC			=  23;
+parameter PIXELCLK		= 60;  // PLL doesn't go down to 6Mhz so we first use
+														 // the PLL to go down to 60Mhz, and then we apply
+														 // an internal 1/10 clk divider
+parameter H_DISPLAY		= 320;
+parameter H_FRONT			=   8;
+parameter H_SYNC			=  32;
+parameter H_BACK			=  40;
 
 parameter V_DISPLAY		= 240;
-parameter V_TOP				=   5;
-parameter V_BOTTOM		=  14;
-parameter V_SYNC			=   3;
+parameter V_BOTTOM		=   3;
+parameter V_SYNC			=   4;
+parameter V_TOP				=   6;
 `endif
 
 // helper constants
