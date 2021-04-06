@@ -24,9 +24,7 @@ module test_cpu16;
 	reg [7:0] ram[0:127];
 	reg [7:0] rom[0:127];
 
-	CPU cpu(
-		.A(A),
-		.B(B),
+	CPU16 cpu16(
 		.clk(clk),
 		.reset(reset),
 		.address(address_bus),
