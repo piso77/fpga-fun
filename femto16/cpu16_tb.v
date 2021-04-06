@@ -21,8 +21,8 @@ module test_cpu16;
 	wire write_enable;
 	wire [7:0] A, B;
 
-	reg [15:0] ram[0:255];
-	reg [15:0] rom[0:255];
+  reg [15:0] ram[0:65535];
+  reg [15:0] rom[0:255];
 
 	CPU16 cpu16(
 		.clk(clk),
@@ -33,16 +33,16 @@ module test_cpu16;
 		.write(write_enable)
 	);
 
-	always @(posedge clk)
-		if (write_enable) begin
-			ram[address_bus[7:0]] <= from_cpu;
-		end
+  always @(posedge clk)
+    if (write_enable) begin
+      ram[address_bus] <= from_cpu;
+    end
 
-	always @(*)
-		if (address_bus[8] == 0)
-			to_cpu = ram[address_bus[7:0]];
-		else
-			to_cpu = rom[address_bus[7:0]];
+  always @(posedge clk)
+    if (address_bus[15] == 0)
+      to_cpu <= ram[address_bus];
+    else
+      to_cpu <= rom[address_bus[7:0]];
 
 	initial
 		$readmemh("fib16.hex", rom);
