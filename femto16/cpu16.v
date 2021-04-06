@@ -185,14 +185,14 @@ module CPU16(clk, reset, hold, busy,
             end
             //  01001aaa#####bbb	[B+#] -> A
             16'b01001???????????: begin
-              address <= regs[data_in[2:0]] + 16'($signed(data_in[7:3]));
+              address <= regs[data_in[2:0]] + {{12{data_in[7]}}, data_in[7:3]};
               aluop <= `OP_LOAD_B;
               if (data_in[2:0] == SP)
                 regs[SP] <= regs[SP] + 1;
             end
             //  01010aaa#####bbb	store A -> [B+#]
             16'b01010???????????: begin
-              address <= regs[data_in[2:0]] + 16'($signed(data_in[7:3]));
+              address <= regs[data_in[2:0]] + {{12{data_in[7]}}, data_in[7:3]};
               data_out <= regs[data_in[10:8]];
               write <= 1;
               state <= S_SELECT;
@@ -223,7 +223,7 @@ module CPU16(clk, reset, hold, busy,
                 (data_in[10] && (data_in[11] == neg))) 
               begin
                 // relative branch, sign extended
-                regs[IP] <= regs[IP] + 16'($signed(data_in[7:0]));
+                regs[IP] <= regs[IP] + {{8{data_in[7]}}, data_in[7:0]};
               end
               state <= S_SELECT;
             end
